@@ -55,15 +55,19 @@ export default function Authpage() {
 
   return (
     <div className="min-h-screen bg-black flex" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-      {/* Decorative diamond elements */}
-      <div className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 flex flex-col gap-8 opacity-30 z-10">
-        <div className="w-3 h-3 md:w-4 md:h-4 border-2 rotate-45" style={{ borderColor: '#FFD98ACC' }}></div>
-        <div className="w-3 h-3 md:w-4 md:h-4 border-2 rotate-45" style={{ borderColor: '#FFD98ACC' }}></div>
-      </div>
-
       {/* Left Half - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 lg:p-8">
-        <div className="w-full max-w-md">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 lg:p-8 relative">
+        {/* Temple background for mobile */}
+        <div 
+          className="lg:hidden absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ 
+            backgroundImage: 'url(/image.png)',
+            opacity: 0.1,
+            filter: 'blur(2px)'
+          }}
+        ></div>
+        
+        <div className="w-full max-w-md relative z-10">
           <div className="border-2 bg-black p-6 md:p-10 shadow-2xl" style={{ borderColor: '#FFD98ACC' }}>
             {/* Header */}
             <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: '#FFFFFF' }}>
@@ -287,7 +291,7 @@ export default function Authpage() {
           className="w-full max-w-lg object-contain relative z-10"
           style={{ 
             filter: 'drop-shadow(0 0 30px rgba(255, 217, 138, 0.4))',
-            transform: isLogin ? 'translate(-80px, 0)' : 'translate(-80px, -50px)'
+            transform: isLogin ? 'translate(-80px, 0)' : 'translate(-80px, -80px)'
           }}
         />
       </div>
