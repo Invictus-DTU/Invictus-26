@@ -1,0 +1,14 @@
+{   
+    "items": [
+        { "name": "Person 1", "designation": "Lead Organiser 1", "link": "/", "avatar": "/" },
+        { "name": "Person 2", "designation": "Lead Organiser 2", "link": "/", "avatar": "/" },
+        { "name": "Person 3", "designation": "Lead Organiser 3", "link": "/", "avatar": "/" },
+        { "name": "Person 4", "designation": "Lead Organiser 4", "link": "/", "avatar": "/" },
+        { "name": "Person 5", "designation": "Lead Organiser 5", "link": "/", "avatar": "/" },
+        { "name": "Person 6", "designation": "Lead Organiser 6", "link": "/", "avatar": "/" },
+        { "name": "Person 7", "designation": "Lead Organiser 7", "link": "/", "avatar": "/" },
+        { "name": "Person 8", "designation": "Lead Organiser 8", "link": "/", "avatar": "/" },
+        { "name": "Person 9", "designation": "Lead Organiser 9", "link": "/", "avatar": "/" },
+        { "name": "Person 10", "designation": "Lead Organiser 10", "link": "/", "avatar": "/" }
+    ]
+}
