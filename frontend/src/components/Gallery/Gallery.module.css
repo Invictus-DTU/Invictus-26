@@ -114,14 +114,6 @@
   font-weight: 600;
 }
 
-.galleryBackground {
-  background-image: url("/Gallery pics/backdrop.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center top;
-  padding: 60px 0;
-}
-
 /* ===============================
    VIEW GLANCES – EXACT FIGMA MATCH
    =============================== */

@@ -2,7 +2,6 @@
 import { useMemo, useState } from "react";
 import { utils } from "swapy";
 import { SwapyItem, SwapyLayout, SwapySlot } from "@/component/ui/swapy";
-import { Heart, PlusCircle } from "lucide-react";
 import styles from "./Gallery.module.css";
 export function ProjectViewsCard() {
   return (
@@ -139,8 +138,8 @@ function Gallery() {
 
         {/* LEFT SIDE */}
         <div className={styles.titleBlock}>
-          <h1 className={styles.galleryTitle}>GALLERY</h1>
-          <p className={styles.galleryCaption}>
+          <h1 className={`${styles.galleryTitle} invictus-heading`}>GALLERY</h1>
+          <p className={`${styles.galleryCaption} invictus-subheading`}>
             Moments that capture the energy, innovation, and unforgettable
             experiences of Invictus.
           </p>
@@ -155,7 +154,7 @@ function Gallery() {
 
           <div className={styles.categoryDivider} />
 
-          <div className={styles.categoryList}>
+          <div className={`${styles.categoryList} invictus-subheading`}>
             {["FUN", "CULTURAL", "WORKSHOP"].map((cat) => (
               <button
                 key={cat}
