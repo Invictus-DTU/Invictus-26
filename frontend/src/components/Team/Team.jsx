@@ -1,7 +1,7 @@
 import React from 'react'
 import TeamCarousel from '@/utils/Team Carousel/TeamCarousel'
 
-export default function Team() {
+export default function TeamComponent() {
   return (
     <>
       <img src="/Team/feathers.webp" alt="Decorative Feathers"
@@ -11,6 +11,10 @@ export default function Team() {
       <img src="/Team/peacock.webp" alt="Decorative Feathers"
       className="fixed z-[10] pointer-events-none w-[300px] md:w-[400px] xl:w-[550px] bottom-0 left-0 
       translate-x-[-30%] translate-y-[15%] brightness-125 saturate-125 transition-all duration-500 opacity-100"/>
+
+      <img src="/Team/peacock-shadow.webp" alt="Decorative Feathers"
+      className="fixed z-[9] pointer-events-none w-[300px] md:w-[400px] xl:w-[550px] bottom-0 left-0 
+      translate-x-[-27%] translate-y-[15%] brightness-125 saturate-125 transition-all duration-500 opacity-100"/>
 
       <div className="px-6 mt-16 lg:pt-8 md:pt-4 md:pl-10 text-center md:text-left">
 

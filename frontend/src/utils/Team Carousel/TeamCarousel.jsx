@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import CarouselCard from './CarouselCard'
 import TeamInfo from './TeamInfo.json'    //helper for team details. using dummy data atm
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const TeamCarousel = () => {
   const [active, setActive] = useState(0)
@@ -38,21 +39,17 @@ const TeamCarousel = () => {
       {/* controls */}
       <div className="flex w-full justify-center space-x-8 mt-10">
         <button onClick={prev}
-        className="p-3 rounded-full border-2 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white transition-all 
+        className="p-3 rounded-full border-3 border-[#D4AF37] hover:border-white text-[#D4AF37] bg-white hover:bg-[#D4AF37] hover:text-white transition-all 
         duration-300 group cursor-pointer hover:drop-shadow-[0_0_1rem_rgba(212,175,55,0.8)]">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-          </svg>
+          <ChevronLeft className="w-8 h-8" strokeWidth={4} />
         </button>
 
         <button onClick={next}
-        className="p-3 rounded-full border-2 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white transition-all 
+        className="p-3 rounded-full border-3 border-[#D4AF37] hover:border-white text-[#D4AF37] bg-white hover:bg-[#D4AF37] hover:text-white transition-all 
         duration-300 group cursor-pointer hover:drop-shadow-[0_0_1rem_rgba(212,175,55,0.4)]">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
+          <ChevronRight className="w-8 h-8" strokeWidth={4} />
         </button>
-  </div>
+      </div>
         
     </div>
   )
