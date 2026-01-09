@@ -1,7 +1,7 @@
-import React from 'react'
+import Gallery from "@/components/Gallery/Gallery";
 
-export default function Gallery() {
-  return (
-    <div>Gallery</div>
-  )
-}
+const GalleryPage = () => {
+  return <Gallery />;
+};
+
+export default GalleryPage;

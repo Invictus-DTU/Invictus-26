@@ -1,0 +1,197 @@
+
+.galleryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 20px;
+}
+
+.titleBlock {
+  max-width: 70%;
+}
+
+.galleryTitle {
+  font-family: Orbitron;
+  font-size: 96px;
+  font-weight: 800;
+  letter-spacing: 6px;
+  line-height: 1.05;
+  
+  background: linear-gradient(
+    182.99deg,
+    rgba(226, 170, 56, 0.9) 23.89%,
+    rgba(71, 60, 36, 0.9) 97.31%
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.galleryCaption {
+  margin-top: 12px;
+  font-size: 18px;
+  max-width: 680px;
+  font-family: Montserrat;
+  font-weight: 500;
+  color: rgba(110, 91, 29, 1);
+}
+
+.galleryCaption {
+  margin-top: 18px;
+  font-size: 18px;
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+.categoryBox {
+  width: 280px;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.categoryLabel {
+  font-size: 15px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.categorySelect {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* SWAPY SLOTS */
+.slot {
+  height: 220px;
+}
+
+.item {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.swapyWrapper {    
+  margin-right: 60px;
+  margin-left: 30px;
+}
+
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.categoryItem {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.activeCategory {
+  font-weight: 600;
+}
+
+.galleryBackground {
+  background-image: url("/Gallery pics/backdrop.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
+  padding: 60px 0;
+}
+
+/* ===============================
+   VIEW GLANCES – EXACT FIGMA MATCH
+   =============================== */
+
+.categoryBox {
+  width: 290px;
+  background: #f6f2d9;
+  border: 3px solid #d9b85c;
+  border-radius: 10px;
+  padding: 14px 16px 18px;
+  box-shadow: 6px 6px 0 rgba(120, 100, 40, 0.45);
+}
+
+/* HEADER ROW */
+.categoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* VIEW GLANCES TEXT */
+.categoryLabel {
+  font-family: Montserrat;
+  font-size: 18px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  color: #8f8457;
+}
+
+/* CHEVRON */
+.chevron {
+  font-size: 16px;
+  font-weight: 700;
+  color: #8f8457;
+}
+
+/* GOLD DIVIDER */
+.categoryDivider {
+  height: 2px;
+  background: #d9b85c;
+  margin: 10px 0 14px;
+}
+
+/* CATEGORY LIST */
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* CATEGORY ITEM */
+.categoryItem {
+  text-align: left;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #9b8a3d;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* ACTIVE CATEGORY (HIGHLIGHT PILL) */
+.activeCategory {
+  background: linear-gradient(
+    180deg,
+    rgba(225, 200, 125, 0.95),
+    rgba(190, 160, 80, 0.95)
+  );
+  color: #6d5b1f;
+  font-weight: 600;
+}
