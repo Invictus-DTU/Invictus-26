@@ -59,21 +59,17 @@ const SearchInput = () => {
 export default function Events() {
   return (
     <div 
-      className="min-h-screen w-full relative overflow-x-hidden "
+      className=" w-full relative overflow-x-hidden "
 
     >
-      <div className="container mx-auto px-4 py-10  flex flex-col items-center relative z-10">
+      <div className="container mx-auto px-4 pt-10 flex flex-col items-center relative z-10">
         
-        {/* HEADER - Specs: Orbitron, 700 Bold, Gradient Text */}
         <h1 
-          className="invictus-heading py-12 text-[7.7rem]"
-          
+          className="invictus-heading py-12 text-[4.7rem] lg:text-[7rem]"
         >
           EVENTS
         </h1>
 
-        {/* FILTER SECTION */}
-        {/* Grid for mobile, Flex row for desktop */}
         <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-row gap-4 justify-center items-start mb-16">
           
           {/* 1. Search Box */}
