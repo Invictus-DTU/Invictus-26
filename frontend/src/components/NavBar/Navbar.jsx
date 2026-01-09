@@ -37,7 +37,8 @@ export default function Navbar() {
     <div className="flex justify-center ">
       <nav className="fixed top-4 right-0 w-[85vw] z-50 bg-transparent backdrop-blur-md text-black 
         rounded-l-4xl rounded-r-2xl border-3 border-[#D4AF37]
-        shadow-[0_4px_6px_-1px_rgba(0,0,0,0.15)]">
+        shadow-[0_4px_6px_-1px_rgba(0,0,0,0.15)]"
+        >
 
         <div className="w-full py-3 flex justify-around items-center">
 
