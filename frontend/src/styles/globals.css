@@ -27,7 +27,7 @@
     .invictus-subheading {
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
-    background: linear-gradient(to bottom, #D4AF37, #6E5B1D);
+    background: linear-gradient(to bottom, #837446, #6E5B1D);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -45,7 +45,7 @@ html, body {
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-image: url(backdrop.png);
+  background-image: url("/backdrop.png");
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 100vh;

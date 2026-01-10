@@ -52,10 +52,13 @@ const CarouselCard = ({ personInfo, offset, isFlipped }) => {
 
 
           {/* individual picture will be rendered here (personInfo.avatar) */}
-          <div className="h-32 sm:h-40 flex items-center justify-center">
+          <div className="h-32 sm:h-40 flex items-center justify-center ">
             <div className="w-20 h-20 sm:w-26 sm:h-26 rounded-full border-3 border-[#D4AF37]/60 brightness-105 saturate-125 
             flex items-center justify-center">
-              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full bg-[#808080]"></div>
+              
+              <div className={`w-18 h-18 sm:w-24 sm:h-24 rounded-full bg-cover`} style={{//no need to give it in tailwind specific only because tailwind will crash it
+                backgroundImage: `url(${personInfo.avatar})`,
+              }}></div>
             </div>
           </div>
 

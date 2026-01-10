@@ -1,7 +1,8 @@
-import Gallery from "@/components/Gallery/Gallery";
+import GalleryComponent from "@/components/Gallery/Gallery";
 
-const GalleryPage = () => {
-  return <Gallery />;
-};
+export default function Gallery({setLotusClass, setLotusStyle}) {
+  return (
+    <GalleryComponent setLotusClass={setLotusClass} setLotusStyle={setLotusStyle}/>
+  )
+}
 
-export default GalleryPage;

@@ -8,6 +8,10 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [events, setEvents] = useState([]);
+  const [eventsLoading, setEventsLoading] = useState(false);
+  const [eventsError, setEventsError] = useState(null);
+
   const login = async (credentials) => {
     setLoading(true);
     try {
@@ -86,6 +90,36 @@ export function AuthProvider({ children }) {
     }
   };
 
+   const getEvents = async () => {
+    setEventsLoading(true);
+    setEventsError(null);
+
+    try {
+      const res = await axios.get(`${backend_url}/events`);
+
+      if (res.status === 200) {
+        setEvents(res.data.events);
+        return res.data.events;
+      }
+    } catch (error) {
+      setEventsError(
+        error.response?.data?.message || "Failed to fetch events"
+      );
+      return [];
+    } finally {
+      setEventsLoading(false);
+    }
+  };
+
+  const getEventById = async (id) => {
+    try {
+      const res = await axios.get(`${backend_url}/events/${id}`);
+      if (res.status === 200) return res.data.event;
+    } catch {
+      return null;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -93,6 +127,8 @@ export function AuthProvider({ children }) {
         // isAdmin,
         // refreshToken,
         loading,
+        getEvents,
+        getEventById,
         // logout,
         login,
         register,
