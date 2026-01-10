@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext,useEffect, useState } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
 import { Eye,EyeOff } from 'lucide-react';
 
-export default function Authpage() {
+export default function Authpage({setLotusClass, setLotusStyle}) {
   const { login, register, Adminlogin } = useContext(AuthContext);
   const backend_URL = "http://localhost:3004/";  
   const [isLogin, setIsLogin] = useState(true);
@@ -18,6 +18,33 @@ export default function Authpage() {
     confirmPassword: '',
     agreedToTerms: false
   });
+
+  useEffect(() => {
+      if (!setLotusClass) return
+      setLotusStyle({})
+  
+      setLotusClass(`
+        top-3/4 left-1/2
+        -translate-x-1/2 -translate-y-1/2
+        w-[160px]
+        opacity-80
+        z-999
+        transition-all duration-700 ease-in-out
+      `)
+  
+      const timeout = setTimeout(() => {
+        setLotusClass(`
+          top-3/4 left-1/2
+          -translate-x-1/2 -translate-y-1/2
+          w-[160px]
+          opacity-0
+          z-999
+          transition-all duration-500 ease-in-out
+        `)
+      }, 500)
+  
+      return () => clearTimeout(timeout)
+    }, [setLotusClass, setLotusStyle])
   
   React.useEffect(() => {
     const link = document.createElement('link');

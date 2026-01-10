@@ -1,7 +1,7 @@
 import React from 'react'
 import Landing from '@/components/Landing/Landing'
-export default function index() {
+export default function index({setLotusClass, setLotusStyle}) {
   return (
-    <Landing/>
+    <Landing setLotusClass={setLotusClass} setLotusStyle={setLotusStyle}/>
   )
 }

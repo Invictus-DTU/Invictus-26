@@ -97,8 +97,7 @@ export default function CardComponent({ setLotusClass, setLotusStyle }) {
 
     return () => clearTimeout(timeout)
   }, [setLotusClass, setLotusStyle])
-
-  // ✅ Fetch events from backend
+//events get from backend
   useEffect(() => {
     getEvents()
   }, [getEvents])

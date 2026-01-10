@@ -1,6 +1,6 @@
 @import "tailwindcss";
-/* @tailwind utilities;
-@import "tw-animate-css"; */
+@tailwind utilities;
+@import "tw-animate-css";
 
 @media (prefers-color-scheme: dark) {
   :root {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   SwapyItem,
   SwapyLayout,
@@ -25,20 +25,9 @@ function ImageCard({ src }) {
 /* ---------------- CATEGORY IMAGES ---------------- */
 
 const IMAGES = {
-  FUN: Array.from(
-    { length: 9 },
-    (_, i) => `/Gallery pics/cat1/cat1_${i + 1}.png`,
-  ),
-
-  CULTURAL: Array.from(
-    { length: 9 },
-    (_, i) => `/Gallery pics/cat2/cat2_${i + 1}.png`,
-  ),
-
-  WORKSHOP: Array.from(
-    { length: 9 },
-    (_, i) => `/Gallery pics/cat3/cat3_${i + 1}.png`,
-  ),
+  FUN: Array.from({ length: 9 }, (_, i) => `/Gallery pics/cat1/cat1_${i + 1}.png`),
+  CULTURAL: Array.from({ length: 9 }, (_, i) => `/Gallery pics/cat2/cat2_${i + 1}.png`),
+  WORKSHOP: Array.from({ length: 9 }, (_, i) => `/Gallery pics/cat3/cat3_${i + 1}.png`),
 };
 
 /* ---------------- GRID CONFIG ---------------- */
@@ -59,12 +48,35 @@ const GRID_CLASSES = [
 
 /* ---------------- COMPONENT ---------------- */
 
-export default function Gallery() {
+export default function Gallery({ setLotusClass, setLotusStyle }) {
   const [category, setCategory] = useState("FUN");
+
+  /* 🌸 GLOBAL LOTUS POSITION (next to GALLERY heading) */
+  useEffect(() => {
+    if (!setLotusClass || !setLotusStyle) return;
+
+    const anchor = document.querySelector("[data-gallery-lotus-anchor]");
+    if (!anchor) return;
+
+    const rect = anchor.getBoundingClientRect();
+
+    setLotusStyle({
+      left: rect.left + rect.width / 2,
+      top: rect.top + rect.height / 2,
+      transform: "translate(-50%, -50%)",
+    });
+
+    setLotusClass(`
+      w-[90px] md:w-[120px] lg:w-[150px]
+      opacity-80
+      transition-all duration-700 ease-in-out
+    `);
+  }, [setLotusClass, setLotusStyle]);
 
   return (
     <div className="w-full bg-transparent">
       <div className="max-w-[1600px] mx-auto">
+
         {/* HEADER */}
         <div
           className="
@@ -77,7 +89,7 @@ export default function Gallery() {
           "
         >
           {/* TITLE BLOCK */}
-          <div className="max-w-full md:max-w-[70%]">
+          <div className="max-w-full md:max-w-[70%] relative">
             <h1
               className="
                 font-[Orbitron] font-extrabold tracking-[6px] leading-[1.05]
@@ -89,6 +101,18 @@ export default function Gallery() {
               GALLERY
             </h1>
 
+            {/* 🌸 LOTUS ANCHOR */}
+            <span
+              data-gallery-lotus-anchor
+              className="
+                absolute
+                right-[-2.5rem] md:right-[-3.5rem] lg:right-[-4.5rem]
+                top-1/2
+                -translate-y-1/2
+                w-0 h-0
+              "
+            />
+
             <p
               className="
                 mt-4 md:mt-[18px]
@@ -96,7 +120,7 @@ export default function Gallery() {
                 max-w-[720px]
                 leading-[1.6]
                 font-black
-                font-[Montserrat] 
+                font-[Montserrat]
                 text-[rgba(110,91,29,1)]
               "
             >
@@ -117,15 +141,7 @@ export default function Gallery() {
             "
           >
             <div className="flex justify-between items-center">
-              <span
-                className="
-                  font-[Montserrat]
-                  text-[18px]
-                  tracking-[2px]
-                  font-semibold
-                  text-[#8f8457]
-                "
-              >
+              <span className="font-[Montserrat] text-[18px] tracking-[2px] font-semibold text-[#8f8457]">
                 VIEW GLANCES
               </span>
               <span className="text-[16px] font-bold text-[#8f8457]">⌄</span>
@@ -140,8 +156,7 @@ export default function Gallery() {
                   onClick={() => setCategory(cat)}
                   className={`
                     text-left text-[16px] tracking-[1px]
-                    px-3 py-1.5 rounded-md
-                    transition-all
+                    px-3 py-1.5 rounded-md transition-all
                     ${
                       category === cat
                         ? "bg-[linear-gradient(180deg,rgba(225,200,125,0.95),rgba(190,160,80,0.95))] text-[#6d5b1f] font-semibold"
@@ -158,11 +173,7 @@ export default function Gallery() {
 
         {/* GRID */}
         <div className="px-5 md:px-8">
-          <SwapyLayout
-            id="swapy"
-            className="w-full"
-            config={{ swapMode: "hover" }}
-          >
+          <SwapyLayout id="swapy" className="w-full" config={{ swapMode: "hover" }}>
             <div className="grid w-full grid-cols-12 gap-6 py-6">
               {IMAGES[category].map((src, index) => (
                 <SwapySlot
