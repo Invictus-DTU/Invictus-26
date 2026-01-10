@@ -81,7 +81,7 @@ export default function Navbar() {
 
   return (
     <div className="flex justify-center">
-      <nav className="fixed top-4 right-0 w-[85vw] z-[50] bg-transparent backdrop-blur-md text-black rounded-l-4xl rounded-r-2xl border-3 border-[#D4AF37] 
+      <nav className="fixed top-4 right-0 mr-10 w-[85vw] z-[50] bg-transparent backdrop-blur-md text-black rounded-l-4xl rounded-r-2xl border-3 border-[#D4AF37] 
       shadow-[0_4px_6px_-1px_rgba(0,0,0,0.15)]">
         
         <div className="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
@@ -122,19 +122,19 @@ export default function Navbar() {
             ))}
 
             {/* desktop auth btn */}
-            <div className="border-l border-[#D4AF37]">
+            
             <button 
                 ref={(el) => (itemsRef.current[authIndex] = el)}
                 onClick={handleAuthClick}
-                className={`relative z-10 px-2 lg:px-[0.6rem] xl:px-[0.8rem] py-[0.3rem] transition-colors duration-300 
-                [font-family:'Montserrat',sans-serif] font-[600] whitespace-nowrap ml-6 lg:ml-10 xl:ml-14 cursor-pointer
+                className={`relative z-10 py-[0.3rem] pl-5 transition-colors duration-300 
+                [font-family:'Montserrat',sans-serif] font-[600] whitespace-nowrap  cursor-pointer border-l border-[#D4AF37]
                 ${activeIndex === authIndex ? "text-white" 
                 : "bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] bg-clip-text text-transparent brightness-105 saturate-115"} 
                 ${activeIndex === authIndex ? "hover:text-white" : "hover:text-[#D4AF37] hover:drop-shadow-[0_0_1rem_rgba(212,175,55,0.8)]"}`}
             >
                 {user ? "LOGOUT" : "LOGIN"}
             </button>
-            </div>
+            
 
           </div>
 
