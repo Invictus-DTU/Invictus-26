@@ -1,7 +1,11 @@
 "use client";
+
 import { useEffect, useRef } from "react";
 import { createSwapy } from "swapy";
 import { cn } from "@/lib/utils";
+
+/* ---------------- LAYOUT ---------------- */
+
 export const SwapyLayout = ({
   id,
   onSwap,
@@ -11,31 +15,50 @@ export const SwapyLayout = ({
 }) => {
   const containerRef = useRef(null);
   const swapyRef = useRef(null);
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    swapyRef.current = createSwapy(container, config);
+
+    // ⛔ Prevent double init (React strict mode)
+    if (swapyRef.current) return;
+
+    const swapy = createSwapy(container, config);
+    swapyRef.current = swapy;
+
     if (onSwap) {
-      swapyRef.current.onSwap(onSwap);
+      swapy.onSwap(onSwap);
     }
+
     return () => {
       swapyRef.current?.destroy();
+      swapyRef.current = null;
     };
-  }, [config, onSwap]);
+  }, []); // ✅ RUN ONCE ONLY
+
   return (
-    <div id={id} ref={containerRef} className={className}>
+    <div
+      id={id}
+      ref={containerRef}
+      className={className}
+      data-swapy-container
+    >
       {children}
     </div>
   );
 };
+
+/* ---------------- DRAG HANDLE ---------------- */
+
 export const DragHandle = ({ className }) => {
   return (
     <div
       data-swapy-handle
       className={cn(
-        "absolute top-2 left-2 cursor-grab  text-gray-500  rounded-md bg-transparent  active:cursor-grabbing  ",
-        className,
-      )}>
+        "absolute top-2 left-2 cursor-grab rounded-md text-gray-500 active:cursor-grabbing",
+        className
+      )}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -46,29 +69,37 @@ export const DragHandle = ({ className }) => {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="lucide lucide-grip-vertical-icon lucide-grip-vertical opacity-80">
-        <circle cx="9" cy="12" r="1" />
+        className="opacity-80"
+      >
         <circle cx="9" cy="5" r="1" />
+        <circle cx="9" cy="12" r="1" />
         <circle cx="9" cy="19" r="1" />
-        <circle cx="15" cy="12" r="1" />
         <circle cx="15" cy="5" r="1" />
+        <circle cx="15" cy="12" r="1" />
         <circle cx="15" cy="19" r="1" />
       </svg>
     </div>
   );
 };
+
+/* ---------------- SLOT ---------------- */
+
 export const SwapySlot = ({ id, className, children }) => {
   return (
     <div
+      data-swapy-slot={id}
       className={cn(
-        "data-swapy-highlighted:bg-neutral-200 dark:data-swapy-highlighted:bg-neutral-800",
-        className,
+        "transition-colors data-swapy-highlighted:bg-neutral-200 dark:data-swapy-highlighted:bg-neutral-800",
+        className
       )}
-      data-swapy-slot={id}>
+    >
       {children}
     </div>
   );
 };
+
+/* ---------------- ITEM ---------------- */
+
 const dragOpacityClassMap = {
   10: "data-swapy-dragging:opacity-10",
   20: "data-swapy-dragging:opacity-20",
@@ -81,16 +112,22 @@ const dragOpacityClassMap = {
   90: "data-swapy-dragging:opacity-90",
   100: "data-swapy-dragging:opacity-100",
 };
+
 export const SwapyItem = ({
   id,
   className,
   children,
-  dragItemOpacity = 100, // default to 100
+  dragItemOpacity = 100,
 }) => {
   const opacityClass =
-    dragOpacityClassMap[dragItemOpacity] ?? "data-swapy-dragging:opacity-50";
+    dragOpacityClassMap[dragItemOpacity] ??
+    "data-swapy-dragging:opacity-50";
+
   return (
-    <div className={cn(opacityClass, className)} data-swapy-item={id}>
+    <div
+      data-swapy-item={id}
+      className={cn("relative", opacityClass, className)}
+    >
       {children}
     </div>
   );
