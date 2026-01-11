@@ -1,14 +1,26 @@
 import React, { useContext,useEffect, useState } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
 import { Eye,EyeOff } from 'lucide-react';
+import { useRouter } from "next/router";
+
 
 export default function Authpage({setLotusClass, setLotusStyle}) {
-  const { login, register, Adminlogin } = useContext(AuthContext);
+  const { user,isAdmin, login, register, Adminlogin } = useContext(AuthContext);
   const backend_URL = "http://localhost:3004/";  
   const [isLogin, setIsLogin] = useState(true);
   const [eyeToggle, setEyeToggle] = useState(false);
   const [errors, setErrors] = useState({});
   const [isAdminLogin, setIsAdminLogin] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+  if (user) {
+    router.replace("/Dashboard");
+  }
+  if(isAdmin){
+    router.replace("/admin/code");
+  }
+}, [user, router]);
 
   const [formData, setFormData] = useState({
     fullName: '',

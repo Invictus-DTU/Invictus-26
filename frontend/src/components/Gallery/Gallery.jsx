@@ -51,22 +51,27 @@ const GRID_CLASSES = [
 export default function Gallery({ setLotusClass, setLotusStyle }) {
   const [category, setCategory] = useState("FUN");
 
-  /* 🌸 GLOBAL LOTUS POSITION (next to GALLERY heading) */
+  /* 🌸 LOTUS POSITION — RELATIVE TO GALLERY HEADING */
   useEffect(() => {
     if (!setLotusClass || !setLotusStyle) return;
 
     const anchor = document.querySelector("[data-gallery-lotus-anchor]");
     if (!anchor) return;
 
-    const rect = anchor.getBoundingClientRect();
+    const parent = anchor.offsetParent;
+    if (!parent) return;
+
+    const anchorRect = anchor.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
 
     setLotusStyle({
-      left: rect.left + rect.width / 2,
-      top: rect.top + rect.height / 2,
+      left: anchorRect.left - parentRect.left + anchorRect.width / 2,
+      top: anchorRect.top - parentRect.top + anchorRect.height / 2,
       transform: "translate(-50%, -50%)",
     });
 
-    setLotusClass(`absolute
+    setLotusClass(`
+      absolute
       w-[90px] md:w-[120px] lg:w-[150px]
       opacity-80
       transition-all duration-700 ease-in-out
@@ -74,7 +79,7 @@ export default function Gallery({ setLotusClass, setLotusStyle }) {
   }, [setLotusClass, setLotusStyle]);
 
   return (
-    <div className="w-full bg-transparent">
+    <div className="relative w-full bg-transparent">
       <div className="max-w-[1600px] mx-auto">
 
         {/* HEADER */}
@@ -92,10 +97,8 @@ export default function Gallery({ setLotusClass, setLotusStyle }) {
           <div className="max-w-full md:max-w-[70%] relative">
             <h1
               className="
-                font-[Orbitron] font-extrabold tracking-[6px] leading-[1.05]
                 text-[48px] md:text-[72px] lg:text-[96px]
-                bg-[linear-gradient(182.99deg,rgba(226,170,56,0.9)_23.89%,rgba(71,60,36,0.9)_97.31%)]
-                bg-clip-text text-transparent
+                invictus-heading
               "
             >
               GALLERY
@@ -106,8 +109,8 @@ export default function Gallery({ setLotusClass, setLotusStyle }) {
               data-gallery-lotus-anchor
               className="
                 absolute
-                right-[-2.5rem] md:right-[-3.5rem] lg:right-[-4.5rem]
-                top-1/2
+                right-[2rem] md:right-[3.5rem] lg:right-[4.5rem]
+                top-5/6
                 -translate-y-1/2
                 w-0 h-0
               "
@@ -116,12 +119,8 @@ export default function Gallery({ setLotusClass, setLotusStyle }) {
             <p
               className="
                 mt-4 md:mt-[18px]
+                invictus-subheading
                 text-[20px] md:text-[24px]
-                max-w-[720px]
-                leading-[1.6]
-                font-black
-                font-[Montserrat]
-                text-[rgba(110,91,29,1)]
               "
             >
               Moments that capture the energy, innovation, and unforgettable

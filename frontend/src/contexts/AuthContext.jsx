@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
 export const AuthContext = createContext();
@@ -7,10 +7,37 @@ const backend_url = "http://localhost:3004";
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [isAdmin, setIsAdmin] = useState(null)
   const [events, setEvents] = useState([]);
   const [eventsLoading, setEventsLoading] = useState(false);
   const [eventsError, setEventsError] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true); // to avoid history flickering login pe redirect is avoided bcoz this default true meaning let react check if user is there or not until then no redirects
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      setAuthLoading(false);
+      return;
+    }
+
+    axios
+      .get(`${backend_url}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.data.name);
+      })
+      .catch(() => {
+        localStorage.removeItem("accessToken");
+        setUser(null);
+      })
+      .finally(() => {
+        setAuthLoading(false);//very imp user pura checked and stored properly in localstorage then authloading stopped so initially if user == null and react has just rendered toh wont shift to login no flicker only shift to login page after this check is completed
+      });
+  }, []);
 
   const login = async (credentials) => {
     setLoading(true);
@@ -120,19 +147,64 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const fetchMe = async (token) => {
+  try {
+    const res = await axios.get(`${backend_url}/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // console.log(res);
+    if (res.status === 200) {
+      setUser(res.data.name);
+      // setIsAdmin(res.data.user.role === "admin");
+      return true;
+    }
+  } catch {
+    return false;
+  }
+};
+
+
+  const handleGoogleCallback = async (accessToken, refreshToken) => {
+  if (!accessToken) return { success: false };
+
+  localStorage.setItem("accessToken", accessToken);
+  if (refreshToken) {
+    localStorage.setItem("refreshToken", refreshToken);
+  }
+
+  const success = await fetchMe(accessToken);
+
+  return { success };
+};
+
+const logout = () => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+  // localStorage.removeItem("adminToken");
+
+  setUser(null);
+  setIsAdmin(null);
+};
+
+
+
   return (
     <AuthContext.Provider
       value={{
         user,
-        // isAdmin,
+        isAdmin,
         // refreshToken,
         loading,
         getEvents,
         getEventById,
-        // logout,
+        logout,
         login,
         register,
+        authLoading,
         adminLogin,
+        handleGoogleCallback
       }}
     >
       {children}

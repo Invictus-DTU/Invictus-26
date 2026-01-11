@@ -21,7 +21,11 @@ export const SwapyLayout = ({
     if (!container) return;
 
     // ⛔ Prevent double init (React strict mode)
-    if (swapyRef.current) return;
+        if (window.innerWidth < 1100) {
+      swapyRef.current?.destroy();
+      swapyRef.current = null;
+      return;
+    }
 
     const swapy = createSwapy(container, config);
     swapyRef.current = swapy;

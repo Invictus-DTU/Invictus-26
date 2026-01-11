@@ -71,10 +71,10 @@ useEffect(() => {
 
       {/* ---------------- HEADING SECTION ---------------- */}
 
-      <div className="px-6 mt-16 lg:pt-8 md:pt-4 md:pl-10 text-center md:text-left">
+      <div className="px-6 mt-18 lg:pt-8 md:pt-4 md:pl-10 text-center md:text-left">
 
         <div className="relative inline-block">
-          <span className="invictus-heading text-[5.7rem] lg:text-[7rem]">
+          <span className="invictus-heading mr-2 text-[3.7rem] lg:text-[7rem]">
             TEAM
           </span>
 

@@ -3,6 +3,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/NavBar/Navbar";
 import CommonLotus from "@/utils/commonLotus";
 import "@/styles/globals.css";
+import Script from "next/script";
 
 export default function App({ Component, pageProps }) {
   const [lotusStyle, setLotusStyle] = useState({});
@@ -11,6 +12,11 @@ export default function App({ Component, pageProps }) {
   );
 
   return (
+    <>
+    <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=API_KEY`}
+        strategy="beforeInteractive"
+      />
     <AuthProvider>
       <Navbar />
 
@@ -18,5 +24,7 @@ export default function App({ Component, pageProps }) {
 
       <Component {...pageProps} setLotusClass={setLotusClass} setLotusStyle={setLotusStyle} />
     </AuthProvider>
+
+    </>
   );
 }
