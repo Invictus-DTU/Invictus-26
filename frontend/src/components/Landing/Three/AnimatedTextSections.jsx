@@ -43,7 +43,7 @@ export function AnimatedTextSections() {
 
   return (
     <>
-      <Html style={{ position: "sticky",  width: '100vw', height: '100vh', top: "-50%" }}>
+      <Html center style={{ position: "sticky",  width: '100vw', height: '100vh', top: "-50%" }}>
         <div>
           <div ref={section1Ref} style={{
             position: 'absolute',

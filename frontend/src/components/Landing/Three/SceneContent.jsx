@@ -25,6 +25,7 @@ import { Sun } from "./Sun";
 import { Ocean } from "./Ocean";
 import { Fog } from "./Fog";
 import { AnimatedTextSections } from "./AnimatedTextSections";
+import { Lotus } from "./Lotus";
 
 export function SceneContent() {
   const modelRef = useRef();
@@ -34,7 +35,7 @@ export function SceneContent() {
   // Camera keyframes
   const cameraShots = [
     {
-      pos: new THREE.Vector3(4, 9, -12), // TOP VIEW
+      pos: new THREE.Vector3(4, 10, -13), // TOP VIEW
       lookAt: new THREE.Vector3(0, 0, 0),
     },
     {
@@ -90,6 +91,10 @@ export function SceneContent() {
         shadows={true}
       />
 
+      {/* Lotus */}
+      <Lotus position={[8, -1, -2]} scale={5} />
+      <Lotus position={[-8, -1, -2]} scale={5} />
+
       {/* Water surface with reflections */}
       <Ocean position={[0, -2, 0]} />
 
@@ -124,7 +129,7 @@ export function SceneContent() {
           luminanceSmoothing={0.9}
         />
 
-        <Noise opacity={0.08} />
+        <Noise opacity={0.1} />
 
         <Vignette eskil={false} offset={0.1} darkness={0.9} />
         {/* {sun && (
