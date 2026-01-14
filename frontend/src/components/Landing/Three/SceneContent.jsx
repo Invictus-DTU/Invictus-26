@@ -30,11 +30,14 @@ import { Birds } from "./Birds";
 import { Boat } from "./Boat";
 import { Mountain } from "./Mountain";
 import { Shiva } from "./Shiva";
+import { ThreeDText, MultiLineText3D } from "./3dText";
 
 export function SceneContent() {
   const modelRef = useRef();
   const scroll = useScroll();
   const [sun, setSun] = useState();
+  const [activeSection, setActiveSection] = useState(0);
+
 
   // Camera keyframes
   const cameraShots = [
@@ -43,7 +46,7 @@ export function SceneContent() {
       lookAt: new THREE.Vector3(0, 0, 0),
     },
     {
-      pos: new THREE.Vector3(10, 0, 2), // SIDE VIEW
+      pos: new THREE.Vector3(12, 0, 0), // SIDE VIEW
       lookAt: new THREE.Vector3(0, 2, 0),
     },
     {
@@ -52,28 +55,31 @@ export function SceneContent() {
     },
   ];
 
-  useFrame((state) => {
-    const totalSections = cameraShots.length - 1;
-    const progress = scroll.offset * totalSections;
 
-    const sectionIndex = Math.floor(progress);
-    const sectionT = progress % 1;
+useFrame((state) => {
+  const totalSections = cameraShots.length - 1;
+  const progress = scroll.offset * totalSections;
 
-    const current = cameraShots[sectionIndex];
-    const next = cameraShots[Math.min(sectionIndex + 1, totalSections)];
+  const sectionIndex = Math.floor(progress);
+  const sectionT = progress % 1;
 
-    // Smooth camera movement
-    state.camera.position.lerpVectors(current.pos, next.pos, sectionT);
+    setActiveSection((prev) =>
+    prev !== sectionIndex ? sectionIndex : prev
+  );
 
-    const lookAt = current.lookAt.clone().lerp(next.lookAt, sectionT);
+  const current = cameraShots[sectionIndex];
+  const next = cameraShots[Math.min(sectionIndex + 1, totalSections)];
 
-    state.camera.lookAt(lookAt);
+  state.camera.position.lerpVectors(current.pos, next.pos, sectionT);
 
-    // Optional: subtle model parallax
-    if (modelRef.current) {
-      modelRef.current.position.y = -1 - scroll.offset * 0.3;
-    }
-  });
+  const lookAt = current.lookAt.clone().lerp(next.lookAt, sectionT);
+  state.camera.lookAt(lookAt);
+
+  if (modelRef.current) {
+    modelRef.current.position.y = -1 - scroll.offset * 0.3;
+  }
+});
+
 
   return (
     <>
@@ -117,6 +123,46 @@ export function SceneContent() {
       {/* Sky */}
       <GradientSky />
 
+      {/* CAMERA SHOT 0 — TOP VIEW */}
+      {activeSection === 0 && (
+        <ThreeDText
+          text="Invictus '26"
+          size={1.9}
+          position={[0, 0, 12]}
+          rotation={[1,9.4,-0.1]}
+          section={0}
+          activeSection={activeSection}
+          scroll={scroll}
+        />
+      )}
+
+      {activeSection === 1 && (
+        <MultiLineText3D
+        lines={[
+          "Invictus '26",
+          "brings back its plethora of events",
+          "with its theme based on Indian heritage",
+        ]}
+        position={[-4, 6, 4]}
+        rotation={[1, 1.8, -1]}
+        size={0.4}
+        section={1}
+        scroll={scroll}
+      />
+      )}
+
+      {activeSection === 2 && (
+        <ThreeDText
+          text="Start Exploring"
+          size={0.09}
+          position={[-0.55, -0.2, 8]}
+          rotation={[0,0,0]}
+          section={2}
+          activeSection={activeSection}
+          scroll={scroll}
+        />
+      )}
+
       {/* Sun */}
       <Sun ref={sun} position={[-20, 15, -60]} />
 
@@ -142,11 +188,11 @@ export function SceneContent() {
       <EffectComposer>
         <Bloom
           intensity={0.7}
-          luminanceThreshold={0.4}
-          luminanceSmoothing={0.9}
+          luminanceThreshold={0.7}
+          luminanceSmoothing={2.9}
         />
 
-        <Noise opacity={0.1} />
+        <Noise opacity={0.05} />
 
         <Vignette eskil={false} offset={0.1} darkness={0.9} />
         {/* {sun && (
