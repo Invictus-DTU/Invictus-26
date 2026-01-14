@@ -3,6 +3,7 @@
 import { Text3D } from "@react-three/drei";
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 export function ThreeDText({
@@ -16,6 +17,9 @@ export function ThreeDText({
   scroll,
 }) {
   const ref = useRef();
+  const { viewport } = useThree();
+  const responsiveSize = viewport.width / 180;
+
 
   useFrame(({ clock }) => {
     if (!ref.current) return;
@@ -41,7 +45,7 @@ export function ThreeDText({
     <Text3D
       ref={ref}
       font="/model/fonts/font.json"
-      size={size}
+      size={size ?? responsiveSize}
       height={0.08}
       bevelEnabled={bevelEnabled}
       bevelSize={0.01}

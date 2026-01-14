@@ -154,9 +154,9 @@ useFrame((state) => {
       {activeSection === 2 && (
         <ThreeDText
           text="Start Exploring"
-          size={0.09}
-          position={[-0.55, -0.2, 8]}
-          rotation={[0,0,0]}
+          size={0.03}
+          position={[-0.19, -0.2, 8]}
+          rotation={[0,0.11,0]}
           section={2}
           activeSection={activeSection}
           scroll={scroll}
