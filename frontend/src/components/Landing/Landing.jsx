@@ -1,7 +1,11 @@
 'use client'
 import React, { useEffect } from 'react'
+import { useState } from "react";
+import SnackBar from "@/utils/snackBar";
 
 export default function Landing({ setLotusClass, setLotusStyle }) {
+
+  const [show, setShow] = useState(true);
 
   useEffect(() => {
     if (!setLotusClass || !setLotusStyle) return
@@ -21,7 +25,10 @@ export default function Landing({ setLotusClass, setLotusStyle }) {
     `)
   }, [setLotusClass, setLotusStyle])
 
+  
+
   return (
+    
     <div className="min-h-screen w-full flex flex-col items-center justify-items-center pt-24 pb-10 relative overflow-hidden">
 
       <div className="text-center mt-6">
@@ -61,6 +68,15 @@ export default function Landing({ setLotusClass, setLotusStyle }) {
           transition-all duration-700
         "
       />
+
+      {show && (
+        <SnackBar
+          text="Do you wish to see the live model on your next visit as well?"
+          actionText="No"
+          onAction={() => alert("Action clicked")}
+          onClose={() => setShow(false)}
+        />
+      )}
     </div>
   )
 }

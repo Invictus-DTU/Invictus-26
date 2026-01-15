@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @tailwind utilities;
-@import "tw-animate-css";
+/* @import "tw-animate-css"; */
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -51,4 +51,19 @@ body {
   min-height: 100vh;
 }
 
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideInFromLeft 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
 
