@@ -1,14 +1,11 @@
 {   
     "items": [
-        { "name": "Person 1", "designation": "Lead Organiser 1", "link": "/", "avatar": "/" },
-        { "name": "Person 2", "designation": "Lead Organiser 2", "link": "/", "avatar": "/" },
-        { "name": "Person 3", "designation": "Lead Organiser 3", "link": "/", "avatar": "/" },
-        { "name": "Person 4", "designation": "Lead Organiser 4", "link": "/", "avatar": "/" },
-        { "name": "Sharaddha Singh", "designation": "General Technical Seceratary", "link": "/", "avatar": "" },
-        { "name": "Person 6", "designation": "Lead Organiser 6", "link": "/", "avatar": "/" },
-        { "name": "Person 7", "designation": "Lead Organiser 7", "link": "/", "avatar": "/" },
-        { "name": "Person 8", "designation": "Lead Organiser 8", "link": "/", "avatar": "/" },
-        { "name": "Person 9", "designation": "Lead Organiser 9", "link": "/", "avatar": "/" },
-        { "name": "Person 10", "designation": "Lead Organiser 10", "link": "/", "avatar": "/" }
+        { "name": "Aditya Tiwari", "designation": "General Technical Secretary", "link": "/", "avatar": "/Team/TC/AdityaTiwari.jpg" },
+        { "name": "Shashwat Jha", "designation": "Treasurer", "link": "/", "avatar": "/Team/TC/ShashwatJha.jpg" },
+        { "name": "Abhishek Kumar Jangid", "designation": "Joint Treasurer", "link": "/", "avatar": "/Team/TC/AbhishekJangid.jpg" },
+        { "name": "Trilokendra Singh", "designation": "Joint Treasurer", "link": "/", "avatar": "/Team/TC/TrilokendraSingh.jpg" },
+        { "name": "Shraddha Singh", "designation": "Joint Technical Secretary", "link": "/", "avatar": "/Team/TC/ShraddhaSingh.jpg" },
+        { "name": "Hitesh Mehta", "designation": "Joint Technical Secretary", "link": "/", "avatar": "/Team/TC/HiteshMehta.jpg" },
+        { "name": "Soumya Garg", "designation": "Joint Technical Secretary", "link": "/", "avatar": "/Team/TC/SoumyaGarg.jpg" }
     ]
 }
