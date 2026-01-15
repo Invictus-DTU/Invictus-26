@@ -1,11 +1,11 @@
 {   
     "items": [
-        { "name": "Aditya Tiwari", "designation": "General Technical Secretary", "link": "/", "avatar": "/Team/TC/AdityaTiwari.jpg" },
-        { "name": "Shashwat Jha", "designation": "Treasurer", "link": "/", "avatar": "/Team/TC/ShashwatJha.jpg" },
-        { "name": "Abhishek Kumar Jangid", "designation": "Joint Treasurer", "link": "/", "avatar": "/Team/TC/AbhishekJangid.jpg" },
-        { "name": "Trilokendra Singh", "designation": "Joint Treasurer", "link": "/", "avatar": "/Team/TC/TrilokendraSingh.jpg" },
-        { "name": "Shraddha Singh", "designation": "Joint Technical Secretary", "link": "/", "avatar": "/Team/TC/ShraddhaSingh.jpg" },
-        { "name": "Hitesh Mehta", "designation": "Joint Technical Secretary", "link": "/", "avatar": "/Team/TC/HiteshMehta.jpg" },
-        { "name": "Soumya Garg", "designation": "Joint Technical Secretary", "link": "/", "avatar": "/Team/TC/SoumyaGarg.jpg" }
+        { "name": "Aditya Tiwari", "designation": "General Technical Secretary", "link": "https://in.linkedin.com/in/aditya-tiwari-784517279", "avatar": "/Team/TC/AdityaTiwari.webp" },
+        { "name": "Shashwat Jha", "designation": "Treasurer", "link": "https://in.linkedin.com/in/shashwatjha26", "avatar": "/Team/TC/ShashwatJha.webp" },
+        { "name": "Abhishek Kumar Jangid", "designation": "Joint Treasurer", "link": "https://in.linkedin.com/in/abhishek-kumar-jangid-086243288", "avatar": "/Team/TC/AbhishekJangid.webp" },
+        { "name": "Trilokendra Singh", "designation": "Joint Treasurer", "link": "https://in.linkedin.com/in/trilokendra-singh-54b894318", "avatar": "/Team/TC/TrilokendraSingh.webp" },
+        { "name": "Shraddha Singh", "designation": "Joint Technical Secretary", "link": "https://in.linkedin.com/in/shraddha-singh-29b3a528a", "avatar": "/Team/TC/ShraddhaSingh.webp" },
+        { "name": "Hitesh Mehta", "designation": "Joint Technical Secretary", "link": "https://in.linkedin.com/in/hiteshmehta02", "avatar": "/Team/TC/HiteshMehta.webp" },
+        { "name": "Soumya Garg", "designation": "Joint Technical Secretary", "link": "https://in.linkedin.com/in/soumya-garg-59919b312", "avatar": "/Team/TC/SoumyaGarg.webp" }
     ]
 }
