@@ -24,6 +24,7 @@ export default function SnackBar({ text, onClose, actionText, onAction }) {
         {actionText && (
           <>
           {/* Vertical line sepeartion */}
+              <span className="w-px h-5 bg-[#d6b36a]/70" />
           <button
             onClick={onAction}
             className="
@@ -44,12 +45,12 @@ export default function SnackBar({ text, onClose, actionText, onAction }) {
         <button
           onClick={onClose}
           className="
-            w-7 h-7
+            w-9 md:w-7 h-7
             flex items-center justify-center
             rounded-full
-            border border-[#d6b36a]
+            border border-[#897955]
             text-[#6b4e16]
-            hover:bg-[#d6b36a]
+            hover:bg-[#8b7a53]
             hover:text-white
             transition
           "

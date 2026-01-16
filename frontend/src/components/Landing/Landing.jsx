@@ -5,7 +5,42 @@ import SnackBar from "@/utils/snackBar";
 
 export default function Landing({ setLotusClass, setLotusStyle }) {
 
-  const [show, setShow] = useState(true);
+    const [show, setShow] = useState(true);
+    const SNACKBAR_TIMEOUT = 5000;
+
+    useEffect(() => {
+      if(localStorage.getItem("ModelSeen")){
+      const shown = localStorage.getItem("SnackbarShownLanding");
+      if(!shown){
+        setShow(true);
+        return;
+      }
+      const lastShown = Number(shown);
+        if(Date.now() - lastShown > SNACKBAR_TIMEOUT) {
+          localStorage.removeItem("ModelSeen");
+        }
+      }
+    }, [])
+
+    useEffect(() => {
+      if (typeof window === "undefined") return;
+
+      const shown = localStorage.getItem("SnackbarShownLanding");
+      if(!shown){
+        setShow(true);
+        return;
+      }
+      const lastShown = Number(shown);
+      // console.log(Date.now() - lastShown);
+      if (Date.now() - lastShown < SNACKBAR_TIMEOUT || localStorage.getItem("ModelSeen") ) {
+        setShow(false);
+      }
+    }, []);
+
+    const handleClose = () => {
+      setShow(false);
+      localStorage.setItem("SnackbarShownLanding",  Date.now().toString());
+    }
 
   useEffect(() => {
     if (!setLotusClass || !setLotusStyle) return
@@ -39,7 +74,7 @@ export default function Landing({ setLotusClass, setLotusStyle }) {
             tracking-widest
           "
         >
-          INVICTUS’26
+          INVICTUS'26
         </h1>
       </div>
 
@@ -71,10 +106,13 @@ export default function Landing({ setLotusClass, setLotusStyle }) {
 
       {show && (
         <SnackBar
-          text="Do you wish to see the live model on your next visit as well?"
+          text="Do you wish to see the live 3d model on your next visit as well?"
           actionText="No"
-          onAction={() => alert("Action clicked")}
-          onClose={() => setShow(false)}
+          onAction={() => {
+            localStorage.setItem("ModelSeen", "true");
+            handleClose();
+          }}
+          onClose={() => handleClose()}
         />
       )}
     </div>

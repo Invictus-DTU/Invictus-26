@@ -2,12 +2,41 @@ import React, { useState, useEffect, useContext } from "react";
 import MapPreview from "./MapPreview";
 import { DTU_LOCATIONS } from "./locations";
 import MapModal from "./MapModal";
+import SnackBar from "@/utils/snackBar";
 
 export default function Dashboard({ setLotusClass, setLotusStyle }) {
   const [activeTab, setActiveTab] = useState("EVENTS");
   const [mapOpen, setMapOpen] = useState(false);
   const [mapDestination, setMapDestination] = useState(DTU_LOCATIONS.DTU);
+  const [show, setShow] = useState(true);
+  const SNACKBAR_TIMEOUT = 5000;
 
+    useEffect(() => {
+      if (typeof window === "undefined") return;
+
+    const neverBar = localStorage.getItem("NeverShow")
+    if(neverBar){
+      setShow(false);
+      return;
+    }
+
+      const shown = localStorage.getItem("SnackbarShownDashboard");
+      if(!shown){
+        setShow(true);
+        return;
+      }
+
+      const lastShown = Number(shown);
+
+      if (Date.now() - lastShown < SNACKBAR_TIMEOUT || localStorage.getItem("ModelSeen") ) {
+        setShow(false);
+      }
+    }, []);
+
+    const handleClose = () => {
+      setShow(false);
+      localStorage.setItem("SnackbarShownDashboard",  Date.now().toString());
+    }
 
   /* 🌸 POSITION LOTUS NEXT TO WELCOME TEXT */
   useEffect(() => {
@@ -44,7 +73,7 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
           absolute top-14 right-8
           w-[400px] h-[240px]
           bg-[#f9f6ef]/70
-          border-4 border-[#bfa14a]
+          border-4 border-[#b19965]
           rounded-xl z-10"
           style={{ boxShadow: "0 2px 12px rgba(191,161,74,0.12)" }}
           >
@@ -98,10 +127,10 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
             }}
             className="
               mt-6
-              bg-[#bfa14a] text-white font-semibold
+              bg-[#b19965] text-white font-semibold
               rounded-lg px-5 py-2
               flex items-center gap-2
-              border-2 border-[#bfa14a]
+              border-2 border-[#b19965]
               transition hover:bg-[#d4af37] active:scale-95
             "
           >
@@ -118,16 +147,16 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
             mt-12
             rounded-2xl p-4 sm:p-6
             bg-white/80
-            border-[3px] border-[#bfa14a]
+            border-[3px] border-[#b19965]
           "
         >
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-            <span className="font-bold text-[#bfa14a] text-lg">HOME</span>
+            <span className="font-bold text-[#b19965] text-lg">HOME</span>
             <button
               className="
                 text-[#7A6C45] font-bold uppercase tracking-widest rounded-lg
                 px-4 py-1
-                border-2 border-[#bfa14a]
+                border-2 border-[#b19965]
                 transition hover:bg-[#ffffff] active:scale-95
               "
             >
@@ -142,11 +171,11 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`
-                  rounded-lg px-3 py-1 font-semibold border-2 border-[#bfa14a]
+                  rounded-lg px-3 py-1 font-semibold border-2 border-[#b19965]
                   transition
                   ${
                     activeTab === tab
-                      ? "bg-[#bfa14a] text-white"
+                      ? "bg-[#b19965] text-white"
                       : "bg-[#e7d7b1] text-[#7c6a3c]"
                   }
                 `}
@@ -172,19 +201,19 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
               <div>
                 <div className="font-bold mb-2">EVENT NAME</div>
                 <div className="flex gap-2 flex-wrap">
-                  <button className="bg-[#bfa14a] text-white rounded-lg px-4 py-1 font-semibold border-2 border-[#bfa14a] transition hover:bg-[#d4af37] active:scale-95"   onClick={() => {
+                  <button className="bg-[#b19965] text-white rounded-lg px-4 py-1 font-semibold border-2 border-[#b19965] transition hover:bg-[#d4af37] active:scale-95"   onClick={() => {
                     setMapDestination(DTU_LOCATIONS.SPS_18);
                     setMapOpen(true);
                   }}>
                     VIEW VENUE ON MAP
                   </button>
-                  <button className="bg-[#bfa14a] text-white rounded-lg px-4 py-1 font-semibold border-2 border-[#bfa14a] transition hover:bg-[#d4af37] active:scale-95">
+                  <button className="bg-[#b19965] text-white rounded-lg px-4 py-1 font-semibold border-2 border-[#b19965] transition hover:bg-[#d4af37] active:scale-95">
                     EDIT TEAM {/* registration link redirect */}
                   </button>
                 </div>
               </div>
-              <div className="font-semibold text-[#bfa14a]">Team Name</div>
-             <div className="font-semibold text-[#bfa14a]">Team Member</div>   {/*member or leader will fetch from backend three things to fetch here event/workshops name user has registered for there member status and unstop registration link*/}
+              <div className="font-semibold text-[#b19965]">Team Name</div>
+             <div className="font-semibold text-[#b19965]">Team Member</div>   {/*member or leader will fetch from backend three things to fetch here event/workshops name user has registered for there member status and unstop registration link*/}
             </div>
           ))}
         </div>
@@ -196,6 +225,18 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
       onClose={() => setMapOpen(false)}
       destination={mapDestination}
     />
+
+          {show && (
+            <SnackBar
+              text="Please log in with the email used on Unstop to get your Events/Workshops"
+              actionText="I have"
+              onAction={() => {
+                localStorage.setItem("NeverShow", "true");
+                handleClose();
+              }}
+              onClose={() => handleClose()}
+            />
+          )}
     </>
   );
 }
