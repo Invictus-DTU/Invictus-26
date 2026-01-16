@@ -14,6 +14,10 @@ export default function ThreeScene() {
   const [playTransition, setPlayTransition] = useState(false);
   const [currSection, setcurrSection] = useState(0);
   const [glitchTrigger, setGlitchTrigger] = useState(0);
+  useEffect(() => {
+  document.body.classList.add("cursor-hidden");
+  return () => document.body.classList.remove("cursor-hidden");
+}, []);
 
   useEffect(() => {
     setGlitchTrigger((t) => t + 1);

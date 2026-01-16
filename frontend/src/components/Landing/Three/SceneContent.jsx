@@ -14,6 +14,7 @@ import {
   GodRays,
 } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
+import ShootingStarCursor from "./ShootingStarCursor";
 import * as THREE from "three";
 import { Model } from "./Model";
 import { Model2 } from "./Model2";
@@ -187,6 +188,7 @@ useFrame((state) => {
       <Shiva position={[-70,-2,30]} scale={0.4} />
 
       <Environment preset="sunset" />
+      <ShootingStarCursor />
 
       {/* Animated Text Sections */}
       {/* <AnimatedTextSections /> */}
