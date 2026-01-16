@@ -1,134 +1,143 @@
 "use client";
 
+import { useRef, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-/* CONFIG */
-const PARTICLE_COUNT = 6000;
-const SPAWN_PER_FRAME = 40;
+/* ================= SHADERS ================= */
+
+const vertexShader = `
+attribute float life;
+varying float vLife;
+
+void main() {
+  vLife = life;
+  vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    float size = 0.02 * life;
+    size *= (300.0 / -mvPosition.z); // distance attenuation
+    gl_PointSize = size;
+
+  gl_Position = projectionMatrix * mvPosition;
+}
+`;
+
+const fragmentShader = `
+precision highp float;
+varying float vLife;
+
+void main() {
+  vec2 p = gl_PointCoord * 2.0 - 1.0;
+  float dist = length(p);
+
+  float alpha = smoothstep(1.0, 0.0, dist);
+  alpha *= vLife;
+
+  vec3 color = vec3(0.95, 0.88, 0.78); // warm gold
+
+  gl_FragColor = vec4(color, alpha);
+}
+`;
+
+/* ================= COMPONENT ================= */
 
 export default function ShootingStarCursor() {
   const pointsRef = useRef();
-  const index = useRef(0);
+  const prevWorldPos = useRef(new THREE.Vector3());
 
-  const { mouse, viewport } = useThree();
-  const clock = useRef(0);
+  const { camera, mouse } = useThree();
 
-  /* ---------- GEOMETRY ---------- */
+  const COUNT = 8000;
+
+  /* ===== GEOMETRY BUFFERS ===== */
   const geometry = useMemo(() => {
-    const geo = new THREE.BufferGeometry();
+    const g = new THREE.BufferGeometry();
 
-    geo.setAttribute(
-      "position",
-      new THREE.BufferAttribute(new Float32Array(PARTICLE_COUNT * 3), 3)
-    );
+    const positions = new Float32Array(COUNT * 3);
+    const velocity = new Float32Array(COUNT * 3);
+    const life = new Float32Array(COUNT);
 
-    geo.setAttribute(
-      "aVelocity",
-      new THREE.BufferAttribute(new Float32Array(PARTICLE_COUNT * 3), 3)
-    );
+    for (let i = 0; i < COUNT; i++) life[i] = 0;
 
-    geo.setAttribute(
-      "aStartTime",
-      new THREE.BufferAttribute(new Float32Array(PARTICLE_COUNT), 1)
-    );
+    g.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    g.setAttribute("velocity", new THREE.BufferAttribute(velocity, 3));
+    g.setAttribute("life", new THREE.BufferAttribute(life, 1));
 
-    geo.setAttribute(
-      "aRandom",
-      new THREE.BufferAttribute(new Float32Array(PARTICLE_COUNT), 1)
-    );
-
-    return geo;
+    return g;
   }, []);
 
-  /* ---------- SHADER ---------- */
+  /* ===== MATERIAL ===== */
   const material = useMemo(
     () =>
       new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
         transparent: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
-        uniforms: {
-          uTime: { value: 0 },
-        },
-        vertexShader: `
-          attribute vec3 aVelocity;
-          attribute float aStartTime;
-          attribute float aRandom;
-
-          uniform float uTime;
-
-          varying float vAlpha;
-
-          void main() {
-            float age = uTime - aStartTime;
-
-            if (age < 0.0) {
-              vAlpha = 0.0;
-              gl_Position = vec4(0.0);
-              return;
-            }
-
-            vec3 pos = position + aVelocity * age * 6.0;
-
-            float life = 1.0 - age * 0.8;
-            vAlpha = clamp(life, 0.0, 1.0);
-
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-            gl_PointSize = 6.0 * vAlpha;
-          }
-        `,
-        fragmentShader: `
-          varying float vAlpha;
-
-          void main() {
-            vec2 p = gl_PointCoord * 2.0 - 1.0;
-            float d = dot(p, p);
-
-            if (d > 1.0) discard;
-
-            gl_FragColor = vec4(1.0, 0.85, 0.55, vAlpha);
-          }
-        `,
       }),
     []
   );
 
-  /* ---------- UPDATE ---------- */
-  useFrame((state, delta) => {
-    clock.current += delta;
-    material.uniforms.uTime.value = clock.current;
+  /* ===== FRAME LOOP ===== */
+  useFrame((_, delta) => {
+const worldPos = new THREE.Vector3(mouse.x, mouse.y, 0.2);
+worldPos.unproject(camera);
 
-    const posAttr = geometry.attributes.position;
-    const velAttr = geometry.attributes.aVelocity;
-    const timeAttr = geometry.attributes.aStartTime;
-    const randAttr = geometry.attributes.aRandom;
 
-    const x = mouse.x * viewport.width * 0.5;
-    const y = mouse.y * viewport.height * 0.5;
+    const dir = worldPos.clone().sub(prevWorldPos.current);
+    prevWorldPos.current.copy(worldPos);
 
-    for (let i = 0; i < SPAWN_PER_FRAME; i++) {
-      const i3 = index.current * 3;
+    const pos = geometry.attributes.position.array;
+    const vel = geometry.attributes.velocity.array;
+    const life = geometry.attributes.life.array;
 
-      posAttr.array[i3] = x;
-      posAttr.array[i3 + 1] = y;
-      posAttr.array[i3 + 2] = 0;
+    /* Shift particles back */
+    for (let i = COUNT - 1; i > 0; i--) {
+      life[i] = life[i - 1];
+      pos[i * 3] = pos[(i - 1) * 3];
+      pos[i * 3 + 1] = pos[(i - 1) * 3 + 1];
+      pos[i * 3 + 2] = pos[(i - 1) * 3 + 2];
 
-      velAttr.array[i3] = (Math.random() - 0.5) * 0.6;
-      velAttr.array[i3 + 1] = (Math.random() - 0.5) * 0.6;
-      velAttr.array[i3 + 2] = Math.random() * 0.8;
-
-      timeAttr.array[index.current] = clock.current;
-      randAttr.array[index.current] = Math.random();
-
-      index.current = (index.current + 1) % PARTICLE_COUNT;
+      vel[i * 3] = vel[(i - 1) * 3];
+      vel[i * 3 + 1] = vel[(i - 1) * 3 + 1];
+      vel[i * 3 + 2] = vel[(i - 1) * 3 + 2];
     }
 
-    posAttr.needsUpdate = true;
-    velAttr.needsUpdate = true;
-    timeAttr.needsUpdate = true;
+    /* Head particle */
+    life[0] = 1;
+    pos[0] = worldPos.x;
+    pos[1] = worldPos.y;
+    pos[2] = worldPos.z;
+
+    vel[0] = dir.x * 30;
+    vel[1] = dir.y * 30;
+    vel[2] = dir.z * 30;
+
+    /* Update all */
+    for (let i = 0; i < COUNT; i++) {
+      life[i] -= delta * 0.5;
+
+      pos[i * 3] += vel[i * 3] * delta;
+      pos[i * 3 + 1] += vel[i * 3 + 1] * delta;
+      pos[i * 3 + 2] += vel[i * 3 + 2] * delta;
+
+      vel[i * 3] *= 0.88;
+      vel[i * 3 + 1] *= 0.88;
+      vel[i * 3 + 2] *= 0.88;
+
+      if (life[i] <= 0) {
+        pos[i * 3] = worldPos.x;
+        pos[i * 3 + 1] = worldPos.y;
+        pos[i * 3 + 2] = worldPos.z;
+      }
+    }
+
+    geometry.attributes.position.needsUpdate = true;
+    geometry.attributes.velocity.needsUpdate = true;
+    geometry.attributes.life.needsUpdate = true;
   });
 
-  return <points ref={pointsRef} geometry={geometry} material={material} />;
+  return (
+    <points ref={pointsRef} geometry={geometry} material={material} frustumCulled={false} />
+  );
 }
