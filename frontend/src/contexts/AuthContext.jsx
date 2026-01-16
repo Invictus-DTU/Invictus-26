@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
-      setAuthLoading(false);
+      setAuthLoading(false);//no need to set user as null because on reload automatically default state as null 
       return;
     }
 
@@ -29,13 +29,14 @@ export function AuthProvider({ children }) {
       })
       .then((res) => {
         setUser(res.data.name);
+        console.log(user);
       })
       .catch(() => {
-        localStorage.removeItem("accessToken");//if accesstoken not valid
+        localStorage.removeItem("accessToken");// if accesstoken not valid
         setUser(null);
       })
       .finally(() => {
-        setAuthLoading(false);//very imp user pura checked and stored properly in localstorage then authloading stopped so initially if user == null and react has just rendered toh wont shift to login no flicker only shift to login page after this check is completed
+        setAuthLoading(false);// very imp user pura checked and stored properly in localstorage then authloading stopped so initially if user == null and react has just rendered toh wont shift to login no flicker only shift to login page after this check is completed
       });
   }, []);
 
@@ -53,7 +54,7 @@ export function AuthProvider({ children }) {
 
       if (res.status === 200) {
         localStorage.setItem("accessToken", res.data.accessToken);
-        setUser(res.data.user);
+        setUser(res.data.name);
         return { success: true };
       }
     } catch (error) {

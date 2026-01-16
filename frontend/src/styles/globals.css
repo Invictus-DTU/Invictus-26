@@ -2,6 +2,22 @@
 @tailwind utilities;
 /* @import "tw-animate-css"; */
 
+.three-wrapper {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  isolation: isolate;
+}
+
+.three-wrapper * {
+  box-sizing: content-box;
+  color: initial;
+  font-family: initial;
+}
+
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

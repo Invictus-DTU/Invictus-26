@@ -115,7 +115,7 @@ useFrame((state) => {
       <Ocean position={[0, -2, 0]} />
 
       {/* Fog around model */}
-      <Fog position={[0, -1, 0]} />
+      {/* <Fog position={[0, -1, 0]} /> */}
 
       {/* Ground */}
       {/* <MarbleGround /> */}

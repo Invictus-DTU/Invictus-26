@@ -37,6 +37,9 @@ export default function ThreeScene() {
         camera={{ position: [0, 12, 12], fov: 50 }}
         className="absolute inset-0"
         frameloop={playTransition ? "never" : "always"}
+        gl={{ alpha: true }}
+        style={{ all: "unset" }}
+
         >
         <ScrollControls pages={3} damping={0.18}>
           <SceneContent setcurrSection={setcurrSection} playTransition={playTransition} onStartExplore={() => setPlayTransition(true)} />
