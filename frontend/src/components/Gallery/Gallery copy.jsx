@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState, useEffect } from "react";
 import { utils } from "swapy";
-import { SwapyItem, SwapyLayout, SwapySlot } from "@/components/Gallery/ui/swapy";
+import { SwapyItem, SwapyLayout, SwapySlot } from "@/component/ui/swapy";
 import { Heart, PlusCircle } from "lucide-react";
 import styles from "./Gallery.module.css";
 export function ProjectViewsCard() {
