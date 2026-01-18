@@ -63,12 +63,17 @@ const EventCard = ({ title, isActive }) => {
 export default function CardComponent({ setLotusClass, setLotusStyle }) {
   const [api, setApi] = useState(null)
   const [current, setCurrent] = useState(0)
+  const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  const {
-    events,
-    eventsLoading,
-    getEvents,
-  } = useContext(AuthContext)
+  const [eventsLoading, setEventsLoading] = useState(true)
+  const [events, setEvents] = useState([])
+  const [eventsError, setEventsError] = useState(null)
+
+  // const {
+  //   events,
+  //   eventsLoading,
+  //   getEvents,
+  // } = useContext(AuthContext)
 
   // 🌸 Lotus center → fade animation (unchanged)
   useEffect(() => {
@@ -97,10 +102,24 @@ export default function CardComponent({ setLotusClass, setLotusStyle }) {
 
     return () => clearTimeout(timeout)
   }, [setLotusClass, setLotusStyle])
-//events get from backend
+
+
+// events get from backend
   useEffect(() => {
+    const getEvents = async () => {
+      const res = await fetch(`${backend_url}/events/`)
+      if (!res.ok) {
+        setEventsLoading(false)
+        setEventsError("Unable to get events")
+      }
+      const events = await res.json()
+      console.log(events)
+      setEvents(events)
+      setEventsError(null)
+      setEventsLoading(false)
+    }
     getEvents()
-  }, [getEvents])
+  }, [])
 
   // 🔄 Active index sync
   useEffect(() => {
@@ -146,11 +165,11 @@ export default function CardComponent({ setLotusClass, setLotusStyle }) {
         <CarouselContent className="-ml-4 items-center pt-10 pb-10">
           {events.map((ev, index) => (
             <CarouselItem
-              key={ev._id || index}
+              key={ev.id || index}
               className="pl-4 basis-[85%] md:basis-1/3 flex justify-center"
             >
               <EventCard
-                title={ev.title}
+                title={ev.name}
                 isActive={index === current}
               />
             </CarouselItem>
@@ -161,11 +180,17 @@ export default function CardComponent({ setLotusClass, setLotusStyle }) {
           className="absolute left-2 md:-left-12 top-1/2 -translate-y-1/2 z-30
           h-10 w-10 rounded-full border-2 border-[#C5A059] bg-white text-[#C5A059]
           shadow-md hover:bg-[#C5A059] hover:text-white transition"
+          onClick={() => {
+            setCurrent(current - 1 ? current !== 0 : 0)
+          }}
         />
         <CarouselNext
           className="absolute right-2 md:-right-12 top-1/2 -translate-y-1/2 z-30
           h-10 w-10 rounded-full border-2 border-[#C5A059] bg-white text-[#C5A059]
           shadow-md hover:bg-[#C5A059] hover:text-white transition"
+          onClick={() => {
+            setCurrent(current + 1 ? current + 1 < events.length : events.length - 1)
+          }}
         />
       </Carousel>
     </div>
