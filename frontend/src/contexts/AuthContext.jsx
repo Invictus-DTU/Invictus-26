@@ -8,6 +8,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(null)
+  const [regError, setRegError] = useState(null);
   const [events, setEvents] = useState([]);
   const [eventsLoading, setEventsLoading] = useState(false);
   const [eventsError, setEventsError] = useState(null);
@@ -53,11 +54,19 @@ export function AuthProvider({ children }) {
       );
 
       if (res.status === 200) {
+        // console.log(res);
+        
         localStorage.setItem("accessToken", res.data.accessToken);
-        setUser(res.data.name);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
+        const Name = await fetchMe(res.data.accessToken);
+        // console.log(Name);
+        setRegError(null);
         return { success: true };
       }
     } catch (error) {
+      setRegError(error.response.data.error || "Registration failed")
+      console.log(error);
+      
       return {
         success: false,
         message: error.response?.data?.message || "Login failed",
@@ -68,28 +77,34 @@ export function AuthProvider({ children }) {
   };
 
   const register = async (data) => {
-    setLoading(true);
-    try {
-      const res = await axios.post(
-        `${backend_url}/users`,
-        data,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      if (res.status === 201 || res.status === 200) {
-        return { success: true };
+  setLoading(true);
+  try {
+    const res = await axios.post(
+      `${backend_url}/users`,
+      data,
+      {
+        headers: { "Content-Type": "application/json" },
       }
-    } catch (error) {
+    );
+
+    if (res.status === 201 || res.status === 200) {
+      setRegError(null);
       return {
-        success: false,
-        message: error.response?.data?.message || "Registration failed",
+        success: true,
+        data: res.data,
       };
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    setRegError(error.response?.data?.error || "Registration failed");
+
+    return {
+      success: false,
+      message: error.response?.data?.error || "Registration failed",
+    };
+  } finally {
+    setLoading(false);
+  }
+};
 
   const adminLogin = async (credentials) => {
     setLoading(true);
@@ -198,6 +213,7 @@ const logout = () => {
         isAdmin,
         // refreshToken,
         loading,
+        regError,
         getEvents,
         getEventById,
         logout,

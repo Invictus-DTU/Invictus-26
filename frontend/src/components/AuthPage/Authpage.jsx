@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 
 export default function Authpage({setLotusClass, setLotusStyle}) {
-  const { user,isAdmin, login, register, Adminlogin } = useContext(AuthContext);
+  const { user, isAdmin, login, register, Adminlogin, loading, regError } = useContext(AuthContext);
   const backend_URL = "http://localhost:3004/";  
   const [isLogin, setIsLogin] = useState(true);
   const [eyeToggle, setEyeToggle] = useState(false);
@@ -30,6 +30,15 @@ export default function Authpage({setLotusClass, setLotusStyle}) {
     confirmPassword: '',
     agreedToTerms: false
   });
+  
+  useEffect(() => {
+    if (regError) {
+      showErrors({
+        server: regError,
+      });
+    }
+  }, [loading]);
+
 
   useEffect(() => {
       if (!setLotusClass) return
@@ -81,8 +90,9 @@ export default function Authpage({setLotusClass, setLotusStyle}) {
   }
 
   if (!isLogin) {
-    if (!formData.fullName.trim()) {
+    if (!formData.fullName.trim() || formData.fullName.length > 30) {
       newErrors.fullName = "Full name is required";
+      if(formData.fullName.length > 30) newErrors.fullName = "Name should be less than 30 letters";
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -143,11 +153,19 @@ const handleSubmit = async (e) => {
         password: formData.password,
       });
     } else {
-      await register({
-        fullName: formData.fullName,
+    const result = await register({
+      name: formData.fullName,
+      email: formData.email,
+      password: formData.password,
+    });
+
+    if (result?.success) {
+      await login({
         email: formData.email,
         password: formData.password,
       });
+}
+
     }
   } catch (err) {
     console.error(err);
@@ -306,7 +324,7 @@ const handleSubmit = async (e) => {
                     style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(61%) saturate(466%) hue-rotate(359deg) brightness(104%) contrast(101%)' }} 
                   />
                   <input
-                    type="password"
+                    type = {eyeToggle ? "text" : "password"}
                     name="confirmPassword"
                     placeholder="Confirm Password"
                     value={formData.confirmPassword}
@@ -364,18 +382,31 @@ const handleSubmit = async (e) => {
                 <p className="text-xs text-red-400 text-center mb-1">
                   {errors.admin}
                 </p>
-              )}
+                )}
+                {errors.server && (
+                  <p className="text-xs text-red-400 text-center mb-1">
+                    {errors.server}
+                  </p>
+                )}
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="w-full font-semibold py-2.5 bg-[#FFD98A] hover:bg-[#917d53] cursor-pointer tracking-wider uppercase text-sm"
+                className={`w-full font-semibold py-2.5 bg-[#FFD98A] hover:bg-[#917d53] cursor-pointer tracking-wider uppercase text-sm 
+                    ${loading ? "opacity-70 cursor-not-allowed" : "cursor-pointer hover:bg-[#917d53]"}  ` }
                 style={{ 
                   color: '#000000',
                   border: '2px solid #FFD98A'
                 }}
               >
 
-                {isLogin ? "LOGIN" : "REGISTER"}
+              {loading ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                  {isLogin ? "LOGGING IN" : "REGISTERING"}
+                </>
+              ) : (
+                isLogin ? "LOGIN" : "REGISTER"
+              )}
               </button>
 
               {/* Divider */}
