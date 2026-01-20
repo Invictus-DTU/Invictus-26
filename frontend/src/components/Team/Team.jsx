@@ -4,7 +4,6 @@ import TeamCarousel from '@/utils/Team Carousel/TeamCarousel'
 
 export default function TeamComponent({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle }) {
 
-  /* ---------------- MOVE GLOBAL LOTUS NEXT TO "TEAM" ---------------- */
   useEffect(() => {
     if (!setLotusStyle || !setLotusClass) return;
 
@@ -40,7 +39,7 @@ export default function TeamComponent({ setLotusClass, setLotusStyle, setFigureC
     if (!setFigureClass || !setFigureStyle) return;
   
     setFigureStyle({
-      left: "0px",
+      left: "-20px",
       bottom: "0px",
       transform: "translate(10%, 10%)",
     });
@@ -61,14 +60,13 @@ export default function TeamComponent({ setLotusClass, setLotusStyle, setFigureC
 
   return (
     <>
-      {/* ---------------- DECORATIVE BACKGROUND ELEMENTS ---------------- */}
 
       <img
         src="/Team/feathers.webp"
         alt="Decorative Feathers"
         className="
           fixed z-[10] pointer-events-none
-          w-[400px] md:w-[500px] xl:w-[600px]
+          w-[325px] md:w-[425px] xl:w-[525px]
           bottom-0 right-0
           translate-x-[35%] translate-y-[35%]
           brightness-125 saturate-125
@@ -76,20 +74,6 @@ export default function TeamComponent({ setLotusClass, setLotusStyle, setFigureC
         "
       />
 
-      <img
-        src="/Team/peacock-shadow.webp"
-        alt="Peacock Shadow"
-        className="
-          fixed z-[9] pointer-events-none
-          w-[300px] md:w-[400px] xl:w-[550px]
-          bottom-0 left-0
-          translate-x-[-27%] translate-y-[15%]
-          brightness-125 saturate-125
-          transition-all duration-500 opacity-100
-        "
-      />
-
-      {/* ---------------- HEADING SECTION ---------------- */}
 
       <div className="px-6 mt-22 lg:pt-8 md:pt-4 md:pl-10 text-center md:text-left">
 
@@ -98,7 +82,6 @@ export default function TeamComponent({ setLotusClass, setLotusStyle, setFigureC
             TEAM
           </span>
 
-          {/* LOTUS ANCHOR — exact placement reference */}
           <span
             data-lotus-anchor
             className=" absolute right-[-2.5rem] md:right-[-3.5rem] lg:right-[-4.5rem] top-1/2 -translate-y-1/2 w-0 h-0"
@@ -109,15 +92,12 @@ export default function TeamComponent({ setLotusClass, setLotusStyle, setFigureC
           The passionate minds and dedicated leaders driving Invictus forward.
         </div>
 
-        {/* LOTUS ANCHOR — mobile between heading & carousel */}
         <span
           data-lotus-anchor-mobile
           className="block w-0 h-0 md:hidden"
         />
 
       </div>
-
-      {/* ---------------- TEAM CAROUSEL ---------------- */}
 
       <div className="relative w-full flex justify-center items-center overflow-hidden">
         <TeamCarousel />

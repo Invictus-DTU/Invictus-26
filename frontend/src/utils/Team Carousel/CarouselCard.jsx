@@ -45,14 +45,14 @@ const CarouselCard = ({ personInfo, offset, isFlipped }) => {
         
         {/* front side of card */}
         <div 
-          className="absolute inset-0 w-full h-full rounded-2xl shadow-xl flex flex-col justify-center items-center"
+          className="absolute inset-0 w-full h-full rounded-t-[29px] rounded-b-3xl shadow-xl flex flex-col justify-center items-center"
           style={{ 
             backfaceVisibility: "hidden",
             backgroundImage: "url('/Team/card.webp')",
             backgroundSize: 'cover',
             backgroundPosition: 'center' }}>
 
-          <div className="h-32 sm:h-40 flex items-center justify-center ">
+          <div className="h-32 sm:h-40 flex flex-col items-center justify-end">
             <div className="w-20 h-20 sm:w-26 sm:h-26 rounded-full border-3 border-[#D4AF37]/60 brightness-105 saturate-125 
             flex items-center justify-center">
               
@@ -60,13 +60,20 @@ const CarouselCard = ({ personInfo, offset, isFlipped }) => {
                 backgroundImage: `url(${personInfo.avatar})`,
               }}></div>
             </div>
+            <div
+            className='w-40 h-4 mt-2'
+            style={{ 
+            backfaceVisibility: "hidden",
+            backgroundImage: "url('/Team/divider.svg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center' }}></div>
           </div>
 
           <div className="text-center [font-family:'Montserrat',sans-serif] font-[900]">
-            <p className="bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] bg-clip-text text-[1.1em] sm:text-[1.4em] text-transparent">
+            <p className="bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] bg-clip-text text-[1em] sm:text-[1.3em] text-transparent">
               {personInfo.name}
             </p>
-            <p className="py-2 sm:py-3 text-black opacity-70 text-[0.9em] sm:text-[1.2em]">
+            <p className="py-2 sm:py-3 text-black opacity-70 text-[0.9em] sm:text-[1.1em]">
               {personInfo.designation}
             </p>
           </div>
@@ -95,7 +102,7 @@ const CarouselCard = ({ personInfo, offset, isFlipped }) => {
 
         {/* back side of card */}
         <div 
-          className="absolute inset-0 w-full h-full rounded-2xl bg-white border-3 border-[#D4AF37]/60 
+          className="absolute inset-0 w-full h-full rounded-2xl bg-white border-3 border-[#D4AF37]/60 rounded-[20px]
           shadow-xl flex items-center justify-center text-white"
           style={{ 
             backfaceVisibility: "hidden", 

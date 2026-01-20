@@ -1,0 +1,19 @@
+<svg
+  width="240"
+  height="16"
+  viewBox="0 0 240 16"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Left line -->
+  <line x1="0" y1="8" x2="92" y2="8" stroke="#D4AF37" stroke-width="1"/>
+
+  <!-- Right line -->
+  <line x1="148" y1="8" x2="240" y2="8" stroke="#D4AF37" stroke-width="1"/>
+
+  <!-- Center dots -->
+  <circle cx="104" cy="8" r="2" fill="#D4AF37"/>
+  <circle cx="112" cy="8" r="3" fill="#D4AF37"/>
+  <circle cx="120" cy="8" r="4" fill="#D4AF37"/>
+  <circle cx="128" cy="8" r="3" fill="#D4AF37"/>
+  <circle cx="136" cy="8" r="2" fill="#D4AF37"/>
+</svg>
