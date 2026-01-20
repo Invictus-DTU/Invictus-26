@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 
 export default function Authpage({setLotusClass, setLotusStyle, setFigureClass, setFigureStyle}) {
   const { user, isAdmin, login, register, Adminlogin, loading, regError } = useContext(AuthContext);
-  const backend_URL = "http://localhost:3004/";  
+  const backend_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [isLogin, setIsLogin] = useState(true);
   const [eyeToggle, setEyeToggle] = useState(false);
   const [errors, setErrors] = useState({});
@@ -219,7 +219,7 @@ const handleSubmit = async (e) => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = `${backend_URL}auth/google`;
+    window.location.href = `${backend_URL}/auth/google`;
   };
 
   return (
