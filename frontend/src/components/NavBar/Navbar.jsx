@@ -74,23 +74,11 @@ export default function Navbar() {
 
   return (
     <div className="flex justify-center">
-      <nav className="fixed top-4 right-0 w-[85vw] z-[50] bg-transparent backdrop-blur-md text-black rounded-l-4xl rounded-r-2xl border-3 border-[#D4AF37] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.15)]">
-        <div className="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
-
-          {/* placeholder for logo */}
-          <div
-            className="flex text-[#D4AF37] text-[1rem] md:text-[0.8rem] items-center space-x-3 md:space-x-4 cursor-pointer"
-            onClick={() => router.push('/')}
-          >
-            <div className="flex flex-col border-r border-[#D4AF37] pr-3 md:pr-4 leading-tight">
-              <span className="font-bold uppercase text-xl tracking-tighter">
-                Logo(PH)
-              </span>
-            </div>
-          </div>
+      <nav className={`fixed top-4 right-0 w-auto md:w-fit z-[50] flex bg-transparent backdrop-blur-md text-black rounded-l-2xl rounded-r-2xl md:rounded-l-4xl border-3 border-[#D4AF37] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.15)]`}>
+        <div className="px-4 py-3 flex items-center">
 
           {/* desktop menu */}
-          <div className="hidden md:flex md:text-[0.67rem] items-center space-x-1 lg:space-x-4 xl:space-x-5 relative text-[0.75rem] lg:text-[0.9rem] xl:text-[1.1rem] uppercase tracking-wider">
+          <div className="hidden w-fit md:flex md:text-[0.67rem] items-center space-x-1 lg:space-x-4 xl:space-x-5 relative text-[0.75rem] lg:text-[0.9rem] xl:text-[1.1rem] uppercase tracking-wider">
 
             {/* selected option pill */}
             {mounted && activeIndex !== -1 && (
