@@ -52,7 +52,7 @@ export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, 
     });
 
     setLotusClass(`
-      absolute
+      fixed
       max-[380px]:bottom-[20%]
       bottom-[22%]
       md:bottom-[29%]
