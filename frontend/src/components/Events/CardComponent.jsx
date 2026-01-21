@@ -7,12 +7,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/Events/ui/carousel'
-import { AuthContext } from '@/contexts/AuthContext'
+import EventMore from './EventMore'
 
 // --- 1. Event Card ---
-const EventCard = ({ title, isActive }) => {
+const EventCard = ({ title, image, isActive, onClick }) => {
+
   return (
     <div
+      onClick={onClick}
       className={`
         relative bg-white transition-all duration-500 ease-in-out
         w-[279px] h-[377px]
@@ -33,12 +35,13 @@ const EventCard = ({ title, isActive }) => {
 
       <div className="z-10 w-full flex-1 my-3 border-2 border-[#C5A059]/30 bg-[#FFF8E7] rounded-lg flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full bg-[#C5A059]/20 mx-auto mb-2 flex items-center justify-center">
+          {/* <div className="w-12 h-12 rounded-full bg-[#C5A059]/20 mx-auto mb-2 flex items-center justify-center">
             <span className="text-[#C5A059] text-xl">📷</span>
           </div>
           <p className="text-[#C5A059] text-[10px] font-bold tracking-widest leading-relaxed">
             EVENT PHOTO<br />THEME BACKGROUND
-          </p>
+          </p> */}
+          <img src={image || "/backdrop.png"} alt="" />
         </div>
       </div>
 
@@ -60,10 +63,12 @@ const EventCard = ({ title, isActive }) => {
 }
 
 // --- 2. Main Carousel Component ---
-export default function CardComponent({ setLotusClass, setLotusStyle }) {
+export default function CardComponent({ filters, setLotusClass, setLotusStyle }) {
   const [api, setApi] = useState(null)
   const [current, setCurrent] = useState(0)
-  const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3004';
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const [eventsLoading, setEventsLoading] = useState(true)
   const [events, setEvents] = useState([])
@@ -75,6 +80,15 @@ export default function CardComponent({ setLotusClass, setLotusStyle }) {
   //   getEvents,
   // } = useContext(AuthContext)
 
+  const handleEventClick = (event) => {
+  setSelectedEvent(event);
+  setDrawerOpen(true);
+};
+
+const handleClose = () => {
+  setDrawerOpen(false);
+  setTimeout(() => setSelectedEvent(null), 300); // match animation
+};
   // 🌸 Lotus center → fade animation (unchanged)
   useEffect(() => {
     if (!setLotusClass) return
@@ -105,40 +119,48 @@ export default function CardComponent({ setLotusClass, setLotusStyle }) {
 
 
 // events get from backend
-  useEffect(() => {
-    const getEvents = async () => {
-      const res = await fetch(`${backend_url}/events/`)
+useEffect(() => {
+  const getEvents = async () => {
+    try {
+      const res = await fetch(`${backend_url}/events`);
+
       if (!res.ok) {
-        setEventsLoading(false)
-        setEventsError("Unable to get events")
+        throw new Error(`HTTP ${res.status}`);
       }
-      const events = await res.json()
-      console.log(events)
-      setEvents(events)
-      setEventsError(null)
-      setEventsLoading(false)
+
+      const data = await res.json();
+      // console.log(data);
+      setEvents(data);
+      setEventsError(null);
+    } catch (err) {
+      console.error(err);
+      setEventsError("Unable to get events");
+      setEvents([]);
+    } finally {
+      setEventsLoading(false);
     }
-    getEvents()
-  }, [])
+  };
+
+  if (backend_url) getEvents();
+}, [backend_url]);
 
   // 🔄 Active index sync
   useEffect(() => {
     if (!api || !events?.length) return
 
     const update = () => {
-      setCurrent(api.selectedScrollSnap() % events.length)
+      const index = api.selectedScrollSnap();
+      setCurrent(index);
     }
 
     update()
     api.on('select', update)
   }, [api, events])
 
-  // ✅ Loading state (silent)
   if (eventsLoading) {
     return <div className="min-h-[600px]" />
   }
 
-  // ✅ Coming Soon (exact UI preserved)
   if (!events || events.length === 0) {
     return (
       <div className="w-full py-20 flex flex-col items-center justify-center min-h-[400px]">
@@ -155,15 +177,91 @@ export default function CardComponent({ setLotusClass, setLotusStyle }) {
     )
   }
 
+  const isSameDay = (d1, d2) =>
+  d1.getFullYear() === d2.getFullYear() &&
+  d1.getMonth() === d2.getMonth() &&
+  d1.getDate() === d2.getDate();
+
+const filteredEvents = events.filter((ev) => {
+
+  if(filters.tag && filters.tag === "Workshop"){
+  if(ev.isWorkshop){
+    return true;
+  }else{
+    return false;
+  }
+  }
+  // 🔍 Search
+  if (
+
+    filters.search &&
+    !ev.name.toLowerCase().includes(filters.search.toLowerCase())
+  ) {
+    return false;
+  }
+
+  // 🧭 Mode
+  // console.log(filters.mode);
+  if (filters.mode && ev.mode !== filters.mode) {
+    return false;
+  }
+
+  // 🏷 Category
+  if (filters.category && ev.category !== filters.category) {
+    return false;
+  }
+
+  // 📅 Date
+  if (filters.date) {
+    const eventDate = new Date(ev.date);
+    // console.log(eventDate);
+    const today = new Date();
+    // console.log(today);
+
+    if (filters.date === "TODAY" && !isSameDay(eventDate, today)) {
+      return false;
+    }
+
+    if (filters.date === "TOMORROW") {
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      if (!isSameDay(eventDate, tomorrow)) return false;
+    }
+
+    if (filters.date === "THIS_WEEKEND") {
+      const day = eventDate.getDay(); // 0 Sun, 6 Sat
+      if (day !== 0 && day !== 6) return false;
+    }
+  }
+
+  if(!ev.isWorkshop) return true;
+});
+
+  if (!filteredEvents.length) {
+    return (
+      <div className="w-full py-20 flex flex-col items-center justify-center min-h-[400px]">
+        <div className="text-center space-y-4 p-8 border-4 border-[#C5A059] rounded-2xl bg-[#FFF8E7] shadow-xl">
+ 
+          <div className="w-24 h-1 bg-[#C5A059] mx-auto rounded-full" />
+          <p className="text-[#7A6C45] font-bold uppercase tracking-widest mt-4">
+            NO EVENTS/WORKSHOPS FOUND
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+
   return (
     <div className="w-full py-20 flex justify-center min-h-[600px] overflow-hidden">
+      
       <Carousel
         setApi={setApi}
         opts={{ align: 'center', loop: true }}
         className="w-full max-w-5xl"
       >
         <CarouselContent className="-ml-4 items-center pt-10 pb-10">
-          {events.map((ev, index) => (
+          {filteredEvents.map((ev, index) => (
             <CarouselItem
               key={ev.id || index}
               className="pl-4 basis-[85%] md:basis-1/3 flex justify-center"
@@ -171,28 +269,33 @@ export default function CardComponent({ setLotusClass, setLotusStyle }) {
               <EventCard
                 title={ev.name}
                 isActive={index === current}
+                onClick={() => handleEventClick(ev)}
               />
             </CarouselItem>
           ))}
+
         </CarouselContent>
 
         <CarouselPrevious
           className="absolute left-2 md:-left-12 top-1/2 -translate-y-1/2 z-30
           h-10 w-10 rounded-full border-2 border-[#C5A059] bg-white text-[#C5A059]
           shadow-md hover:bg-[#C5A059] hover:text-white transition"
-          onClick={() => {
-            setCurrent(current - 1 ? current !== 0 : 0)
-          }}
+           onClick={() => api?.scrollPrev()}
         />
         <CarouselNext
           className="absolute right-2 md:-right-12 top-1/2 -translate-y-1/2 z-30
           h-10 w-10 rounded-full border-2 border-[#C5A059] bg-white text-[#C5A059]
           shadow-md hover:bg-[#C5A059] hover:text-white transition"
-          onClick={() => {
-            setCurrent(current + 1 ? current + 1 < events.length : events.length - 1)
-          }}
+          onClick={() => api?.scrollNext()}
         />
       </Carousel>
+
+      <EventMore
+        open={drawerOpen}
+        onClose={handleClose}
+        event={selectedEvent}
+      />
+
     </div>
   )
 }

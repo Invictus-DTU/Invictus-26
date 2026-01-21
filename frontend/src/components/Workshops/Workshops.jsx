@@ -26,6 +26,10 @@ export default function Workshops({setLotusClass, setLotusStyle, setFigureClass,
     `);
   }, [setFigureClass, setFigureStyle]);
 
+    const [filters, setFilters] = useState({
+          tag: "Workshop",
+    });
+
   return (
     <div 
       className=" w-full relative overflow-x-hidden "
@@ -44,7 +48,7 @@ export default function Workshops({setLotusClass, setLotusStyle, setFigureClass,
         </div>
         {/* CARD CAROUSEL SECTION */}
         <div className="w-full max-w-6xl">
-           <CardComponent setLotusClass={setLotusClass} setLotusStyle={setLotusStyle}/>
+           <CardComponent filters={filters} setLotusClass={setLotusClass} setLotusStyle={setLotusStyle}/>
         </div>
 
       </div>

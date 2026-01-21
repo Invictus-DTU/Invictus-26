@@ -6,9 +6,15 @@ import SnackBar from "@/utils/snackBar";
 import { useRouter } from 'next/router';
 
 // Reusable Dropdown Component
-const CustomDropdown = ({ label, options, icon: Icon }) => {
+const CustomDropdown = ({ label, options, icon: Icon, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+
+  const handleSelect = (opt) => {
+    setSelected(opt);
+    setIsOpen(false);
+    onSelect?.(opt);
+  };
 
   return (
     <div className="relative group min-w-[160px] md:min-w-[200px]">
@@ -30,7 +36,7 @@ const CustomDropdown = ({ label, options, icon: Icon }) => {
           {options.map((opt, idx) => (
             <div 
               key={idx} 
-              onClick={() => { setSelected(opt); setIsOpen(false); }}
+              onClick={() => handleSelect(opt)}
               className="px-4 py-2 hover:bg-[#C5A059] hover:text-white cursor-pointer text-[#C5A059]  font-semibold text-sm uppercase transition-colors"
             >
               {opt}
@@ -43,25 +49,35 @@ const CustomDropdown = ({ label, options, icon: Icon }) => {
 };
 
 // Search Input Component (Specific design from image)
-const SearchInput = () => {
+const SearchInput = ({ value, onChange }) => {
   return (
     <div className="relative min-w-[250px]">
-       <div className="bg-[#F9F4E8] border-3 border-[#C5A059]  rounded-md px-4 py-2 flex items-center text-[#7A6C45] font-bold shadow-sm">
-          <Search size={18} className="text-[#C5A059] mr-2" />
-          <input 
-            type="text" 
-            placeholder="EVENT NAME HERE" 
-            className="bg-transparent outline-none w-full placeholder-[#C5A059] text-sm uppercase font-bold"
-          />
-       </div>
+      <div className="bg-[#F9F4E8] border-3 border-[#C5A059] rounded-md px-4 py-2 flex items-center text-[#7A6C45] font-bold shadow-sm">
+        <Search size={18} className="text-[#C5A059] mr-2" />
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="EVENT NAME HERE"
+          className="bg-transparent outline-none w-full placeholder-[#C5A059] text-sm uppercase font-bold"
+        />
+      </div>
     </div>
   );
 };
+
 
 export default function Events({setLotusClass, setLotusStyle, setFigureClass, setFigureStyle}) {
     const [show, setShow] = useState(true);
     const SNACKBAR_TIMEOUT = 3000;
     const router = useRouter();
+    const [filters, setFilters] = useState({
+      search: "",
+      mode: null,
+      category: null,
+      date: null,
+    });
+
 
     useEffect(() => {
       if (typeof window === "undefined") return;
@@ -127,31 +143,44 @@ export default function Events({setLotusClass, setLotusStyle, setFigureClass, se
           
           {/* 1. Search Box */}
           <div className="w-full md:w-auto">
-             <SearchInput />
+             <SearchInput
+                value={filters.search}
+                onChange={(val) =>
+                  setFilters((prev) => ({ ...prev, search: val }))
+                }
+             />
           </div>
 
           {/* 2. Mode Dropdown */}
           <CustomDropdown 
             label="MODE" 
-            options={['Online', 'Offline', 'Hybrid']} 
+            options={['ONLINE', 'OFFLINE']} 
+              onSelect={(mode) =>
+                setFilters((prev) => ({ ...prev, mode }))
+              }
           />
 
           {/* 3. Category Dropdown */}
-          <CustomDropdown 
-            label="CATEGORY" 
-            options={['Category 1', 'Category 2', 'Category 3']} 
-          />
+            <CustomDropdown
+              label="CATEGORY"
+              options={["TECH", "NON_TECH", "CORE", "FIELD", "OTHER"]}
+              onSelect={(category) =>
+                setFilters((prev) => ({ ...prev, category }))
+              }
+            />
 
-          {/* 4. Date Dropdown */}
-          <CustomDropdown 
-            label="DATE" 
-            options={['Today', 'Tomorrow', 'This Weekend']} 
-          />
+            <CustomDropdown
+              label="DATE"
+              options={["TODAY", "TOMORROW", "THIS_WEEKEND"]}
+              onSelect={(date) =>
+                setFilters((prev) => ({ ...prev, date }))
+              }
+            />
         </div>
 
         {/* CARD CAROUSEL SECTION */}
         <div className="w-full max-w-6xl">
-           <CardComponent setLotusClass={setLotusClass} setLotusStyle={setLotusStyle}/>
+           <CardComponent  filters={filters} setLotusClass={setLotusClass} setLotusStyle={setLotusStyle}/>
         </div>
 
       </div>
