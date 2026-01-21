@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { useRouter } from "next/router";
 
 export default function EventMore({ open, onClose, event }) {
   const [tab, setTab] = useState("description");
+  const route = useRouter();
 
   useEffect(() => {
     if (open) document.body.style.overflow = "hidden";
@@ -10,13 +13,13 @@ export default function EventMore({ open, onClose, event }) {
 
   // if (!open) return null;
 
-  return (
+  return createPortal(
     <>
       {/* BACKDROP */}
     <div
       onClick={onClose}
       className={`
-        fixed inset-0 z-40
+        fixed inset-0 z-100
         bg-black/60 backdrop-blur-sm
         transition-opacity duration-300
         ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
@@ -26,14 +29,12 @@ export default function EventMore({ open, onClose, event }) {
       {/* DRAWER */}
     <div
       className={`
-        fixed top-0 right-0 z-50
+        fixed top-0 right-0 z-101
         h-full w-full max-w-2xl
         bg-[#000000] text-[#f3efe6]
         shadow-[-20px_0_60px_rgba(0,0,0,0.45)]
         border-l border-[rgba(201,164,76,0.25)]
         overflow-y-auto overflow-x-hidden
-        transform-gpu
-        transition-transform
         duration-500
         ease-[cubic-bezier(.22,1,.36,1)]
         ${open ? "translate-x-0" : "translate-x-full"}
@@ -52,9 +53,14 @@ export default function EventMore({ open, onClose, event }) {
           {/* LEFT SECTION */}
           <div className="flex flex-col">
             {/* TITLE */}
-            <h1 className="text-4xl invictus-heading font-bold tracking-widest mb-10 text-[#c9a44c]">
-              {event?.name || "EVENT NAME"}
-            </h1>
+            <div className="mb-10">
+              <h1 className="text-4xl invictus-heading font-bold tracking-widest text-[#c9a44c]">
+                {event?.name.toUpperCase() || "EVENT NAME"}
+              </h1>
+              <p className="text-sm tracking-widest text-[red] mt-2 uppercase">
+                {event?.status || "Status"}
+              </p>
+            </div>
 
             {/* TABS */}
             <div className="space-y-4 invictus-subheading mb-10">
@@ -77,33 +83,43 @@ export default function EventMore({ open, onClose, event }) {
               ))}
             </div>
 
-            {/* CONTENT */}
-            <div className="flex-1 text-sm font-bold invictus-text leading-relaxed text-[#f3efe6]/80">
-              {tab === "description" && (
-                <p>{event?.description || "Event description goes here."}</p> 
-              )}
-              {tab === "stages & timeline" && (
-                <p>{event?.stages || "Stages information goes here."}</p>
-              )}
-              {tab === "contacts" && (
-                <p>{event?.contacts || "Contact details go here."}</p>
-              )}
-              <hr />
-            </div>
+                  <div className="flex-1 text-sm font-bold invictus-text leading-relaxed text-[#f3efe6]/80">
+                    {tab === "description" && (
+                    <p>{event?.description || "Event description goes here."}</p> 
+                    )}
+                    {tab === "stages & timeline" && (
+                    <p>{event?.date ? new Date(event.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : "Stages information goes here."}</p>
+                    )}
+                    {tab === "contacts" && (
+                    <div>
+                      {event?.contacts ? (
+                      Object.entries(event.contacts).map(([name, phone]) => (
+                        <p key={name} className="mb-2">
+                        <span className="text-[#c9a44c]">{name}:</span> {phone}
+                        </p>
+                      ))
+                      ) : (
+                      <p>Contact details go here.</p>
+                      )}
+                    </div>
+                    )}
+                    <hr className="mt-4" />
+                  </div>
 
-            {/* PRIZE */}
+                  {/* PRIZE */}
             <div className="mt-12 invictus-text">
               <p className="text-xs tracking-widest text-[#f3efe6]/60">
                 PRIZES WORTH
               </p>
               <p className="text-4xl font-bold text-[#c9a44c] mt-2">
-                ₹ {event?.prize || "50,000"}*
+                ₹ {event?.prizes || "50,000"}*
               </p>
             </div>
 
             {/* CTA */}
             <div className="flex md:gap-6 gap-2 mt-6 invictus-text">
 <button
+  disabled={!event?.unstopLink}
   className="
     relative overflow-hidden
     px-6 py-2
@@ -113,6 +129,11 @@ export default function EventMore({ open, onClose, event }) {
     transition
     group
   "
+  onClick={() => {
+    if (event?.unstopLink) {
+      window.open(event.unstopLink, "_blank", "noopener,noreferrer");
+    }
+  }}
 >
   <span
     className="
@@ -142,6 +163,7 @@ export default function EventMore({ open, onClose, event }) {
     transition
     group
   "
+  onClick={() => {route.replace("/Dashboard") }}
 >
   <span
     className="
@@ -166,7 +188,7 @@ export default function EventMore({ open, onClose, event }) {
           {/* RIGHT IMAGE */}
           <div className="relative pb-4 mt-10 rounded-xl w-fit h-fit max-h-3/5 bg-cover overflow-hidden border border-[#c9a44c]/20">
             <img
-              src={event?.image || "/lock.svg"}
+              src={event?.image || "/backdrop.png"}
               alt="Event Image"
               className="w-full h-full object-contain"
             />
@@ -174,6 +196,7 @@ export default function EventMore({ open, onClose, event }) {
           </div>
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 }
