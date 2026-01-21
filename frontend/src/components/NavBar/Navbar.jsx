@@ -28,6 +28,22 @@ export default function Navbar({ className = "" }) {
   const itemsRef = useRef([]);
   const [mounted, setMounted] = useState(false);
 
+  //handling pill position and size
+  const updatePill = () => {
+    if (activeIndex === -1) {
+      setPillStyle({ width: 0, left: 0 });
+      return;
+    }
+
+    const activeElement = itemsRef.current[activeIndex];
+    if (activeElement) {
+      setPillStyle({
+        width: activeElement.offsetWidth,
+        left: activeElement.offsetLeft,
+      });
+    }
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -51,19 +67,30 @@ export default function Navbar({ className = "" }) {
   //handle pill animation
   useEffect(() => {
     if (!mounted) return;
-    if (activeIndex === -1) {
-      setPillStyle({ width: 0, left: 0 });
-      return;
-    }
-
-    const activeElement = itemsRef.current[activeIndex];
-    if (activeElement) {
-      setPillStyle({
-        width: activeElement.offsetWidth,
-        left: activeElement.offsetLeft,
-      });
-    }
+    updatePill();
   }, [activeIndex, mounted]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && open) { setOpen(false); }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [open]);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const handleResize = () => { requestAnimationFrame(updatePill); };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [activeIndex, mounted]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [router.pathname]);
 
   //helper to handle navigation
   const handleNavigation = (e, href) => {
@@ -223,14 +250,14 @@ export default function Navbar({ className = "" }) {
           )}
         </div>
 
-        {/* placeholder for mobile menu bottom */}
+        {/* menu bottom text */}
         <div className=" border-t border-[#D4AF37]/20 pt-4">
-            <div className="flex text-[#D4AF37] text-[1rem] md:text-[0.8rem] items-center space-x-3 md:space-x-4">
-          <div className="flex flex-col border-r border-[#D4AF37] pr-3 md:pr-4 leading-tight">
-            <span className="font-bold uppercase tracking-tighter">Invictus(PH)</span>
+            <div className="flex text-[1.5rem] md:text-[1.2rem] items-center space-x-3 md:space-x-4">
+          <div className="flex flex-col border-r border-[#D4AF37] pr-2 md:pr-3 leading-tight">
+            <span className="invictus-heading font-bold uppercase tracking-[0.15em]">Invictus</span>
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="font-medium uppercase tracking-[0.2em]">2026</span>
+            <span className="invictus-heading font-bold uppercase tracking-[0.1em]">2026</span>
           </div>
           </div>
         </div>
