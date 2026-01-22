@@ -45,6 +45,15 @@ export default function Navbar({ className = "" }) {
   };
 
   useEffect(() => {
+    if (!open) return;
+
+    const handleScroll = () => { setOpen(false); };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [open]);
+
+  useEffect(() => {
     setMounted(true);
   }, []);
 

@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import SnackBar from "@/utils/snackBar";
 
-export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle, setDisplayNavbar, displayWordArt, setDisplayWordArt }) {
+export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle, setDisplayNavbar, displayLogo, setDisplayLogo }) {
 
     const [show, setShow] = useState(true);
     const wordArtRef = useRef(null);
@@ -96,7 +96,7 @@ export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, 
         const visible = entry.isIntersecting;
 
         setDisplayNavbar(!visible);
-        setDisplayWordArt(!visible);
+        setDisplayLogo(!visible);
       },
       { threshold: 0.1 }
     );
@@ -110,11 +110,11 @@ export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, 
 
     if (outOfView) {
       setDisplayNavbar(true);
-      setDisplayWordArt(true);
+      setDisplayLogo(true);
     }
 
     return () => observer.disconnect();
-  }, [setDisplayNavbar, setDisplayWordArt]);
+  }, [setDisplayNavbar, setDisplayLogo]);
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center pt-6 relative overflow-hidden bg-transparent">
@@ -130,7 +130,7 @@ export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, 
             drop-shadow-[0_8px_30px_rgba(255,215,138,0.4)]
             select-none animate-float
             transition-all duration-500 ease-in-out
-            ${displayWordArt ? "opacity-0 scale-95" : "opacity-100 scale-100"}
+            ${displayLogo ? "opacity-0 scale-95" : "opacity-100 scale-100"}
           `}
         />
       </div>
