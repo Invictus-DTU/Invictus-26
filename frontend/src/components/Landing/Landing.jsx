@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useState } from "react";
 import SnackBar from "@/utils/snackBar";
 
-export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle }) {
+export default function Landing() {
 
     const [show, setShow] = useState(true);
     const SNACKBAR_TIMEOUT = 10000;
@@ -41,55 +41,9 @@ export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, 
       setShow(false);
       localStorage.setItem("SnackbarShownLanding",  Date.now().toString());
     }
-    useEffect(() => {
-    if (!setLotusClass || !setLotusStyle) return;
-
-    setLotusStyle({
-      left: "50%",
-    animation: "lotusFloat 5s ease-in-out infinite",
-    filter: "drop-shadow(0 0 22px rgba(255,215,138,0.65))",
-    willChange: "transform",
-    });
-
-    setLotusClass(`
-      fixed
-      max-[380px]:bottom-[20%]
-      bottom-[22%]
-      md:bottom-[29%]
-      w-[80px] md:w-[100px] lg:w-[110px]
-      opacity-100
-      pointer-events-none
-      z-[30]
-      transition-all duration-1000 ease-in-out
-
-    `);
-  }, [setLotusClass, setLotusStyle]);
-
-
-  useEffect(() => {
-    if (!setFigureClass || !setFigureStyle) return;
-
-    setFigureStyle({
-      left: "49%",
-      bottom: "0px",
-      transform: "translateX(-50%)",
-    });
-
-    setFigureClass(`
-      fixed bottom-0
-      w-[240px]
-      max-[380px]:w-[160px]
-      max-[400px]:w-[280px]
-      md:w-[280px]
-      lg:w-[17.625vw]
-      drop-shadow-[0_0_30px_rgba(255,215,138,0.55)]
-      transition-all duration-1000 ease-in-out
-      z-[20]
-    `);
-  }, [setFigureClass, setFigureStyle]);
-
 
   return (
+    <>
     <div className="min-h-screen w-full flex flex-col items-center pt-6 relative overflow-hidden bg-transparent">
 
       {/* WORD ART */}
@@ -216,5 +170,8 @@ export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, 
         />
       )}
     </div>
+
+    <div className="absolute bottom-0 h-1 w-full bg-linear-to-r from-transparent via-[#615030] to-transparent opacity-100" />
+    </>
   )
 }

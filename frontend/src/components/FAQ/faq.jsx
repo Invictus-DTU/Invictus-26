@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import faqs from "./faqs.json";
 
-export default function FAQ({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle }) {
+export default function FAQ() {
   const [open, setOpen] = useState([]);
 
   const toggleFAQ = (i) => {
@@ -11,19 +11,6 @@ export default function FAQ({ setLotusClass, setLotusStyle, setFigureClass, setF
         : [...prev, i]
     );
   };
-
-  // Hide 3D background elements
-  useEffect(() => {
-    if (!setLotusClass || !setLotusStyle) return;
-    setLotusStyle({});
-    setLotusClass("hidden");
-  }, [setLotusClass, setLotusStyle]);
-
-  useEffect(() => {
-    if (!setFigureClass || !setFigureStyle) return;
-    setFigureStyle({});
-    setFigureClass("hidden");
-  }, [setFigureClass, setFigureStyle]);
 
   return (
     <div className="min-h-screen w-full relative overflow-x-hidden font-sans pt-28 pb-12 px-6">
@@ -38,12 +25,8 @@ export default function FAQ({ setLotusClass, setLotusStyle, setFigureClass, setF
         
         {/* TITLE */}
         <h1 className="text-center text-4xl md:text-6xl font-extrabold tracking-widest mb-12 drop-shadow-lg">
-          <span className="bg-gradient-to-b from-[#D4AF37] via-[#F3E3B6] to-[#8B6508] invictus-heading bg-clip-text text-transparent">
-            FREQUENTLY ASKED
-          </span>
-          <br />
-          <span className="bg-gradient-to-b from-[#8B6508] to-[#D4AF37] bg-clip-text invictus-heading text-transparent text-3xl md:text-5xl">
-            QUESTIONS
+          <span className="invictus-heading text-5xl md:text-7xl ">
+            FREQUENTLY ASKED QUESTIONS
           </span>
         </h1>
 

@@ -2,25 +2,7 @@
 
 import React, { useEffect } from "react";
 
-const Footer = ({
-  setLotusClass,
-  setLotusStyle,
-  setFigureClass,
-  setFigureStyle,
-}) => {
-
-  /* ---- Hide global decorative elements when footer is mounted ---- */
-  useEffect(() => {
-    if (!setLotusClass || !setLotusStyle) return;
-    setLotusStyle({});
-    setLotusClass("hidden");
-  }, [setLotusClass, setLotusStyle]);
-
-  useEffect(() => {
-    if (!setFigureClass || !setFigureStyle) return;
-    setFigureStyle({});
-    setFigureClass("hidden");
-  }, [setFigureClass, setFigureStyle]);
+const Footer = ({}) => {
 
   return (
     <footer className="relative w-full border-t-[3px] border-[#D4AF37] shadow-[0_-4px_20px_rgba(212,175,55,0.15)] font-sans text-[#423212] overflow-hidden">

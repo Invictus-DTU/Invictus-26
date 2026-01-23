@@ -11,7 +11,6 @@ export default function Navbar() {
   const navItems = [
     { name: "Home", href: "/Home" },
     { name: "Events", href: "/Events" },
-    { name: "About Us", href: "/AboutUs" },
     { name: "Workshop", href: "/Workshops" },
     { name: "Team", href: "/Team" },
     { name: "Sponsor", href: "/Sponsors" },
@@ -19,7 +18,7 @@ export default function Navbar() {
   ];
 
   //hindi/sanskrit numeric characters
-  const nums = ['०१', '०२', '०३', '०४', '०५', '०६', '०७']; // Added one more for About Us
+  const nums = ['०१', '०२', '०३', '०४', '०५', '०६']; // Added one more for About Us
 
   const authIndex = navItems.length; // PROFILE / LOGIN pill index
 

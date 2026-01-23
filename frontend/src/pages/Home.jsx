@@ -1,13 +1,40 @@
-import React from 'react'
-import Landing from '@/components/Landing/Landing'
+import React, { useRef } from "react";
+import Landing from "@/components/Landing/Landing";
+import Aboutus from "@/components/AboutUs/Aboutus";
 import FAQ from "@/components/FAQ/faq";
 import Footer from "@/components/Footer/footer";
+import { useFigureBySection } from "@/lib/useFigureBySection";
 
-export default function Home({setLotusClass, setLotusStyle, setFigureClass, setFigureStyle}) {
+export default function Home({
+  setFigureClass,
+  setFigureStyle,
+  setLotusClass,
+  setLotusStyle,
+}) {
+  const landingRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useFigureBySection({
+    landingRef,
+    contentRef, 
+    setLotusClass,
+    setLotusStyle,
+    setFigureClass,
+    setFigureStyle,
+  });
+
   return (
-    <><Landing setLotusClass={setLotusClass} setLotusStyle={setLotusStyle} setFigureClass={setFigureClass} setFigureStyle={setFigureStyle} />
-    <FAQ setLotusClass={setLotusClass} setLotusStyle={setLotusStyle} setFigureClass={setFigureClass} setFigureStyle={setFigureStyle}/>
-    <Footer setLotusClass={setLotusClass} setLotusStyle={setLotusStyle} setFigureClass={setFigureClass} setFigureStyle={setFigureStyle}/>
+    <>
+      {/* LANDING */}
+      <section ref={landingRef}>
+        <Landing />
+      </section>
+
+      <section ref={contentRef}>
+        <Aboutus />
+        <FAQ />
+        <Footer />
+      </section>
     </>
-  )
+  );
 }
