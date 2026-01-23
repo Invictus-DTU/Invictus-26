@@ -255,7 +255,7 @@ const Aboutus = () => {
         </div>
 
         {/* SCROLLER AREA */}
-        <div id="scroller-area" className="relative mx-auto z-10 flex items-center justify-center -mt-10 w-[min(150vw,900px)] h-[min(75vh,500px)] bg-transparent">
+        <div id="scroller-area" className="relative md:mx-auto z-10 flex items-center justify-center -mt-10 w-[min(150vw,900px)] h-[min(75vh,500px)] bg-transparent">
           <div className="absolute inset-0 pointer-events-none z-[5] w-full h-full bg-transparent overflow-hidden">
             <Canvas key={router.asPath} gl={{ antialias: true, alpha: true, premultipliedAlpha: false }}>
               <Scroller progressRef={progress} />
@@ -264,10 +264,10 @@ const Aboutus = () => {
 
           {/* Text Content Overlay */}
           <div
-            className="absolute inset-0 z-100 flex items-start justify-center px-[22%] pt-[16%] -ml-[1%] pointer-events-none transition-opacity duration-[1200ms] ease-out"
+            className="absolute inset-0 z-100 flex items-start justify-center max-[700px]:mt-18 px-[22%] pt-[16%] -ml-[1%] pointer-events-none transition-opacity duration-[1200ms] ease-out"
             style={{ opacity: textOpacity }}
           >
-            <p className="invictus-text text-center leading-relaxed font-black italic text-[#312215] text-[1.159rem] max-w-[450px] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
+            <p className="invictus-text text-center leading-relaxed font-black italic text-[#312215] text-[0.8rem] md:text-[1.159rem] max-w-[450px] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
               {aboutText}
             </p>
           </div>
