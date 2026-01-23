@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import faqs from "./faqs.json";
 
-export default function FAQ() {
+export default function FAQ({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle }) {
   const [open, setOpen] = useState([]);
 
   const toggleFAQ = (i) => {
@@ -12,114 +12,105 @@ export default function FAQ() {
     );
   };
 
+  // Hide 3D background elements
+  useEffect(() => {
+    if (!setLotusClass || !setLotusStyle) return;
+    setLotusStyle({});
+    setLotusClass("hidden");
+  }, [setLotusClass, setLotusStyle]);
+
+  useEffect(() => {
+    if (!setFigureClass || !setFigureStyle) return;
+    setFigureStyle({});
+    setFigureClass("hidden");
+  }, [setFigureClass, setFigureStyle]);
+
   return (
-    <div
-      style={{
-        backgroundImage: "url('/backdrop.svg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        minHeight: "100vh",
-        width: "100%",
-        margin: 0,
-        padding: "24px",
-        overflowX: "hidden",
-        boxSizing: "border-box"
-      }}
-    >
-      <h1
-        style={{
-          textAlign: "center",
-          color: "#C5A059",
-          fontSize: "50px",
-          letterSpacing: "3px",
-          marginBottom: "20px",
-          fontWeight: "bold"
-        }}
-      >
-        FREQUENTLY ASKED QUESTIONS
-      </h1>
+    <div className="min-h-screen w-full relative overflow-x-hidden font-sans pt-28 pb-12 px-6">
+      
+      {/* BACKGROUNDS */}
+      <div 
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+      />
 
-      <div style={{ maxWidth: "1300px", margin: "0 auto" }}>
-        {faqs.map((item, i) => {
-          const isOpen = open.includes(i);
+      {/* CONTENT */}
+      <div className="relative z-10 max-w-4xl mx-auto">
+        
+        {/* TITLE */}
+        <h1 className="text-center text-4xl md:text-6xl font-extrabold tracking-widest mb-12 drop-shadow-lg">
+          <span className="bg-gradient-to-b from-[#D4AF37] via-[#F3E3B6] to-[#8B6508] invictus-heading bg-clip-text text-transparent">
+            FREQUENTLY ASKED
+          </span>
+          <br />
+          <span className="bg-gradient-to-b from-[#8B6508] to-[#D4AF37] bg-clip-text invictus-heading text-transparent text-3xl md:text-5xl">
+            QUESTIONS
+          </span>
+        </h1>
 
-          return (
-            <div key={i} style={{ marginBottom: "14px" }}>
-              
-              <div
-                onClick={() => toggleFAQ(i)}
-                style={{
-                  background: isOpen ? "#fff8e7" : "rgba(166,138,82,0.85)",
-                  border: "3px solid #C5A059",
-                  borderRadius: isOpen ? "10px 10px 0 0" : "10px",
-                  padding: "16px 22px",
-                  cursor: "pointer",
-                  fontSize: "26px",
-                  fontWeight: "bold",
-                  color: isOpen ? "#7a6c45" : "#ffffff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  boxSizing: "border-box"
-                }}
+        <div className="space-y-4">
+          {faqs.map((item, i) => {
+            const isOpen = open.includes(i);
+
+            return (
+              <div 
+                key={i} 
+                className={`
+                  rounded-xl border transition-all duration-300 ease-in-out
+                  ${isOpen ? 'border-[#D4AF37] shadow-[0_0_25px_rgba(212,175,55,0.3)]' : 'border-[#6E5616] hover:border-[#D4AF37]/60'}
+                `}
               >
                 
-                <div style={{ display: "flex", alignItems: "center" }}>
+                {/* --- QUESTION HEADER --- */}
+                <div
+                  onClick={() => toggleFAQ(i)}
+                  className={`
+                    flex items-center justify-between p-5 md:p-6 cursor-pointer transition-all duration-300
+                    ${isOpen 
+                      ? 'bg-gradient-to-r from-[#FFFDF5] to-[#F3E3B6] rounded-t-xl text-[#423212]' 
+                      : 'bg-[#2A2112]/80 backdrop-blur-sm rounded-xl text-[#F3E3B6] hover:bg-[#3E2D0B]/80'
+                    }
+                  `}
+                >
+                  <div className="flex items-center gap-4">
+                    {/* Lotus Icon */}
+                    <img
+                      src="/lotus.svg"
+                      alt="lotus"
+                      className={`w-6 h-6 transition-all duration-300 ${isOpen ? 'opacity-100 brightness-75 sepia' : 'opacity-70 brightness-150'}`}
+                    />
+                    
+                    {/* Question Text */}
+                    <span className={`text-lg md:text-xl font-bold tracking-wide ${isOpen ? 'text-[#423212]' : 'text-[#F3E3B6]'}`}>
+                      {item.q}
+                    </span>
+                  </div>
+
+                  {/* Rotating Wheel Icon */}
                   <img
-                    src="/lotus.svg"
-                    alt="lotus"
-                    width="22"
-                    style={{ marginRight: "12px", flexShrink: 0 }}
+                    src="/wheel.svg"
+                    alt="toggle"
+                    className={`w-8 h-8 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]
+                      ${isOpen ? 'rotate-180 brightness-0 opacity-80' : 'rotate-0 brightness-0 invert opacity-60'}
+                    `}
                   />
-                  {item.q}
                 </div>
 
-                
-                <img
-                  src="/wheel.svg"
-                  alt="wheel"
-                  width="32"
-                  style={{
-                    transition: "transform 0.64s ease, filter 0.64s ease",
-                    transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                    filter: isOpen
-                      ? "brightness(0) saturate(100%) invert(60%) sepia(40%) saturate(600%) hue-rotate(10deg)"
-                      : "brightness(0) invert(1)"
-                  }}
-                />
-              </div>
-
-              
-              <div
-                style={{
-                  maxHeight: isOpen ? "300px" : "0px",
-                  opacity: isOpen ? 1 : 0,
-                  transition: "all 0.4s ease",
-                  overflow: "hidden",
-                  background: "#7a6c45",
-                  borderLeft: isOpen ? "3px solid #C5A059" : "none",
-                  borderRight: isOpen ? "3px solid #C5A059" : "none",
-                  borderBottom: isOpen ? "3px solid #C5A059" : "none",
-                  borderRadius: "0 0 10px 10px",
-                  color: "#fff8e7",
-                  boxSizing: "border-box"
-                }}
-              >
-                <p
-                  style={{
-                    padding: isOpen ? "18px 24px" : "0 24px",
-                    fontSize: "22px",
-                    lineHeight: "1.7",
-                    margin: 0
-                  }}
+                {/* --- ANSWER BODY --- */}
+                <div
+                  className={`
+                    overflow-hidden transition-all duration-500 ease-in-out bg-[#FFFBEB]
+                    ${isOpen ? 'max-h-[500px] opacity-100 rounded-b-xl' : 'max-h-0 opacity-0'}
+                  `}
                 >
-                  {item.a}
-                </p>
+                  <p className="p-6 text-[#5C450E] text-base md:text-lg leading-relaxed font-medium border-t border-[#D4AF37]/30">
+                    {item.a}
+                  </p>
+                </div>
+
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
