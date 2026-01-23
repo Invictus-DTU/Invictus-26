@@ -221,7 +221,7 @@ const Aboutus = () => {
     const start = windowHeight;
     const end = -rect.height;
 
-    const rawProgress = (rect.top - start) / (end - start) * 1.5;
+    const rawProgress = (rect.top - start) / (end - start) * 1.7;
     const clamped = Math.min(Math.max(rawProgress, 0), 1);
 
     progress.current = clamped;

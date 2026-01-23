@@ -1,11 +1,29 @@
-import ThreeScene from "@/components/Landing/Three/ThreeScene";
+import dynamic from "next/dynamic";
+import { Suspense, useEffect } from "react";
+import { useLoader } from "@/contexts/LoaderContext";
 
-export default function Home() {
+const ModelScene = dynamic(() => import("@/components/Landing/Three/ThreeScene"), {
+  ssr: false,
+  suspense: true,
+});
+
+
+export default function ModelPage() {
+  const { setModelReady } = useLoader();
+
+  useEffect(() => {
+  return () => {
+    setModelReady(false);
+  };
+}, []);
+
   return (
-    <main>
+    
+    <Suspense fallback={null}>
       <div className="three-wrapper">
-        <ThreeScene />
+        <ModelScene onReady={() => setModelReady(true)} />
       </div>
-    </main>
+    </Suspense>
+    
   );
 }

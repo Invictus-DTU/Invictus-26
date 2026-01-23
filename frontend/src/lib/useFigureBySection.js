@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 export function useFigureBySection({
+  enabled,
   landingRef,
   contentRef,
   setLotusClass,
@@ -9,6 +10,7 @@ export function useFigureBySection({
   setFigureStyle,
 }) {
   useEffect(() => {
+     if (!enabled) return;
     if (!setFigureClass || !setFigureStyle) return;
     if (!setLotusClass || !setLotusStyle) return;
 
@@ -95,5 +97,5 @@ export function useFigureBySection({
       landingObserver.disconnect();
       contentObserver.disconnect();
     };
-  }, []);
+  }, [enabled, landingRef, contentRef, setFigureClass, setFigureStyle, setLotusClass, setLotusStyle]);
 }

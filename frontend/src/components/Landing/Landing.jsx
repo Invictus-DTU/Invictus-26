@@ -1,12 +1,14 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import SnackBar from "@/utils/snackBar";
+import { useRouter } from 'next/router';
 
 export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo }) {
 
   const [show, setShow] = useState(true);
   const wordArtRef = useRef(null);
   const SNACKBAR_TIMEOUT = 10000;
+  const route = useRouter();
 
   useEffect(() => {
     if(localStorage.getItem("ModelSeen")){
@@ -136,6 +138,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
         
         {/* JOIN GROUP - Darker Gold/Bronze Style */}
         <button
+        onClick={() => window.open('https://t.me/joinchat/Invictus26','_blank')}
           className="
             group relative
             w-full md:w-auto
@@ -161,6 +164,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
 
         {/* REGISTER - Lighter Cream/Gold Style */}
         <button
+        onClick={() => route.push('/login')}
           className="
             group relative
             w-full md:w-auto

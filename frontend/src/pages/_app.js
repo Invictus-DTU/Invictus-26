@@ -3,9 +3,29 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/NavBar/Navbar";
 import CommonLotus from "@/utils/commonLotus";
 import LandingFigure from "@/utils/landingFigure";
+import { LoaderProvider } from "@/contexts/LoaderContext";
+import { useLoader } from "@/contexts/LoaderContext";
+import Loader from "@/utils/Loader";
 import "@/styles/globals.css";
 import { useRouter } from "next/router";
 import Script from "next/script";
+
+function DomReady() {
+  const { setDomReady } = useLoader();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDomReady(true);
+    }, 1000); // 1 second delay
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return null;
+}
+
+
+
 
 export default function App({ Component, pageProps }) {
   const [lotusStyle, setLotusStyle] = useState({});
@@ -53,7 +73,9 @@ export default function App({ Component, pageProps }) {
         strategy="beforeInteractive"
       />
     <AuthProvider>
-      
+     <LoaderProvider>
+      <DomReady />
+      <Loader />
       {router.pathname !== "/model" && (
         <Navbar
           className={`
@@ -67,7 +89,7 @@ export default function App({ Component, pageProps }) {
         <img
         src="/logo.png"
         alt="Invictus'26 Logo"
-        onClick={() => router.push('/Home')}
+        onClick={() => router.push('/')}
         className={`
           fixed top-1 left-2 z-60
           w-[100px] md:w-[150px] cursor-pointer
@@ -85,6 +107,7 @@ export default function App({ Component, pageProps }) {
       <Component {...pageProps} setLotusClass={setLotusClass} setLotusStyle={setLotusStyle} setFigureClass={setFigureClass} 
       setFigureStyle={setFigureStyle} setDisplayNavbar={setDisplayNavbar} displayLogo={displayLogo} 
       setDisplayLogo={setDisplayLogo} />
+    </LoaderProvider>
     </AuthProvider>
 
     </>
