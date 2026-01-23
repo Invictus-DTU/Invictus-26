@@ -2,91 +2,45 @@
 import React, { useEffect, useRef, useState } from 'react'
 import SnackBar from "@/utils/snackBar";
 
-export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle, setDisplayNavbar, displayLogo, setDisplayLogo }) {
+export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo }) {
 
-    const [show, setShow] = useState(true);
-    const wordArtRef = useRef(null);
-    const SNACKBAR_TIMEOUT = 10000;
-
-    useEffect(() => {
-      if(localStorage.getItem("ModelSeen")){
-      const shown = localStorage.getItem("SnackbarShownLanding");
-      if(!shown){
-        setShow(true);
-        return;
-      }
-      const lastShown = Number(shown);
-        if(Date.now() - lastShown > SNACKBAR_TIMEOUT) {
-          localStorage.removeItem("ModelSeen");
-        }
-      }
-    }, [])
-
-    useEffect(() => {
-      if (typeof window === "undefined") return;
-
-      const shown = localStorage.getItem("SnackbarShownLanding");
-      if(!shown){
-        setShow(true);
-        return;
-      }
-      const lastShown = Number(shown);
-      // console.log(Date.now() - lastShown);
-      if (Date.now() - lastShown < SNACKBAR_TIMEOUT || localStorage.getItem("ModelSeen") ) {
-        setShow(false);
-      }
-    }, []);
-
-    const handleClose = () => {
-      setShow(false);
-      localStorage.setItem("SnackbarShownLanding",  Date.now().toString());
-    }
-    useEffect(() => {
-    if (!setLotusClass || !setLotusStyle) return;
-
-    setLotusStyle({
-      left: "50%",
-    animation: "lotusFloat 5s ease-in-out infinite",
-    filter: "drop-shadow(0 0 22px rgba(255,215,138,0.65))",
-    willChange: "transform",
-    });
-
-    setLotusClass(`
-      fixed
-      max-[380px]:bottom-[20%]
-      bottom-[22%]
-      md:bottom-[29%]
-      w-[80px] md:w-[100px] lg:w-[110px]
-      opacity-100
-      pointer-events-none
-      z-[60]
-      transition-all duration-1000 ease-in-out
-
-    `);
-  }, [setLotusClass, setLotusStyle]);
-
+  const [show, setShow] = useState(true);
+  const wordArtRef = useRef(null);
+  const SNACKBAR_TIMEOUT = 10000;
 
   useEffect(() => {
-    if (!setFigureClass || !setFigureStyle) return;
+    if(localStorage.getItem("ModelSeen")){
+    const shown = localStorage.getItem("SnackbarShownLanding");
+    if(!shown){
+      setShow(true);
+      return;
+    }
+    const lastShown = Number(shown);
+      if(Date.now() - lastShown > SNACKBAR_TIMEOUT) {
+        localStorage.removeItem("ModelSeen");
+      }
+    }
+  }, [])
 
-    setFigureStyle({
-      left: "49%",
-      bottom: "0px",
-      transform: "translateX(-50%)",
-    });
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-    setFigureClass(`
-      fixed bottom-0
-      w-[240px]
-      max-[380px]:w-[160px]
-      max-[400px]:w-[280px]
-      md:w-[280px]
-      lg:w-[17.625vw]
-      drop-shadow-[0_0_30px_rgba(255,215,138,0.55)]
-      transition-all duration-1000 ease-in-out
-      z-[40]
-    `);
-  }, [setFigureClass, setFigureStyle]);
+    const shown = localStorage.getItem("SnackbarShownLanding");
+    if(!shown){
+      setShow(true);
+      return;
+    }
+    const lastShown = Number(shown);
+    // console.log(Date.now() - lastShown);
+    if (Date.now() - lastShown < SNACKBAR_TIMEOUT || localStorage.getItem("ModelSeen") ) {
+      setShow(false);
+    }
+  }, []);
+
+  const handleClose = () => {
+    setShow(false);
+    localStorage.setItem("SnackbarShownLanding",  Date.now().toString());
+  }
 
   useEffect(() => {
     if (!wordArtRef.current) return;
@@ -105,8 +59,7 @@ export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, 
 
     //safety check in case observer fails
     const rect = wordArtRef.current.getBoundingClientRect();
-    const outOfView =
-      rect.bottom < 0 || rect.top > window.innerHeight;
+    const outOfView = rect.bottom < 0 || rect.top > window.innerHeight;
 
     if (outOfView) {
       setDisplayNavbar(true);
@@ -117,6 +70,7 @@ export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, 
   }, [setDisplayNavbar, setDisplayLogo]);
 
   return (
+    <>
     <div className="min-h-screen w-full flex flex-col items-center pt-6 relative overflow-hidden bg-transparent">
 
       {/* WORD ART */}
@@ -245,5 +199,8 @@ export default function Landing({ setLotusClass, setLotusStyle, setFigureClass, 
         />
       )}
     </div>
+
+    <div className="absolute bottom-0 h-1 w-full bg-linear-to-r from-transparent via-[#615030] to-transparent opacity-100" />
+    </>
   )
 }

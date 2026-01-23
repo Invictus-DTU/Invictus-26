@@ -29,9 +29,13 @@ export default function TeamComponent({ setLotusClass, setLotusStyle, setFigureC
       transform: "translate(-50%, -50%)",
     });
 
-    setLotusClass(`absolute
-      w-[90px] md:w-[120px] lg:w-[150px]
-      opacity-80
+    setLotusClass(`fixed
+      w-[8vw]
+      opacity-100
+      pointer-events-none
+      z-[30]
+      transition-all duration-1000 ease-in-out
+
     `);
   }, [setLotusStyle, setLotusClass]);
 
@@ -84,7 +88,11 @@ export default function TeamComponent({ setLotusClass, setLotusStyle, setFigureC
 
           <span
             data-lotus-anchor
-            className=" absolute right-[-2.5rem] md:right-[-3.5rem] lg:right-[-4.5rem] top-1/2 -translate-y-1/2 w-0 h-0"
+            className='    absolute
+    right-[-4.8rem]    
+    top-1/2
+    -translate-y-1/2
+    w-1 h-1'
           />
         </div>
 
@@ -94,7 +102,7 @@ export default function TeamComponent({ setLotusClass, setLotusStyle, setFigureC
 
         <span
           data-lotus-anchor-mobile
-          className="block w-0 h-0 md:hidden"
+          className='fixed top-[20%] left-[30%]'
         />
 
       </div>

@@ -9,7 +9,7 @@ export default function SnackBar({ text, onClose, actionText, onAction }) {
         flex items-center gap-4
         px-6 py-3
         rounded-r-2xl
-        bg-gradient-to-r from-[#f9f4e7] to-[#fffaf0]
+        bg-linear-to-r from-[#f9f4e7] to-[#fffaf0]
         border-2 border-[#d6b36a]
         shadow-[0_0_20px_rgba(214,179,106,0.35)]
         text-[#6b4e16]

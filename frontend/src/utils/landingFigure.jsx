@@ -5,15 +5,14 @@ export default function landingFigure({ className, style }) {
         <div
       style={style}
       className={`
-        pointer-events-none z-10
-        transition-all duration-700 ease-in-out
+        fixed -bottom-200 left-1/2
         ${className}
       `}
     >
       <img
         src="/figure.png"
         alt="Lotus"
-        className="w-full h-full object-contain drop-shadow-md"
+        className="w-full h-full object-contain"
       />
     </div>
   )

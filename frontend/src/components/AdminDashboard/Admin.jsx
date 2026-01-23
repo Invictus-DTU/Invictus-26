@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Upload, Plus, X, Edit2, Trash2, Users, Calendar } from 'lucide-react';
 import Papa from "papaparse";
+import { AuthContext } from '@/contexts/AuthContext';
 
 // CONFIGURATION: Change this to your actual backend URL
-const API_BASE_URL = "http://localhost:3004/api"; 
-
+const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3004';
+  
 export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle }) {
-  // State for Events
-  const [events, setEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { getAdminEvents,events, eventsLoading, eventsError } = useContext(AuthContext);
 
+  const[eventsAll, setEvents] = useState([]);
   // State for UI Modals
   const [showEventForm, setShowEventForm] = useState(false);
   const [showRegistrations, setShowRegistrations] = useState(false); // Stores eventID or false
@@ -63,17 +63,13 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
 
   const fetchEvents = async () => {
     try {
-      setIsLoading(true);
-      const response = await fetch(`${API_BASE_URL}/events`);
-      if (!response.ok) throw new Error("Failed to fetch events");
-      const data = await response.json();
-      setEvents(data);
+      await getAdminEvents();
+      setEvents(events);
     } catch (error) {
       console.error("Error fetching events:", error);
       alert("Could not load events from server.");
-    } finally {
-      setIsLoading(false);
-    }
+    } 
+    
   };
 
   // --- 2. FORM HANDLING ---
@@ -466,23 +462,22 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
         )}
 
         {/* --- EVENTS GRID --- */}
-        {isLoading ? (
+        {eventsLoading ? (
           <div className="text-center py-20"><p className="text-[#8B6508] text-xl">Loading events...</p></div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
               <div key={event._id || event.id} className="bg-white rounded-2xl shadow-xl overflow-hidden border-3 border-[#C5A059] hover:border-[#D4AF37] hover:shadow-2xl transition-all">
                 {event.eventPhoto && (
-                  <img src={event.eventPhoto} alt={event.eventName} className="w-full h-52 object-cover" />
+                  <img src={event.eventPhoto} alt={event.name} className="w-full h-52 object-cover" />
                 )}
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-2xl font-bold text-[#8B6508] font-['Montserrat',sans-serif]">{event.eventName}</h3>
                     <span className={`px-4 py-1.5 rounded-full text-xs font-bold font-['Montserrat',sans-serif] ${
-                      event.status === 'registrations_open' ? 'bg-green-100 text-green-700 border-2 border-green-500' :
-                      event.status === 'registrations_closed' ? 'bg-red-100 text-red-700 border-2 border-red-500' :
-                      event.status === 'upcoming' ? 'bg-blue-100 text-blue-700 border-2 border-blue-500' :
-                      event.status === 'ongoing' ? 'bg-yellow-100 text-yellow-700 border-2 border-yellow-500' :
+                      event.status === 'ACTIVE' ? 'bg-green-100 text-green-700 border-2 border-green-500' :
+                      event.status === 'COMPLETED' ? 'bg-red-100 text-red-700 border-2 border-red-500' :
+                      event.status === 'UPCOMING' ? 'bg-blue-100 text-blue-700 border-2 border-blue-500' :
                       'bg-gray-100 text-gray-700 border-2 border-gray-500'
                     }`}>
                       {event.status ? event.status.replace(/_/g, ' ').toUpperCase() : 'STATUS'}
@@ -490,8 +485,8 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
                   </div>
                   
                   <div className="space-y-2 text-sm text-[#8B6508]/80 mb-5 font-['Montserrat',sans-serif]">
-                    <p><strong className="text-[#8B6508]">Category:</strong> {event.eventCategory}</p>
-                    <p><strong className="text-[#8B6508]">Mode:</strong> {event.eventMode}</p>
+                    <p><strong className="text-[#8B6508]">Category:</strong> {event.category}</p>
+                    <p><strong className="text-[#8B6508]">Mode:</strong> {event.mode}</p>
                     <p><strong className="text-[#8B6508]">Date:</strong> {event.date ? new Date(event.date).toLocaleString() : 'TBD'}</p>
                     {event.isWorkshop && (
                       <span className="inline-block bg-[#FDF8E2] text-[#8B6508] px-3 py-1 rounded-lg text-xs font-bold border-2 border-[#C5A059] mt-2">
@@ -527,7 +522,7 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
           </div>
         )}
 
-        {events.length === 0 && !isLoading && (
+        {events.length === 0 && !eventsLoading && (
           <div className="text-center py-20 bg-white rounded-2xl shadow-xl border-3 border-[#C5A059]">
             <Calendar size={80} className="mx-auto text-[#D4AF37]/40 mb-6" />
             <p className="text-[#8B6508] text-2xl font-bold mb-2 font-['Montserrat',sans-serif]">No events created yet</p>

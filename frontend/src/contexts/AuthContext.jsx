@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { log } from "three";
 
 export const AuthContext = createContext();
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -7,7 +8,7 @@ const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [regError, setRegError] = useState(null);
   const [events, setEvents] = useState([]);
   const [eventsLoading, setEventsLoading] = useState(false);
@@ -15,31 +16,40 @@ export function AuthProvider({ children }) {
   const [authLoading, setAuthLoading] = useState(true); // to avoid history flickering login pe redirect is avoided bcoz this default true meaning let react check if user is there or not until then no redirects
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
+  const restoreSession = async () => {
+    const adminToken = localStorage.getItem("adminToken");
+    const userToken = localStorage.getItem("accessToken");
 
-    if (!token) {
-      setAuthLoading(false);//no need to set user as null because on reload automatically default state as null 
-      return;
+    if (adminToken) {
+      const ok = await fetchMeAdmin(adminToken);
+      if (ok) {
+        localStorage.removeItem("accessToken");
+        setAuthLoading(false);
+        return;
+      }
+      localStorage.removeItem("adminToken");
     }
 
-    axios
-      .get(`${backend_url}/users/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setUser(res.data.name);
-        console.log(user);
-      })
-      .catch(() => {
-        localStorage.removeItem("accessToken");// if accesstoken not valid
-        setUser(null);
-      })
-      .finally(() => {
-        setAuthLoading(false);// very imp user pura checked and stored properly in localstorage then authloading stopped so initially if user == null and react has just rendered toh wont shift to login no flicker only shift to login page after this check is completed
-      });
-  }, []);
+    //  Try user
+    if (userToken) {
+      const ok = await fetchMe(userToken);
+      if (ok) {
+        localStorage.removeItem("adminToken");
+        setAuthLoading(false);
+        return;
+      }
+      localStorage.removeItem("accessToken");
+    }
+
+    //  No valid session
+    setUser(null);
+    setIsAdmin(false);
+    setAuthLoading(false);
+  };
+
+  restoreSession();
+}, []);
+
 
   const login = async (credentials) => {
     setLoading(true);
@@ -106,7 +116,7 @@ export function AuthProvider({ children }) {
   }
 };
 
-  const adminLogin = async (credentials) => {
+  const Adminlogin = async (credentials) => {
     setLoading(true);
     try {
       const res = await axios.post(
@@ -116,14 +126,20 @@ export function AuthProvider({ children }) {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         }
+        
       );
 
       if (res.status === 200) {
+        
         localStorage.setItem("adminToken", res.data.accessToken);
-        setUser({ ...res.data.admin, role: "admin" });
+        const admin = await fetchMeAdmin(res.data.accessToken);
+        setRegError(null);
         return { success: true };
       }
     } catch (error) {
+      setRegError(error.response?.data?.error || "Registration failed");
+      console.log(error);
+      
       return {
         success: false,
         message: error.response?.data?.message || "Admin login failed",
@@ -133,18 +149,24 @@ export function AuthProvider({ children }) {
     }
   };
 
-   const getEvents = async () => {
+   const getAdminEvents = async () => {
     setEventsLoading(true);
     setEventsError(null);
 
     try {
-      const res = await axios.get(`${backend_url}/events`);
+      const res = await axios.get(`${backend_url}/admin/events`,{
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+      },
+      });
 
       if (res.status === 200) {
-        setEvents(res.data.events);
-        return res.data.events;
+        console.log(res);
+        setEvents(res.data);
+        return res.data;
       }
     } catch (error) {
+      console.log(error);
       setEventsError(
         error.response?.data?.message || "Failed to fetch events"
       );
@@ -154,14 +176,14 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const getEventById = async (id) => {
-    try {
-      const res = await axios.get(`${backend_url}/events/${id}`);
-      if (res.status === 200) return res.data.event;
-    } catch {
-      return null;
-    }
-  };
+  // const getEventById = async (id) => {
+  //   try {
+  //     const res = await axios.get(`${backend_url}/events/${id}`);
+  //     if (res.status === 200) return res.data.event;
+  //   } catch {
+  //     return null;
+  //   }
+  // };
 
   const fetchMe = async (token) => {
   try {
@@ -173,7 +195,25 @@ export function AuthProvider({ children }) {
     // console.log(res);
     if (res.status === 200) {
       setUser(res.data.name);
+      setIsAdmin(false);
       // setIsAdmin(res.data.user.role === "admin");
+      return true;
+    }
+  } catch {
+    return false;
+  }
+};
+
+  const fetchMeAdmin = async (token) => {
+  try {
+    const res = await axios.get(`${backend_url}/admin/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.status === 200) {
+      setUser(null);
+      setIsAdmin(true);
       return true;
     }
   } catch {
@@ -198,7 +238,7 @@ export function AuthProvider({ children }) {
 const logout = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
-  // localStorage.removeItem("adminToken");
+  localStorage.removeItem("adminToken");
 
   setUser(null);
   setIsAdmin(null);
@@ -212,15 +252,17 @@ const logout = () => {
         user,
         isAdmin,
         // refreshToken,
+        events,
+        eventsLoading,
+        eventsError,
+        getAdminEvents,
         loading,
         regError,
-        getEvents,
-        getEventById,
         logout,
         login,
         register,
         authLoading,
-        adminLogin,
+        Adminlogin,
         handleGoogleCallback
       }}
     >

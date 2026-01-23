@@ -4,7 +4,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { LogOut } from "lucide-react";
 
 export default function Navbar({ className = "" }) {
-  const { user, logout } = useContext(AuthContext);
+  const { user, isAdmin, logout } = useContext(AuthContext);
   const router = useRouter();
 
   //sections and routes
@@ -65,7 +65,8 @@ export default function Navbar({ className = "" }) {
 
     if (
       router.pathname === "/login" ||
-      router.pathname === "/Dashboard"
+      router.pathname === "/Dashboard" ||
+      router.pathname === "/Admin"
     ) {
       index = authIndex;
     }
@@ -123,8 +124,7 @@ export default function Navbar({ className = "" }) {
                 style={{
                   width: `${pillStyle.width}px`,
                   transform: `translateX(${pillStyle.left}px)`
-                }}/>
-            )}
+                }}/>)}
 
             {/* nav items */}
             {navItems.map(({ name, href }, index) => (
@@ -159,6 +159,8 @@ export default function Navbar({ className = "" }) {
                   e.preventDefault();
                   if (user) {
                     router.push("/Dashboard");
+                  } else if (isAdmin) {   
+                    router.push("/Admin");
                   } else {
                     router.push("/login");
                   }
@@ -176,12 +178,24 @@ export default function Navbar({ className = "" }) {
                     : "hover:text-[#D4AF37] hover:drop-shadow-[0_0_1rem_rgba(212,175,55,0.8)]"
                   }
                 `}>
-                {user ? "PROFILE" : "LOGIN"}
+                {user || isAdmin ? "PROFILE" : "LOGIN"} 
               </button>
             </div>
 
             {/* LOGOUT (NOT PART OF PILL) */}
             {user && (
+              <button
+                onClick={() => {
+                  logout();
+                  router.push("/login");
+                }}
+                className="ml-2 p-2 transition-colors duration-300 rounded-md hover:bg-[#D4AF37] group cursor-pointer"
+                title="Logout">
+                <LogOut size={20} strokeWidth={2.5} className="text-[#D4AF37] group-hover:text-white transition-colors duration-300" />
+              </button>
+            )}
+
+            {isAdmin && (
               <button
                 onClick={() => {
                   logout();
@@ -228,10 +242,11 @@ export default function Navbar({ className = "" }) {
         ))}
 
         {/* mobile profile / logout */}
-        <div className="border-t border-[#D4AF37]/20 pt-4 space-x-20">
+        <div className="border-t border-[#D4AF37]/20 pt-4 flex justify-between space-x-20">
           <button
             onClick={() => {
               if (user) router.push("/Dashboard");
+              else if (isAdmin) router.push("/Admin");
               else router.push("/login");
               setOpen(false);
             }}
@@ -243,23 +258,35 @@ export default function Navbar({ className = "" }) {
               : "text-white/40 hover:text-white hover:translate-x-2"
             }
           `}>
-            {user ? "PROFILE" : "LOGIN"}
+            {user || isAdmin ? "PROFILE" : "LOGIN"}
           </button>
 
           {user && (
             <button
-                onClick={() => {
-                  logout();
-                  router.push("/login");
-                }}
-                className="ml-2 p-2 transition-colors duration-300 rounded-md hover:bg-[#D4AF37] group cursor-pointer"
-                title="Logout">
-                <LogOut size={30} strokeWidth={2.5} className="text-[#D4AF37]" />
-              </button>
+              onClick={() => {
+                logout();
+                router.push("/login");
+              }}
+              className="transition-colors duration-300 rounded-md hover:bg-[#D4AF37] group"
+              title="Logout">
+              <LogOut size={30} strokeWidth={2.5} className="text-[#D4AF37]" />
+            </button>
+          )}
+
+          {isAdmin && ( 
+            <button
+              onClick={() => {
+                logout();
+                router.push("/login");
+              }}
+              className="transition-colors duration-300 rounded-md hover:bg-[#D4AF37] group"
+              title="Logout">
+              <LogOut size={30} strokeWidth={2.5} className="text-[#D4AF37]" />
+            </button>
           )}
         </div>
 
-        {/* menu bottom text */}
+      {/* menu bottom text */}
         <div className=" border-t border-[#D4AF37]/20 pt-4">
             <div className="flex text-[1.5rem] md:text-[1.2rem] items-center space-x-3 md:space-x-4">
           <div className="flex flex-col border-r border-[#D4AF37] pr-2 md:pr-3 leading-tight">

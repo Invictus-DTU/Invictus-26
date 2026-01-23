@@ -95,9 +95,9 @@ const handleClose = () => {
     setLotusStyle({})
 
     setLotusClass(`
-      top-3/4 left-1/2 fixed
-      -translate-x-1/2 -translate-y-1/2
-      w-[160px]
+       fixed
+      w-[5vw]
+      translate-x-1
       opacity-80
       z-999
       transition-all duration-700 ease-in-out
@@ -105,12 +105,11 @@ const handleClose = () => {
 
     const timeout = setTimeout(() => {
       setLotusClass(`fixed
-        top-3/4 left-1/2
-        -translate-x-1/2 -translate-y-1/2
-        w-[160px]
+        w-[5vw]
+        translate-x-1
         opacity-0
         z-999
-        transition-all duration-500 ease-in-out
+        transition-all duration-700 ease-in-out
       `)
     }, 500)
 

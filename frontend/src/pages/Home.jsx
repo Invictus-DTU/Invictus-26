@@ -1,13 +1,43 @@
-import React from 'react'
-import Landing from '@/components/Landing/Landing'
-// import TeamComponent from '@/components/Team/Team'
-export default function Home({setLotusClass, setLotusStyle, setFigureClass, setFigureStyle, setDisplayNavbar, displayLogo, setDisplayLogo}) {
+import React, { useRef } from "react";
+import Landing from "@/components/Landing/Landing";
+import Aboutus from "@/components/AboutUs/Aboutus";
+import FAQ from "@/components/FAQ/faq";
+import Footer from "@/components/Footer/footer";
+import { useFigureBySection } from "@/lib/useFigureBySection";
+
+export default function Home({
+  setFigureClass,
+  setFigureStyle,
+  setLotusClass,
+  setLotusStyle,
+  setDisplayNavbar, 
+  displayLogo, 
+  setDisplayLogo
+}) {
+  const landingRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useFigureBySection({
+    landingRef,
+    contentRef, 
+    setLotusClass,
+    setLotusStyle,
+    setFigureClass,
+    setFigureStyle,
+  });
+
   return (
     <>
-    <Landing setLotusClass={setLotusClass} setLotusStyle={setLotusStyle} setFigureClass={setFigureClass} setFigureStyle={setFigureStyle} setDisplayNavbar={setDisplayNavbar} displayLogo={displayLogo} setDisplayLogo={setDisplayLogo}/>
+      {/* LANDING */}
+      <section ref={landingRef}>
+        <Landing setDisplayNavbar={setDisplayNavbar} displayLogo={displayLogo} setDisplayLogo={setDisplayLogo}/>
+      </section>
 
-    {/* just to test redndering of navbar and logo on landing, pls replace with appropriate component */}
-    {/* <TeamComponent setLotusClass={setLotusClass} setLotusStyle={setLotusStyle} setFigureClass={setFigureClass} setFigureStyle={setFigureStyle} setDisplayNavbar={setDisplayNavbar} displayLogo={displayLogo} setDisplayLogo={setDisplayLogo}/> */}
+      <section ref={contentRef}>
+        <Aboutus />
+        <FAQ />
+        <Footer />
+      </section>
     </>
-  )
+  );
 }

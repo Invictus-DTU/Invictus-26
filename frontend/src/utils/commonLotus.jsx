@@ -5,8 +5,7 @@ export default function commonLotus({ className, style }) {
     <div
       style={style}
       className={`
-        pointer-events-none z-10
-        transition-all duration-700 ease-in-out
+        fixed bottom-10 left-1/2 transform -translate-x-1 
         ${className}
       `}
     >

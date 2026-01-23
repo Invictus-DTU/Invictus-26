@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 
 export default function Authpage({setLotusClass, setLotusStyle, setFigureClass, setFigureStyle}) {
-  const { user, isAdmin, login, register, Adminlogin, loading, regError } = useContext(AuthContext);
+  const { user, isAdmin, authLoading, login, register, Adminlogin, loading, regError } = useContext(AuthContext);
   const backend_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [isLogin, setIsLogin] = useState(true);
   const [eyeToggle, setEyeToggle] = useState(false);
@@ -13,14 +13,19 @@ export default function Authpage({setLotusClass, setLotusStyle, setFigureClass, 
   const [isAdminLogin, setIsAdminLogin] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
+useEffect(() => {
+  if (authLoading) return;
+
+  if (isAdmin) {
+    router.replace("/Admin");
+    return;
+  }
+
   if (user) {
     router.replace("/Dashboard");
   }
-  if(isAdmin){
-    router.replace("/admin/code");
-  }
-}, [user, router]);
+}, [user, isAdmin, authLoading, router]);
+
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -59,7 +64,8 @@ export default function Authpage({setLotusClass, setLotusStyle, setFigureClass, 
           -translate-x-1/2 -translate-y-1/2
           w-[160px]
           opacity-0
-          z-999
+          
+          -z-999
           transition-all duration-500 ease-in-out
         `)
       }, 500)
@@ -172,11 +178,24 @@ const handleSubmit = async (e) => {
       return;
     }
 
-    await Adminlogin({
+    if (!formData.userName.trim() || formData.userName.length > 30) {
+      showErrors({ admin: "username too long" });
+      return;
+    }
+
+    if (!formData.password.trim() || formData.password.length > 30) {
+      showErrors({ admin: "password too long" });
+      return;
+    }
+
+    try {
+      await Adminlogin({
       username: formData.userName,
       password: formData.password,
-      role: "admin",
     });
+    } catch (error) {
+      console.log(error);
+    }
 
     return;
   }
@@ -189,6 +208,7 @@ const handleSubmit = async (e) => {
         email: formData.email,
         password: formData.password,
       });
+      return;
     } else {
     const result = await register({
       name: formData.fullName,
