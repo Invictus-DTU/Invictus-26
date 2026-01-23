@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }) {
   const [lotusClass, setLotusClass] = useState(
     "top-0 left-0 w-[180px] opacity-0"
   );
-  const [figureStyle,setFigureStyle] = useState({});
+  const [figureStyle, setFigureStyle] = useState({});
   const [figureClass, setFigureClass] = useState(
     "top-0 left-0 w-[180px] opacity-0"
   );
@@ -20,18 +20,18 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
-    <Script
+      <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.API_KEY}`}
         strategy="beforeInteractive"
       />
-    <AuthProvider>
-      
-      {router.pathname === '/model' ? null : <Navbar />}
-      {router.pathname === '/model' ? null : <CommonLotus className={lotusClass} style={lotusStyle} />}
-      {router.pathname === '/model' ? null : <LandingFigure className={figureClass} style={figureStyle} />}
+      <AuthProvider>
 
-      <Component {...pageProps} setLotusClass={setLotusClass} setLotusStyle={setLotusStyle} setFigureClass={setFigureClass} setFigureStyle={setFigureStyle}/>
-    </AuthProvider>
+        {router.pathname === '/model' ? null : <Navbar />}
+        {router.pathname === '/model' ? null : <CommonLotus className={lotusClass} style={lotusStyle} />}
+        {router.pathname === '/model' ? null : <LandingFigure className={figureClass} style={figureStyle} />}
+
+        <Component {...pageProps} setLotusClass={setLotusClass} setLotusStyle={setLotusStyle} setFigureClass={setFigureClass} setFigureStyle={setFigureStyle} />
+      </AuthProvider>
 
     </>
   );
