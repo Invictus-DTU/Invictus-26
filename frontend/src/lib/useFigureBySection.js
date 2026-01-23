@@ -80,7 +80,7 @@ export function useFigureBySection({
           lg:w-[190px]
           pointer-events-none
           z-[30]
-          opacity-90
+          opacity-60
           drop-shadow-[0_0_30px_rgba(255,215,138,0.4)]
           transition-all duration-700 ease-out
         `);
