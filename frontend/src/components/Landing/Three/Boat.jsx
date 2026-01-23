@@ -10,29 +10,20 @@ export function Boat(props) {
   useFrame((state) => {
     if (boatRef.current) {
       const time = state.clock.getElapsedTime()
-      const speed = 0.01 // Speed of movement
-      const distance = 80 // Total distance to travel
+      const speed = 0.4 // Speed of revolution
+      const radius = 22// Radius of circular orbit around the center
       
-      // Calculate progress (0 to 1) and loop it
-      const progress = (time * speed) % 2
+      // Calculate angle based on time
+      const angle = time * speed
       
-      // Back and forth motion
-      let t = progress
-      let direction = 1
-      
-      if (progress > 1) {
-        // Going back
-        t = 2 - progress
-        direction = -1
-      }
-      
-      // Linear movement along X axis
-      boatRef.current.position.x = -15
-      boatRef.current.position.z = -distance / 2 + t * distance
+      // Circular motion around the center (0, 0)
+      boatRef.current.position.x = Math.cos(angle) * radius
+      boatRef.current.position.z = Math.sin(angle) * radius
       boatRef.current.position.y = -1.5 + Math.sin(time * 0.5) * 0.05 // On water with gentle bobbing
       
-      // Make boat face direction of movement
-      boatRef.current.rotation.y = direction > 0 ? Math.PI / 2 : -Math.PI / 2
+      // Make boat face tangent to the circle (direction of movement)
+      // Adding Math.PI/2 to rotate 90 degrees so the boat's front faces the movement direction
+      boatRef.current.rotation.y = -angle + Math.PI / 2
     }
   })
 

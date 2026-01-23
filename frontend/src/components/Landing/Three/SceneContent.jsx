@@ -23,11 +23,13 @@ import { Mountain } from "./Mountain";
 import { Shiva } from "./Shiva";
 import { ThreeDText, MultiLineText3D } from "./3dText";
 import { useRouter } from "next/router";
+import { Clouds } from "./Clouds";
 
 export function SceneContent({
   setcurrSection,
   playTransition,
   onStartExplore,
+  setScrollOffset,
 }) {
   const modelRef = useRef();
   const scroll = useScroll();
@@ -112,6 +114,10 @@ export function SceneContent({
 
     setcurrSection((prev) => (prev !== sectionIndex ? sectionIndex : prev));
 
+    if (setScrollOffset) {
+      setScrollOffset(scroll.offset);
+    }
+
     const current = cameraShots[sectionIndex];
     const next = cameraShots[Math.min(sectionIndex + 1, totalSections)];
 
@@ -163,7 +169,7 @@ export function SceneContent({
       {/* <Walls /> */}
 
       {/* Clouds */}
-      {/* <Clouds /> */}
+      <Clouds />
 
       {/* Sky */}
       <GradientSky />
@@ -182,18 +188,58 @@ export function SceneContent({
       )}
 
       {activeSection === 1 && (
-        <MultiLineText3D
-          lines={[
-            "Invictus '26",
-            "brings back its plethora of events",
-            "with its theme based on Indian heritage",
-          ]}
-          position={[-3, 6, 6]}
-          rotation={[1, 1.8, -1]}
-          size={0.4}
-          section={1}
-          scroll={scroll}
-        />
+        <>
+          <MultiLineText3D
+            lines={[
+              "Invictus '26",
+              "brings back its plethora of events",
+              "with its theme based on Indian heritage",
+            ]}
+            position={[-3, 6, 6]}
+            rotation={[1, 1.8, -1]}
+            size={0.4}
+            section={1}
+            scroll={scroll}
+          />
+          {/* 3D Button */}
+          <group
+            position={[isMobile ? 28 : -1, 3.3, 4.3]}
+            scale={1}
+            rotation={[1, 1.8, -1]}
+          >
+            <mesh
+              onClick={() => {
+                router.push("/Events");
+              }}
+              onPointerOver={(e) => {
+                document.body.style.cursor = "pointer";
+                e.object.scale.set(1.1, 1.1, 1.1);
+              }}
+              onPointerOut={(e) => {
+                document.body.style.cursor = "default";
+                e.object.scale.set(1, 1, 1);
+              }}
+            >
+              <boxGeometry args={[2, 0.6, 0.3]} />
+              <meshStandardMaterial
+                color="#DAA06D"
+                metalness={0.5}
+                roughness={0.3}
+                emissive="#764ba2"
+                emissiveIntensity={0.3}
+              />
+            </mesh>
+          </group>
+          <ThreeDText
+            text="Events"
+            size={0.3}
+            position={[isMobile ? 27.94 : -0.7, 3.2, 5]}
+            rotation={[1, 1.8, -1]}
+            section={1}
+            activeSection={activeSection}
+            scroll={scroll}
+          />
+        </>
       )}
 
       {activeSection === 2 && (
