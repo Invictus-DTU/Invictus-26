@@ -5,7 +5,7 @@ import CommonLotus from "@/utils/commonLotus";
 import LandingFigure from "@/utils/landingFigure";
 import { LoaderProvider } from "@/contexts/LoaderContext";
 import { useLoader } from "@/contexts/LoaderContext";
-import Loader from "@/utils/Loader";
+import Loader from "@/utils/loader";
 import "@/styles/globals.css";
 import { useRouter } from "next/router";
 import Script from "next/script";

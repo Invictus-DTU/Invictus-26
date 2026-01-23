@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useLoader } from "@/contexts/LoaderContext";
 
-export default function GlobalLoader() {
+export default function Loader() {
   const router = useRouter();
   const { domReady, modelReady } = useLoader();
 
