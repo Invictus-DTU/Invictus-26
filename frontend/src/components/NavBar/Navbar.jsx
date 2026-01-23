@@ -10,8 +10,8 @@ export default function Navbar() {
   //sections and routes
   const navItems = [
     { name: "Home", href: "/Home" },
-    { name: "About Us", href: "/AboutUs" },
     { name: "Events", href: "/Events" },
+    { name: "About Us", href: "/AboutUs" },
     { name: "Workshop", href: "/Workshops" },
     { name: "Team", href: "/Team" },
     { name: "Sponsor", href: "/Sponsors" },
@@ -137,9 +137,9 @@ export default function Navbar() {
                   e.preventDefault();
                   if (user) {
                     router.push("/Dashboard");
-                  } else if(isAdmin){
+                  } else if (isAdmin) {
                     router.push("/Admin");
-                  }else{
+                  } else {
                     router.push("/login");
                   }
                 }}
@@ -173,7 +173,7 @@ export default function Navbar() {
               </button>
             )}
             {isAdmin && (
-            <button
+              <button
                 onClick={() => {
                   logout();
                   router.push("/login");
@@ -182,7 +182,7 @@ export default function Navbar() {
                 title="Logout">
                 <LogOut size={30} strokeWidth={2.5} className="text-[#D4AF37]" />
               </button>
-          )}
+            )}
           </div>
 
           {/* mobile menu btn */}
@@ -250,14 +250,14 @@ export default function Navbar() {
           )}
           {isAdmin && (
             <button
-                onClick={() => {
-                  logout();
-                  router.push("/login");
-                }}
-                className="ml-2 p-2 transition-colors duration-300 rounded-md hover:bg-[#D4AF37] group cursor-pointer"
-                title="Logout">
-                <LogOut size={30} strokeWidth={2.5} className="text-[#D4AF37]" />
-              </button>
+              onClick={() => {
+                logout();
+                router.push("/login");
+              }}
+              className="ml-2 p-2 transition-colors duration-300 rounded-md hover:bg-[#D4AF37] group cursor-pointer"
+              title="Logout">
+              <LogOut size={30} strokeWidth={2.5} className="text-[#D4AF37]" />
+            </button>
           )}
         </div>
 

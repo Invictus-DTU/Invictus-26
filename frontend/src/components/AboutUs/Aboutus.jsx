@@ -90,7 +90,7 @@ void main() {
   
   // High-key brightness boost to match light/original look exactly
   vec3 finalColor = texColor.rgb * 1.05;
-  finalColor = pow(finalColor, vec3(0.46)); // Strong lift for "peach-white" effect
+  finalColor = pow(finalColor, vec3(0.49)); // Strong lift for "peach-white" effect
   
   gl_FragColor = vec4(finalColor, texColor.a);
   gl_FragColor.a *= clamp(progress*5.0, 0.0, 1.0);
@@ -188,7 +188,7 @@ function useAnimatedNumber(target, duration = 2000, startAnimation = false) {
   return currentValue;
 }
 
-const Aboutus = ({ setLotusClass, setLotusStyle }) => {
+const Aboutus = ({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle }) => {
   const [showContent, setShowContent] = useState(false);
   const [textOpacity, setTextOpacity] = useState(0);
   const router = useRouter();
@@ -210,7 +210,7 @@ const Aboutus = ({ setLotusClass, setLotusStyle }) => {
 
     // Text reveal
     gsap.to({}, {
-      delay: 1.9,
+      delay: 1.6,
       duration: 0.3,
       onStart: () => {
         let startTime = null;
@@ -218,7 +218,7 @@ const Aboutus = ({ setLotusClass, setLotusStyle }) => {
           if (!startTime) startTime = timestamp;
           const elapsed = timestamp - startTime;
           const p = Math.min(elapsed / 1500, 1);
-          setTextOpacity(p);
+          setTextOpacity(Math.pow(p, 3));
           if (p < 1) requestAnimationFrame(animateText);
           else setTimeout(() => setShowContent(true), 300);
         };
@@ -239,7 +239,7 @@ const Aboutus = ({ setLotusClass, setLotusStyle }) => {
       const parentRect = parent.getBoundingClientRect();
 
       setLotusStyle({
-        left: anchorRect.left - parentRect.left + anchorRect.width,
+        left: anchorRect.left - parentRect.left + anchorRect.width + 120,
         top: anchorRect.top - parentRect.top + anchorRect.height / 2,
         transform: "translate(-50%, -50%)",
       });
@@ -253,6 +253,23 @@ const Aboutus = ({ setLotusClass, setLotusStyle }) => {
     window.addEventListener('resize', updateLotus);
     return () => window.removeEventListener('resize', updateLotus);
   }, [setLotusClass, setLotusStyle]);
+
+  useEffect(() => {
+    if (!setFigureClass || !setFigureStyle) return;
+
+    setFigureStyle({
+      left: "-50px",
+      bottom: "-20px",
+      transform: "none",
+    });
+
+    setFigureClass('fixed !left-0 !bottom-0 w-[150px] md:w-[220px] lg:w-[280px] opacity-90 transition-all duration-700 ease-out pointer-events-none z-[30] drop-shadow-[0_0_30px_rgba(255,215,138,0.4)]');
+
+    return () => {
+      setFigureClass('opacity-0');
+      setFigureStyle({});
+    };
+  }, [setFigureClass, setFigureStyle]);
 
   return (
     <main className="w-full min-h-screen relative overflow-x-hidden bg-transparent">
@@ -284,7 +301,7 @@ const Aboutus = ({ setLotusClass, setLotusStyle }) => {
             className="absolute inset-0 z-[100] flex items-start justify-center px-[22%] pt-[14%] -ml-[1%] pointer-events-none transition-opacity duration-[1200ms] ease-out"
             style={{ opacity: textOpacity }}
           >
-            <p className="invictus-subheading text-center leading-relaxed font-black italic !text-[#2d2101ff] !bg-none !bg-clip-border text-[clamp(1rem,1.4vw,1.8rem)] max-w-[450px] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
+            <p className="invictus-subheading text-center leading-relaxed font-black italic !text-[#8B6914] !bg-none !bg-clip-border text-[clamp(1rem,1.4vw,1.8rem)] max-w-[450px] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
               {aboutText}
             </p>
           </div>
@@ -335,15 +352,15 @@ const Aboutus = ({ setLotusClass, setLotusStyle }) => {
           </div>
 
           {/* BUTTONS */}
-          <div className="flex gap-20 justify-center mt-3 flex-wrap">
+          <div className="flex gap-20 justify-center mt-3 flex-wrap relative z-[50]">
             <button
-              className="invictus-subheading font-bold text-lg px-10 py-3 rounded-full shadow-lg transition-all hover:scale-105 active:scale-95 border-2 bg-[#E8D7B8] !text-[#8B6914] border-[#B89C3B] !bg-none !bg-clip-border"
+              className="font-['Montserrat'] font-bold text-lg px-12 py-4 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all hover:scale-105 active:scale-95 border-2 !bg-white text-[#8B6914] border-[#B89C3B]"
               onClick={() => router.push("/Gallery")}
             >
               View Gallery
             </button>
             <button
-              className="invictus-subheading font-bold text-lg px-10 py-3 rounded-full shadow-lg transition-all hover:scale-105 active:scale-95 border-2 bg-[#E8D7B8] !text-[#8B6914] border-[#B89C3B] !bg-none !bg-clip-border"
+              className="font-['Montserrat'] font-bold text-lg px-12 py-4 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all hover:scale-105 active:scale-95 border-2 !bg-white text-[#8B6914] border-[#B89C3B]"
               onClick={() => router.push("/Events")}
             >
               View Events
