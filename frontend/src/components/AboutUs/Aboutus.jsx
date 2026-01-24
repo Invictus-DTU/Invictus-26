@@ -207,9 +207,9 @@ const Aboutus = () => {
 
 
   // Stats numbers - animated
-  const footfallValue = useAnimatedNumber(20000, 2500, showContent);
-  const collegesValue = useAnimatedNumber(200, 2500, showContent);
-  const eventsValue = useAnimatedNumber(80, 2500, showContent);
+  const footfallValue = useAnimatedNumber(20000, 2700, showContent);
+  const collegesValue = useAnimatedNumber(200, 2700, showContent);
+  const eventsValue = useAnimatedNumber(80, 2700, showContent);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -228,7 +228,7 @@ const Aboutus = () => {
       setTextOpacity(opacity);
 
       // Update progress for scroller effect
-      const start = windowHeight;
+      const start = windowHeight * 0.9;
       const end = -rect.height;
 
       const rawProgress = (rect.top - start) / (end - start) * 2;
@@ -285,7 +285,7 @@ const Aboutus = () => {
 
         {/* STATS */}
         <div className={`flex flex-col items-center w-full z-10 relative mt-8 transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <div className="flex justify-center gap-20 mb-8 flex-wrap w-[90%] max-w-[1000px] items-center">
+          <div className="flex flex-col md:flex-row justify-center gap-10 md:gap-20 mb-8 md:flex-wrap w-[90%] max-w-[1000px] items-center">
 
             {/* Footfall */}
             <div className="flex flex-col items-center min-w-[150px]">
