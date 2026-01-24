@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 export default function EventMore({ open, onClose, event }) {
   const [tab, setTab] = useState("description");
   const route = useRouter();
+  const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3004';
 
   useEffect(() => {
     if (open) document.body.style.overflow = "hidden";
@@ -92,15 +93,16 @@ export default function EventMore({ open, onClose, event }) {
                     )}
                     {tab === "contacts" && (
                     <div>
-                      {event?.contacts ? (
-                      Object.entries(event.contacts).map(([name, phone]) => (
-                        <p key={name} className="mb-2">
-                        <span className="text-[#c9a44c]">{name}:</span> {phone}
-                        </p>
-                      ))
-                      ) : (
-                      <p>Contact details go here.</p>
-                      )}
+                      
+                     {Array.isArray(event?.contacts) && event.contacts.length > 0 ? (
+                        event.contacts.map((contact, idx) => (
+                          <p key={idx} className="mb-2">
+                          <span className="text-[#c9a44c]">{contact.name}:</span> {contact.phone}
+                          </p>
+                        ))
+                        ) : (
+                        <p>Contact details go here.</p>
+                        )}
                     </div>
                     )}
                     <hr className="mt-4" />
@@ -185,10 +187,9 @@ export default function EventMore({ open, onClose, event }) {
             </div>
           </div>
 
-          {/* RIGHT IMAGE */}
           <div className="relative pb-4 mt-10 rounded-xl w-fit h-fit max-h-3/5 bg-cover overflow-hidden border border-[#c9a44c]/20">
             <img
-              src={event?.image || "/backdrop.png"}
+              src={event?.imagePath ? `${backend_url}${event.imagePath}` : "/backdrop.png"}
               alt="Event Image"
               className="w-full h-full object-contain"
             />

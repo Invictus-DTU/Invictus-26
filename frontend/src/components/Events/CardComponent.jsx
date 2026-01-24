@@ -33,15 +33,13 @@ const EventCard = ({ title, image, isActive, onClick }) => {
         </h3>
       </div>
 
-      <div className="z-10 w-full flex-1 my-3 border-2 border-[#C5A059]/30 bg-[#FFF8E7] rounded-lg flex items-center justify-center p-4">
-        <div className="text-center">
-          {/* <div className="w-12 h-12 rounded-full bg-[#C5A059]/20 mx-auto mb-2 flex items-center justify-center">
-            <span className="text-[#C5A059] text-xl">📷</span>
-          </div>
-          <p className="text-[#C5A059] text-[10px] font-bold tracking-widest leading-relaxed">
-            EVENT PHOTO<br />THEME BACKGROUND
-          </p> */}
-          <img src={image || "/backdrop.png"} alt="" />
+      <div className="z-10 w-full h-[30%] flex-1 my-3 border-2 border-[#C5A059]/30 bg-[#FFF8E7] rounded-lg flex items-center justify-center p-4">
+        <div className="w-full h-full overflow-hidden rounded-lg flex items-center justify-center">
+          <img
+            src={image || "/backdrop.png"}
+            alt={title}
+            className="w-full h-full object-contain"
+          />
         </div>
       </div>
 
@@ -82,6 +80,7 @@ export default function CardComponent({ filters, setLotusClass, setLotusStyle })
 
   const handleEventClick = (event) => {
   setSelectedEvent(event);
+  console.log(event);
   setDrawerOpen(true);
 };
 
