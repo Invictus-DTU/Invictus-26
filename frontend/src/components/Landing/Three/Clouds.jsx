@@ -14,7 +14,7 @@ export function Clouds() {
         volume={12}
         position={[-70, 40, 20]}
         speed={0.3}
-        opacity={0.1}
+        opacity={0.01}
         scale={[2, 5, 19]}
       />
       <Cloud
@@ -26,7 +26,7 @@ export function Clouds() {
         segments={20}
         position={[-70, 38, -15]}
         speed={0.02}
-        opacity={0.3}
+        opacity={0.07}
         scale={[3, 4, 8]}
       />
        <Cloud
@@ -38,7 +38,7 @@ export function Clouds() {
         segments={30}
         position={[-70, 40, 50]}
         speed={0.22}
-        opacity={0.2}
+        opacity={0.06}
         scale={[3, 2, 10]}
       />
       {/* <Cloud position={[-12, 13, -5]} speed={0.22} opacity={0.8} scale={[2, 1.5, 3]} /> */}

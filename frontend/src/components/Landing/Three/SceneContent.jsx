@@ -83,7 +83,7 @@ export function SceneContent({
           },
           {
             pos: new THREE.Vector3(12, 0, 0), // SIDE VIEW - desktop
-            lookAt: new THREE.Vector3(0, 2, 0),
+            lookAt: new THREE.Vector3(2, 3, 0),
           },
           {
             pos: new THREE.Vector3(0, -0.2, 9), // FRONT VIEW - desktop
