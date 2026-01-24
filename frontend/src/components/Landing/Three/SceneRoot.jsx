@@ -22,7 +22,6 @@ export default function SceneRoot({
   onReady,
 }) {
   const { scene } = useThree();
-
 useEffect(() => {
   return () => {
     scene.traverse((obj) => {
