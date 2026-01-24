@@ -4,7 +4,7 @@ import Papa from "papaparse";
 import { AuthContext } from '@/contexts/AuthContext';
 
 // CONFIGURATION: Change this to your actual backend URL
-const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3004';
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3004';
   
 export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle }) {
   const { getAdminEvents,events, eventsLoading, eventsError } = useContext(AuthContext);
@@ -22,6 +22,7 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
   // Form Data State
   const [formData, setFormData] = useState({
     eventPhoto: '',
+    eventPhotoFile: null,
     eventName: '',
     eventCategory: '',
     eventMode: 'offline',
@@ -103,7 +104,7 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData(prev => ({ ...prev, eventPhoto: reader.result }));
+        setFormData(prev => ({ ...prev, eventPhoto: reader.result, eventPhotoFile: file}));
       };
       reader.readAsDataURL(file);
     }
@@ -118,26 +119,64 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
       return;
     }
 
+    const basicEventFields = {
+      name: formData.eventName,
+      category: formData.eventCategory,
+      mode: formData.eventMode,
+      description: formData.description,
+      date: formData.date,
+      status: formData.status,
+      isWorkshop: formData.isWorkshop,
+      unstopRegLink: formData.unstopRegLink,
+      latitude: formData.latitude,
+      longitude: formData.longitude,
+    }
+
+    const imageFormData = new FormData();
+    if (formData.eventPhotoFile) imageFormData.append('image', formData.eventPhotoFile);
+
     try {
+      const adminToken = localStorage.getItem('adminToken');
+
       if (editingEvent) {
         // UPDATE Existing Event
         const response = await fetch(`${API_BASE_URL}/events/${editingEvent._id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+          body: JSON.stringify(basicEventFields)
         });
         
         if (!response.ok) throw new Error("Update failed");
+
+        const imageResponse = await fetch(`${API_BASE_URL}/events/${editingEvent._id}/image`, {
+          method: 'PUT',
+          headers: {'Authorization': `Bearer ${adminToken}`},
+          body: imageFormData
+        });
+
+        if (!imageResponse.ok) throw new Error("Image Update failed");
+
         alert('Event updated successfully!');
       } else {
         // CREATE New Event
         const response = await fetch(`${API_BASE_URL}/events`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+          body: JSON.stringify(basicEventFields)
         });
 
         if (!response.ok) throw new Error("Creation failed");
+
+        const data = await response.json();
+
+        const imageResponse = await fetch(`${API_BASE_URL}/events/${data.id}/image`, {
+          method: 'PUT',
+          headers: {'Authorization': `Bearer ${adminToken}`},
+          body: imageFormData
+        });
+
+        if (!imageResponse.ok) throw new Error("Image Upload failed");
+
         alert('Event created successfully!');
       }
 
