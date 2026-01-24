@@ -25,9 +25,9 @@ function ImageCard({ src }) {
 /* ---------------- CATEGORY IMAGES ---------------- */
 
 const IMAGES = {
-  FUN: Array.from({ length: 9 }, (_, i) => `/Gallery pics/cat1/cat1_${i + 1}.png`),
-  CULTURAL: Array.from({ length: 9 }, (_, i) => `/Gallery pics/cat2/cat2_${i + 1}.png`),
-  WORKSHOP: Array.from({ length: 9 }, (_, i) => `/Gallery pics/cat3/cat3_${i + 1}.png`),
+  FUN: Array.from({ length: 9 }, (_, i) => `/Gallery pics/cat1/cat1_${i + 1}.jpeg`),
+  CULTURAL: Array.from({ length: 9 }, (_, i) => `/Gallery pics/cat2/cat2_${i + 1}.jpeg`),
+  WORKSHOP: Array.from({ length: 9 }, (_, i) => `/Gallery pics/cat3/cat3_${i + 1}.jpeg`),
 };
 
 /* ---------------- GRID CONFIG ---------------- */
