@@ -1,15 +1,26 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, use } from "react";
 import MapPreview from "./MapPreview";
 import { DTU_LOCATIONS } from "./locations";
 import MapModal from "./MapModal";
 import SnackBar from "@/utils/snackBar";
+import { AuthContext } from "@/contexts/AuthContext";
+import Drawer from "./Drawer"
 
-export default function Dashboard({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle }) {
+export default function Dashboard({ setLotusClass, setLotusStyle }) {
   const [activeTab, setActiveTab] = useState("EVENTS");
   const [mapOpen, setMapOpen] = useState(false);
   const [mapDestination, setMapDestination] = useState(DTU_LOCATIONS.DTU);
   const [show, setShow] = useState(true);
+  const [error, setError] = useState(false);
+  const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3004';
+  const { fetchUserEvents, loading, user , setLoading } = useContext(AuthContext);
+  const [events, setEvents] = useState([]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const SNACKBAR_TIMEOUT = 5000;
+
+  function openDrawer() {
+  setDrawerOpen(!drawerOpen);
+}
 
     useEffect(() => {
       if (typeof window === "undefined") return;
@@ -38,6 +49,44 @@ export default function Dashboard({ setLotusClass, setLotusStyle, setFigureClass
       localStorage.setItem("SnackbarShownDashboard",  Date.now().toString());
     }
 
+    useEffect(() => {
+       const fetchData = async () => {
+        setLoading(true);
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          setLoading(false);
+          return;
+        }
+
+        // Fetch logged-in user
+        const userRes = await fetch(`${API_BASE_URL}/users/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!userRes.ok) throw new Error("Failed to fetch user");
+
+        const userData = await userRes.json();
+        const data = await fetchUserEvents(token, userData.email);
+        console.log(data);
+        setEvents(data);
+
+      } catch (error) {
+        console.error("Error fetching user events:", error);
+        setEvents([]);
+        setError(true);
+      }finally{
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+    }, []);
+
+    useEffect(() => {
+  console.log("Events state updated:", events);
+}, [events]);
+
   /* 🌸 POSITION LOTUS NEXT TO WELCOME TEXT */
   useEffect(() => {
     if (!setLotusClass || !setLotusStyle) return;
@@ -64,28 +113,6 @@ export default function Dashboard({ setLotusClass, setLotusStyle, setFigureClass
       transition-all duration-700 ease-in-out
     `);
   }, [setLotusClass, setLotusStyle]);
-
-  useEffect(() => {
-    if (!setFigureClass || !setFigureStyle) return;
-  
-    setFigureStyle({
-      left: "0px",
-      bottom: "0px",
-      transform: "translate(10%, 10%)",
-    });
-  
-    setFigureClass(`
-      fixed
-      w-[120px]
-      md:w-[140px]
-      lg:w-[190px]
-      pointer-events-none
-      z-[30]
-      opacity-90
-      drop-shadow-[0_0_30px_rgba(255,215,138,0.4)]
-      transition-all duration-700 ease-out
-    `);
-  }, [setFigureClass, setFigureStyle]);
 
   return (
     <>
@@ -116,7 +143,7 @@ export default function Dashboard({ setLotusClass, setLotusStyle, setFigureClass
                 invictus-heading
               "
             >
-              WELCOME BACK, USER
+              WELCOME BACK, {user ? user.split(" ")[0].toUpperCase() : "USER"}
             </h1>
 
             {/* 🌸 LOTUS ANCHOR */}
@@ -186,29 +213,35 @@ export default function Dashboard({ setLotusClass, setLotusStyle, setFigureClass
             </button>
           </div>
 
-          {/* TABS */}
-          <div className="flex gap-2 mb-4 flex-wrap">
-            {["EVENTS", "WORKSHOPS"].map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`
-                  rounded-lg px-3 py-1 font-semibold border-2 border-[#b19965]
-                  transition
-                  ${
-                    activeTab === tab
-                      ? "bg-[#b19965] text-white"
-                      : "bg-[#e7d7b1] text-[#7c6a3c]"
-                  }
-                `}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+          {events.length === 0 && (
+            <div
+              className="
+                flex flex-col sm:flex-row
+                sm:items-center sm:justify-between
+                gap-4
+                border rounded-xl p-4 mb-4
+                bg-[#f9f6ef] opacity-50
+              "
+              style={{ border: "2px solid #e7d7b1" }}
+            >
+              <div>
+                <div className="font-bold mb-2 text-gray-400">No events registered</div>
+                <div className="flex gap-2 flex-wrap">
+                  <button disabled className="bg-gray-300 text-gray-500 rounded-lg px-4 py-1 font-semibold border-2 border-gray-300 cursor-not-allowed">
+                    VIEW VENUE ON MAP
+                  </button>
+                  <button disabled className="bg-gray-300 text-gray-500 rounded-lg px-4 py-1 font-semibold border-2 border-gray-300 cursor-not-allowed">
+                    EDIT TEAM
+                  </button>
+                </div>
+              </div>
+              <div className="font-semibold text-gray-400">—</div>
+              <div className="font-semibold text-gray-400">—</div>
+            </div>
+          )}
 
           {/* EVENT LIST */}
-          {[1, 2, 3].map((_, idx) => (
+          {events.map((ev, idx) => (
             <div
               key={idx}
               className="
@@ -221,22 +254,39 @@ export default function Dashboard({ setLotusClass, setLotusStyle, setFigureClass
               style={{ border: "2px solid #e7d7b1" }}
             >
               <div>
-                <div className="font-bold mb-2">EVENT NAME</div>
+                <div className="font-bold mb-2">{ev.event.name}</div>
                 <div className="flex gap-2 flex-wrap">
                   <button className="bg-[#b19965] text-white rounded-lg px-4 py-1 font-semibold border-2 border-[#b19965] transition hover:bg-[#d4af37] active:scale-95"   onClick={() => {
-                    setMapDestination(DTU_LOCATIONS.SPS_18);
+                    if (
+                      ev.event.latitude == null ||
+                      ev.event.longitude == null
+                    ) {
+                      alert("Venue location not available");
+                      return;
+                    }
+
+                    setMapDestination({
+                      name: ev.event.name,
+                      lat: Number(ev.event.latitude),
+                      lng: Number(ev.event.longitude),
+                    });
                     setMapOpen(true);
                   }}>
                     VIEW VENUE ON MAP
                   </button>
-                  <button className="bg-[#b19965] text-white rounded-lg px-4 py-1 font-semibold border-2 border-[#b19965] transition hover:bg-[#d4af37] active:scale-95">
+                  <button onClick={() => openDrawer(ev)} className="bg-[#b19965] text-white rounded-lg px-4 py-1 font-semibold border-2 border-[#b19965] transition hover:bg-[#d4af37] active:scale-95">
                     EDIT TEAM {/* registration link redirect */}
                   </button>
                 </div>
               </div>
-              <div className="font-semibold text-[#b19965]">Team Name</div>
-             <div className="font-semibold text-[#b19965]">Team Member</div>   {/*member or leader will fetch from backend three things to fetch here event/workshops name user has registered for there member status and unstop registration link*/}
+              <div className="font-semibold text-[#b19965]">{ev.teamName == "" ? "Solo Event" : ev.teamName}</div>
+             <div className="font-semibold text-[#b19965]">{ev.attendace === false ? "Attended" : "Yet to Attend"}</div>   {/*member or leader will fetch from backend three things to fetch here event/workshops name user has registered for there member status and unstop registration link*/}
+              {drawerOpen && (
+                <Drawer event={ev} onClose={openDrawer} />
+              )}
             </div>
+
+          
           ))}
         </div>
       </div>

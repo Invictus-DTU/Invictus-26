@@ -142,10 +142,20 @@ const Scroller = ({ progressRef }) => {
 
   }, [texture, size, uniforms, camera]);
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (uniforms && uniforms.progress && progressRef) {
       uniforms.time.value = state.clock.getElapsedTime();
-      uniforms.progress.value = progressRef.current;
+
+      const target = progressRef.current;
+      const current = uniforms.progress.value;
+      const diff = target - current;
+
+      // Asymmetric speed: Unfold slower (lower factor), Fold faster (higher factor)
+      // Unfolding when target > current
+      const speed = diff > 0 ? 2.0 : 10.0;
+
+      // Frame-rate independent smoothing
+      uniforms.progress.value += (target - current) * speed * delta;
     }
   });
 
@@ -197,46 +207,46 @@ const Aboutus = () => {
 
 
   // Stats numbers - animated
-  const footfallValue = useAnimatedNumber(20000, 1500, showContent);
-  const collegesValue = useAnimatedNumber(200, 1500, showContent);
-  const eventsValue = useAnimatedNumber(80, 1500, showContent);
+  const footfallValue = useAnimatedNumber(20000, 2700, showContent);
+  const collegesValue = useAnimatedNumber(200, 2700, showContent);
+  const eventsValue = useAnimatedNumber(80, 2700, showContent);
 
   useEffect(() => {
-  const handleScroll = () => {
-    if (!sectionRef.current) return;
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
 
-    const rect = sectionRef.current.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-    //update text opacity
-    const fadeStart = windowHeight * 0.1;
-    const fadeEnd = windowHeight * 0.2;
-    let opacity = 0;
-    if (rect.top < fadeEnd) {
-      opacity = 1 - (rect.top - fadeStart) / (fadeEnd - fadeStart);
-      opacity = Math.min(Math.max(opacity, 0), 1);
-    }
-    setTextOpacity(opacity);
+      const rect = sectionRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      //update text opacity
+      const fadeStart = windowHeight * 0.1;
+      const fadeEnd = windowHeight * 0.18;
+      let opacity = 0;
+      if (rect.top < fadeEnd) {
+        opacity = 1 - (rect.top - fadeStart) / (fadeEnd - fadeStart);
+        opacity = Math.min(Math.max(opacity, 0), 1);
+      }
+      setTextOpacity(opacity);
 
-    // Update progress for scroller effect
-    const start = windowHeight;
-    const end = -rect.height;
+      // Update progress for scroller effect
+      const start = windowHeight * 0.9;
+      const end = -rect.height;
 
-    const rawProgress = (rect.top - start) / (end - start) * 1.7;
-    const clamped = Math.min(Math.max(rawProgress, 0), 1);
+      const rawProgress = (rect.top - start) / (end - start) * 2;
+      const clamped = Math.min(Math.max(rawProgress, 0), 1);
 
-    progress.current = clamped;
+      progress.current = clamped;
 
-    // Trigger text + stats once
-    if (clamped > 0.55 && !showContent) {
-      setShowContent(true);
-    }
-  };
+      // Trigger text + stats once
+      if (clamped > 0.55 && !showContent) {
+        setShowContent(true);
+      }
+    };
 
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [showContent]);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [showContent]);
 
 
 
@@ -255,7 +265,7 @@ const Aboutus = () => {
         </div>
 
         {/* SCROLLER AREA */}
-        <div id="scroller-area" className="relative md:mx-auto z-10 flex items-center justify-center -mt-10 w-[min(150vw,900px)] h-[min(75vh,500px)] bg-transparent">
+        <div id="scroller-area" className="relative md:mx-auto z-10 flex items-center justify-center -mt-10 md:-mt-10 w-[95vw] h-[60vw] max-h-[300px] md:max-h-none md:w-[min(150vw,900px)] md:h-[min(75vh,500px)] bg-transparent">
           <div className="absolute inset-0 pointer-events-none z-[5] w-full h-full bg-transparent overflow-hidden">
             <Canvas key={router.asPath} gl={{ antialias: true, alpha: true, premultipliedAlpha: false }}>
               <Scroller progressRef={progress} />
@@ -264,10 +274,10 @@ const Aboutus = () => {
 
           {/* Text Content Overlay */}
           <div
-            className="absolute inset-0 z-100 flex items-start justify-center max-[700px]:mt-18 px-[22%] pt-[16%] -ml-[1%] pointer-events-none transition-opacity duration-[1200ms] ease-out"
+            className="absolute inset-0 z-100 flex items-center justify-center pt-0 md:pt-[16%] md:items-start px-[18%] md:px-[22%] -ml-[1%] pointer-events-none transition-opacity duration-300 ease-out"
             style={{ opacity: textOpacity }}
           >
-            <p className="invictus-text text-center leading-relaxed font-black italic text-[#312215] text-[0.8rem] md:text-[1.159rem] max-w-[450px] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
+            <p className="invictus-text text-center leading-relaxed font-black italic text-[#312215] text-[0.6rem] min-[400px]:text-[0.7rem] md:text-[1.159rem] max-w-[450px] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
               {aboutText}
             </p>
           </div>
@@ -275,7 +285,7 @@ const Aboutus = () => {
 
         {/* STATS */}
         <div className={`flex flex-col items-center w-full z-10 relative mt-8 transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <div className="flex justify-center gap-20 mb-8 flex-wrap w-[90%] max-w-[1000px] items-center">
+          <div className="flex flex-col md:flex-row justify-center gap-10 md:gap-20 mb-8 md:flex-wrap w-[90%] max-w-[1000px] items-center">
 
             {/* Footfall */}
             <div className="flex flex-col items-center min-w-[150px]">
@@ -336,7 +346,7 @@ const Aboutus = () => {
         <div className="h-[10vh]" />
       </div>
       <div className="absolute bottom-0 h-1 w-full bg-linear-to-r from-transparent via-[#615030] to-transparent opacity-100" />
-    
+
     </main>
   );
 };

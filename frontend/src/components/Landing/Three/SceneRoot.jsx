@@ -23,7 +23,6 @@ export default function SceneRoot({
   setScrollOffset,
 }) {
   const { scene } = useThree();
-
 useEffect(() => {
   return () => {
     scene.traverse((obj) => {

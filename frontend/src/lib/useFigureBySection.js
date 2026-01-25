@@ -10,7 +10,7 @@ export function useFigureBySection({
   setFigureStyle,
 }) {
   useEffect(() => {
-     if (!enabled) return;
+    if (!enabled) return;
     if (!setFigureClass || !setFigureStyle) return;
     if (!setLotusClass || !setLotusStyle) return;
 
@@ -87,7 +87,7 @@ export function useFigureBySection({
           transition-all duration-700 ease-out
         `);
       },
-      { threshold: 0.1 }
+      { threshold: 0.01 }
     );
 
     if (landingRef?.current) landingObserver.observe(landingRef.current);

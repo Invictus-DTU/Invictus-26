@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 
 export default function Authpage({setLotusClass, setLotusStyle, setFigureClass, setFigureStyle}) {
-  const { user, isAdmin, authLoading, login, register, Adminlogin, loading, regError } = useContext(AuthContext);
+  const { user, isAdmin, authLoading, login, register, Adminlogin, loading, regError, setRegError } = useContext(AuthContext);
   const backend_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [isLogin, setIsLogin] = useState(true);
   const [eyeToggle, setEyeToggle] = useState(false);
@@ -33,7 +33,7 @@ useEffect(() => {
     email: '',
     password: '',
     confirmPassword: '',
-    agreedToTerms: false
+    // agreedToTerms: false
   });
   
   useEffect(() => {
@@ -42,6 +42,7 @@ useEffect(() => {
         server: regError,
       });
     }
+    return () => { setRegError(null); };
   }, [loading]);
 
 
@@ -142,9 +143,9 @@ useEffect(() => {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
-    if (!formData.agreedToTerms) {
-      newErrors.agreedToTerms = "You must agree to the terms";
-    }
+    // if (!formData.agreedToTerms) {
+    //   newErrors.agreedToTerms = "You must agree to the terms";
+    // }
   }
 
   if (Object.keys(newErrors).length > 0) {
@@ -415,7 +416,7 @@ const handleSubmit = async (e) => {
               )}
 
               {/* Terms Checkbox - Only for Register */}
-              {!isLogin && (
+              {/* {!isLogin && (
                 <label className="flex items-start gap-3 text-sm cursor-pointer" style={{ color: '#FFD98A' }}>
                   <input
                     type="checkbox"
@@ -432,7 +433,7 @@ const handleSubmit = async (e) => {
 
                   <span>I agree to the terms of service and privacy policy</span>
                 </label>
-              )}
+              )} */}
 
               {/* Submit Button */}
               {errors.admin && (

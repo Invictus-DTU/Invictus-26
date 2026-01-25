@@ -18,8 +18,10 @@ export default function ThreeScene({ onReady }) {
   }, []);
 
   useEffect(() => {
-    setGlitchTrigger((t) => t + 1);
-  }, []);
+    if (currSection === 0){
+      setGlitchTrigger((t) => t + 1);
+    }
+  }, [currSection]);
 
   useEffect(() => {
     if (currSection === 2) {

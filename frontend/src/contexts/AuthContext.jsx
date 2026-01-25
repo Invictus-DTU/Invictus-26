@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
-import { log } from "three";
 
 export const AuthContext = createContext();
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -74,7 +73,7 @@ export function AuthProvider({ children }) {
         return { success: true };
       }
     } catch (error) {
-      setRegError(error.response.data.error || "Registration failed")
+       setRegError(error.response?.data?.error || "Login failed");//adding ? in the response or field makes sure that code doesnot fails in case res does not exist then automatically update to "Login failed"
       console.log(error);
       
       return {
@@ -176,14 +175,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // const getEventById = async (id) => {
-  //   try {
-  //     const res = await axios.get(`${backend_url}/events/${id}`);
-  //     if (res.status === 200) return res.data.event;
-  //   } catch {
-  //     return null;
-  //   }
-  // };
 
   const fetchMe = async (token) => {
   try {
@@ -221,6 +212,23 @@ export function AuthProvider({ children }) {
   }
 };
 
+  const fetchUserEvents = async (token, email) => {
+
+  try {
+    const res = await axios.get(`${backend_url}/events/registrations/email/${email}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.status === 200) {
+      
+      return res.data;
+    }
+  } catch (error) {
+    console.log("Error fetching user events:", error);
+    return [];
+  }
+};
 
   const handleGoogleCallback = async (accessToken, refreshToken) => {
   if (!accessToken) return { success: false };
@@ -251,16 +259,19 @@ const logout = () => {
       value={{
         user,
         isAdmin,
-        // refreshToken,
+        fetchUserEvents,
         events,
         eventsLoading,
         eventsError,
         getAdminEvents,
         loading,
+        setLoading,
         regError,
+        setRegError,
         logout,
         login,
         register,
+        
         authLoading,
         Adminlogin,
         handleGoogleCallback

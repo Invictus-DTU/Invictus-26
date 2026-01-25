@@ -34,6 +34,9 @@ const Footer = ({}) => {
                 className="relative h-14 md:h-12 w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-sm"
               />
             </div>
+            <div className=" relative group my-auto ml-4">
+              <p onClick={() => {window.open('https://docs.google.com/document/d/1DcqBkRaoUgag0jVh_zRzh5Twr4LGYZIucaaO2ge_e5M/edit?tab=t.0','_blank')}} className=" cursor-pointer opacity-75 hover:opacity-100 underline">privacy policy</p>
+            </div>
           </div>
 
           {/* ---------- CENTER : CREDITS (TRUE CENTER) ---------- */}

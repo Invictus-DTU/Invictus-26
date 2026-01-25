@@ -6,7 +6,10 @@ import LandingFigure from "@/utils/landingFigure";
 import { LoaderProvider } from "@/contexts/LoaderContext";
 import { useLoader } from "@/contexts/LoaderContext";
 import Loader from "@/utils/loader";
+import { AudioProvider } from "@/contexts/AudioContext";
+import MuteButton from "@/utils/MuteButton";
 import "@/styles/globals.css";
+import GlobalBirdCanvas from "@/components/Landing/Three/GlobalBirdCanvas";
 import { useRouter } from "next/router";
 import Script from "next/script";
 
@@ -70,8 +73,10 @@ export default function App({ Component, pageProps }) {
       />
       <AuthProvider>
         <LoaderProvider>
+          <AudioProvider>
           <DomReady />
           <Loader />
+          <MuteButton />
           {router.pathname !== "/model" && (
             <Navbar
               className={`
@@ -109,6 +114,8 @@ export default function App({ Component, pageProps }) {
           {router.pathname === "/model" ? null : (
             <LandingFigure className={figureClass} style={figureStyle} />
           )}
+          
+          <GlobalBirdCanvas />
 
           <Component
             {...pageProps}
@@ -120,6 +127,9 @@ export default function App({ Component, pageProps }) {
             displayLogo={displayLogo}
             setDisplayLogo={setDisplayLogo}
           />
+
+          
+          </AudioProvider>
         </LoaderProvider>
       </AuthProvider>
     </>

@@ -96,7 +96,7 @@ export default function MapModal({ open, onClose, destination }) {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-14 right-2 z-20
+          className="absolute top-14 right-2 z-22
             bg-[#bfa14a] text-white px-4 py-1 rounded-full font-bold"
         >
           ✕
