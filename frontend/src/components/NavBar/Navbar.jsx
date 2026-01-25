@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useContext } from 'react'
 import { useRouter } from "next/router";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LogOut } from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar({ className = "" }) {
   const { user, isAdmin, logout } = useContext(AuthContext);
@@ -111,11 +112,19 @@ export default function Navbar({ className = "" }) {
 
   return (
     <div className="flex justify-center">
-      <nav className={`${className} fixed top-4 right-0 w-auto md:w-fit z-[50] flex bg-transparent backdrop-blur-md text-black rounded-l-2xl rounded-r-2xl md:rounded-l-4xl border-3 border-[#D4AF37] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.15)]`}>
+      <nav className={`${className} fixed top-4 right-0 md:right-auto w-auto md:w-fit z-[50] flex bg-transparent backdrop-blur-md text-black rounded-l-2xl rounded-r-2xl border-3 border-[#D4AF37] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.15)]`}>
         <div className="px-4 py-3 flex items-center">
 
           {/* desktop menu */}
           <div className="hidden w-fit md:flex md:text-[0.67rem] items-center space-x-1 lg:space-x-4 xl:space-x-5 relative text-[0.75rem] lg:text-[0.9rem] xl:text-[1.1rem] uppercase tracking-wider">
+
+            {/* logo + word art */}
+            <div className="hidden md:flex relative z-10 items-center cursor-pointer select-none">
+              <Image onClick={() => router.push("/")} src="/logo.png" alt="Logo" width={70} height={50} priority
+              className="w-[80px] sm:w-[10px] md:w-[50px]  lg:w-[60px]  xl:w-[75px] h-auto object-contain mr-2"/>
+              <Image onClick={() => router.push("/Home")} src="/wordArt2.svg" alt="Wordart" width={180} height={60} priority
+              className="w-[80px] sm:w-[10px] md:w-[50px]  lg:w-[60px]  xl:w-[80px] h-auto object-contain"/>
+            </div>
 
             {/* selected option pill */}
             {mounted && activeIndex !== -1 && (
@@ -134,16 +143,13 @@ export default function Navbar({ className = "" }) {
                 ref={(el) => (itemsRef.current[index] = el)}
                 onClick={(e) => handleNavigation(e, href)}
                 className={`
-                  relative z-10 px-[0.3rem] lg:px-[0.45rem] xl:px-[0.7rem] xl:py-[0.3rem] lg:px-[0.5rem] py-[0.1rem]
-                  transition-colors duration-300
+                  relative z-10 px-[0.3rem] lg:px-[0.45rem] xl:px-[0.7rem] lg:px-[0.5rem]
+                  transition-colors duration-500
                   [font-family:'Montserrat',sans-serif] font-[600] whitespace-nowrap
+                  bg-gradient-to-b from-[#FFFFFF] to-[#F6F1D4] bg-clip-text text-transparent brightness-105 saturate-115
                   ${activeIndex === index
-                    ? "text-white"
-                    : "bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] bg-clip-text text-transparent brightness-105 saturate-115"
-                  }
-                  ${activeIndex === index
-                    ? "hover:text-white"
-                    : "hover:text-[#D4AF37] hover:drop-shadow-[0_0_1rem_rgba(212,175,55,0.8)]"
+                    ? "hover:bg-gradient-to-b from-[#FFFFFF] to-[#F6F1D4] bg-clip-text text-transparent brightness-105 saturate-115"
+                    : "hover:text-[#FBFF7D] hover:drop-shadow-[0_0_1rem_rgba(212,175,55,0.8)]"
                   }
                 `}
               >
@@ -167,15 +173,15 @@ export default function Navbar({ className = "" }) {
                 }}
                 className={`
                   relative z-10 ml-1 px-2 lg:px-[0.6rem] xl:px-[0.8rem] py-[0.3rem]
-                  transition-colors duration-300 cursor-pointer
+                  transition-colors duration-500 cursor-pointer
                   [font-family:'Montserrat',sans-serif] font-[600] whitespace-nowrap
                   ${activeIndex === authIndex
                     ? "text-white"
-                    : "bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] bg-clip-text text-transparent brightness-105 saturate-115"
+                    : "bg-gradient-to-b from-[#FFFFFF] to-[#F6F1D4] bg-clip-text text-transparent brightness-105 saturate-115"
                   }
                   ${activeIndex === authIndex
                     ? "hover:text-white"
-                    : "hover:text-[#D4AF37] hover:drop-shadow-[0_0_1rem_rgba(212,175,55,0.8)]"
+                    : "hover:text-[#FBFF7D] hover:drop-shadow-[0_0_1rem_rgba(212,175,55,0.8)]"
                   }
                 `}>
                 {user || isAdmin ? "PROFILE" : "LOGIN"} 
@@ -286,16 +292,10 @@ export default function Navbar({ className = "" }) {
           )}
         </div>
 
-      {/* menu bottom text */}
-        <div className=" border-t border-[#D4AF37]/20 pt-4">
-            <div className="flex text-[1.5rem] md:text-[1.2rem] items-center space-x-3 md:space-x-4">
-          <div className="flex flex-col border-r border-[#D4AF37] pr-2 md:pr-3 leading-tight">
-            <span className="invictus-heading font-bold uppercase tracking-[0.15em]">Invictus</span>
-          </div>
-          <div className="flex flex-col leading-tight">
-            <span className="invictus-heading font-bold uppercase tracking-[0.1em]">2026</span>
-          </div>
-          </div>
+        {/* menu bottom wordart */}
+        <div className="border-t border-[#D4AF37]/20 pt-6 flex justify-center">
+          <Image src="/wordArt2.svg" alt="Invictus 2026" width={400} height={70} priority
+          className="object-contain drop-shadow-[0_0_1.2rem_rgba(212,175,55,0.6)]"/>
         </div>
       </div>
 
