@@ -271,6 +271,7 @@ const logout = () => {
         logout,
         login,
         register,
+        
         authLoading,
         Adminlogin,
         handleGoogleCallback
