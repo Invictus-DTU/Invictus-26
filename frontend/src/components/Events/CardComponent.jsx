@@ -267,7 +267,7 @@ const filteredEvents = events.filter((ev) => {
             >
               <EventCard
                 title={ev.name}
-                image={ev.imagePath ? `${backend_url}${ev.imagePath}` : undefined}
+                image={ev.imagePath ? ev.imagePath : undefined}
                 isActive={index === current}
                 onClick={() => handleEventClick(ev)}
               />
