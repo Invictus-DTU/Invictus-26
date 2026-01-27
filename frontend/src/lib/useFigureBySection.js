@@ -19,15 +19,15 @@ export function useFigureBySection({
         if (!entry.isIntersecting) return;
 
         setLotusStyle({
-        left: "49.5%",
-        animation: "lotusFloat 10s ease-in-out infinite",
+        left: "50%",
+        animation: "lotusFloat 5s ease-in-out infinite",
         filter: "drop-shadow(0 0 22px rgba(255,215,138,0.65))",
         willChange: "transform",
         });
 
         setLotusClass(`
         fixed
-        bottom-[22%]
+        bottom-[19%]
         md:bottom-[26%]
         w-[80px] md:w-[100px] lg:w-[110px]
         opacity-90
@@ -38,7 +38,7 @@ export function useFigureBySection({
         `);
 
         setFigureStyle({
-          left: "49.5%",
+          left: "50%",
           bottom: "0px",
           transform: "translateX(-50%)",
         });
@@ -46,13 +46,13 @@ export function useFigureBySection({
         setFigureClass(`
           fixed bottom-0 opacity-93
           w-[12rem]
-          max-[390px]:w-[9rem]
+          max-[390px]:w-[10rem]
           max-[400px]:w-[280px]
           md:w-[280px]
-          lg:w-[17.625vw]
+          lg:w-[17vw]
           drop-shadow-[0_0_30px_rgba(255,215,138,0.55)]
           transition-all duration-1000 ease-in-out
-          z-[20]
+          z-[2]
         `);
       },
       { threshold: 0.87 }

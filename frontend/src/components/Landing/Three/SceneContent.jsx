@@ -241,9 +241,7 @@ export function SceneContent({
           {/* 3D Button */}
           <group position={[0, -0.3, isMobile ? 13.4 : 8]} scale={0.1}>
             <mesh
-              onClick={() => {
-                router.push("/Home");
-              }}
+              onClick={() => {onStartExplore()}}
               onPointerOver={(e) => {
                 document.body.style.cursor = "pointer";
                 e.object.scale.set(1.1, 1.1, 1.1);

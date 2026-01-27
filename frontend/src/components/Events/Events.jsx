@@ -106,12 +106,12 @@ export default function Events({setLotusClass, setLotusStyle, setFigureClass, se
     
       setFigureClass(`
         fixed
-        w-[120px]
-        md:w-[140px]
-        lg:w-[190px]
+        w-[100px]
+        md:w-[120px]
+        lg:w-[175px]
         pointer-events-none
         z-[30]
-        opacity-90
+        opacity-60
         drop-shadow-[0_0_30px_rgba(255,215,138,0.4)]
         transition-all duration-700 ease-out
       `);
@@ -178,7 +178,7 @@ export default function Events({setLotusClass, setLotusStyle, setFigureClass, se
               }
             />
 
-            <div className='mt-2 border-[#C5A059] text-[#39362d]' onClick={() => {setFilters(((prev) => ({...prev,       
+            <div className='mt-2 border-[#C5A059] text-[#39362d] transition-transform duration-500 hover:rotate-360' onClick={() => {setFilters(((prev) => ({...prev,       
                     search: "",
                     mode: null,
                     category: null,

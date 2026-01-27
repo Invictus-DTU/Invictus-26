@@ -27,7 +27,7 @@ export default function MuteButton() {
         toggleMute();
       }}
       className="
-        fixed top-6 left-6 z-[10000]
+        fixed top-6 left-1/2 md:left-6 z-[10000]
         w-9 h-9 rounded-full
         bg-black/50 backdrop-blur
         flex items-center justify-center

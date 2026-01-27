@@ -13,9 +13,9 @@ export default function GlitchIntro({ trigger, currSection }) {
 
     const timers = [];
 
-    timers.push(setTimeout(() => setStage("one"), 1200));
-    timers.push(setTimeout(() => setStage("two"), 1400));
-    timers.push(setTimeout(() => setStage("done"), 1560));
+    timers.push(setTimeout(() => setStage("one"), 570));
+    timers.push(setTimeout(() => setStage("two"), 800));
+    timers.push(setTimeout(() => setStage("done"), 960));
 
     return () => timers.forEach(clearTimeout);
   }, [trigger]);

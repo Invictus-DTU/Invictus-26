@@ -92,7 +92,7 @@ export default function App({ Component, pageProps }) {
           )}
           {router.pathname !== "/model" && (
             <img
-              src="/logo.png"
+              src="/invictuslogo.svg"
               alt="Invictus'26 Logo"
               onClick={() => router.push("/")}
               className={`

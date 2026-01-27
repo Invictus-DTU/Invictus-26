@@ -32,13 +32,13 @@ const Footer = ({}) => {
           </div>
 
           {/* ---------- CENTER : CREDITS (TRUE CENTER) ---------- */}
-          <div className="flex flex-col items-center text-center">
-            <p className="text-sm md:text-[15px] font-medium tracking-wide text-[#6D5627] leading-tight">
+          <div className="flex flex-col invictus-text items-center text-center">
+            <p className="text-sm md:text-[15px] font-medium  text-[#6D5627] leading-tight">
               Designed & Developed with
               <span className="text-[#C0392B] mx-1.5 text-lg inline-block">❤</span>
               by
             </p>
-            <p className="font-bold text-lg tracking-[0.12em] uppercase bg-gradient-to-r from-[#8B6E28] to-[#5C450E] bg-clip-text text-transparent mt-1">
+            <p className="font-bold text-lg tracking-[0.02em] uppercase bg-gradient-to-r from-[#8B6E28] to-[#5C450E] bg-clip-text text-transparent mt-1">
               Invictus Team
             </p>
           </div>

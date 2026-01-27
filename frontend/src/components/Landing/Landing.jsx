@@ -113,27 +113,25 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
       {/* <div className="mt-4 h-[2px] w-[60%] md:w-[40%] bg-gradient-to-r from-transparent via-[#C5A059] to-transparent opacity-80" /> */}
 
       {/* DATE */}
-      <p
-        className="
-          mt-4
-          text-center
-          text-3xl md:text-6xl
-          font-bold
-          tracking-[0.15em]
-          text-[#FFF6E0]
-          font-['Orbitron']
-          relative z-10
-        "
-        style={{
-          textShadow: "0px 0px 15px rgba(197, 160, 89, 0.6)",
-        }}
-      >
-        9-11
-        <sup className="text-[0.5em] ml-1 text-[#D4AF37]">TH</sup>
-        <span className="ml-3">FEB'26</span>
-      </p>
+        <p
+          className="
+            mt-4
+            text-center
+            text-3xl md:text-6xl
+            font-bold
+            tracking-[0.15em]
+            text-[#FFF6E0]
+            font-['Orbitron']
+            relative z-10
+            [text-shadow:_-1px_-1px_0_#8B6914,1px_-1px_0_#8B6914,-1px_1px_0_#8B6914,1px_1px_0_#8B6914,-2px_0_0_#8B6914,2px_0_0_#8B6914,0_-2px_0_#8B6914,0_2px_0_#8B6914]
+          "
+        >
+          9-11
+          <sup className="text-[0.5em] ml-1 text-[#FFF6E0]">TH</sup>
+          <span className="ml-3">FEB'26</span>
+        </p>
 
-      {/* BUTTONS */}
+        {/* BUTTONS */}
       <div className="flex flex-col md:flex-row gap-4 md:gap-24 mt-10 md:mt-12 w-full px-8 md:px-0 justify-center items-center">
         
         {/* JOIN GROUP - Darker Gold/Bronze Style */}
@@ -144,6 +142,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
     w-full md:w-auto
     px-8 py-3.5
     rounded-full
+    invictus-text
     font-bold tracking-widest uppercase text-sm md:text-base
     text-[#FFF1B8]
     z-30
@@ -169,6 +168,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
     w-full md:w-auto
     px-10 py-3.5
     min-w-[180px]
+    invictus-text
     rounded-full
     font-bold tracking-widest uppercase text-sm md:text-base
     text-[#5C450E]

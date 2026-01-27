@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import faqs from "./faqs.json";
 
 export default function FAQ() {
-  const [open, setOpen] = useState([]);
+  const [open, setOpen] = useState([0]);
 
   const toggleFAQ = (i) => {
     setOpen((prev) =>
@@ -42,7 +42,7 @@ export default function FAQ() {
                 <div
                   onClick={() => toggleFAQ(i)}
                   className={`
-                    flex items-center justify-between p-5 md:p-6 cursor-pointer transition-all duration-300
+                    flex items-center invictus-text justify-between p-5 md:p-6 cursor-pointer transition-all duration-300
                     ${isOpen 
                       ? 'bg-gradient-to-r from-[#FFFDF5] to-[#F3E3B6] rounded-t-xl text-[#423212]' 
                       : 'bg-[#2A2112]/80 backdrop-blur-sm rounded-xl text-[#F3E3B6] hover:bg-[#3E2D0B]/80'

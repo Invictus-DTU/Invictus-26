@@ -115,7 +115,8 @@ body::after { /* for adding a blur/darkness effect  */
 
 html,
 body {
-  height: 100%;
+  width: auto;
+  height:min-content;
   background: transparent;
 }
 
@@ -197,4 +198,17 @@ body.cursor-hidden {
 
 .animate-slideUp {
   animation: slideInFromLeft 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-fadeOut {
+  animation: fadeOut 0.8s ease-out forwards;
 }

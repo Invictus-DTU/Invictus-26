@@ -19,7 +19,7 @@ export default function VideoTransition({ play, onEnd }) {
       <video
         ref={videoRef}
         className="w-full h-full object-cover"
-        src="/model/transition.mp4"   
+        src="/intro/transition.mp4"   
         muted
         playsInline
         preload="auto" 

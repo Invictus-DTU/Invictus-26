@@ -252,7 +252,7 @@ const Aboutus = () => {
 
   return (
     <main ref={sectionRef} className="w-full min-h-screen relative overflow-x-hidden bg-transparent">
-      <div className="w-full flex flex-col items-center  px-4 pt-28">
+      <div className="w-full flex flex-col items-center px-4 pt-18">
 
         {/* TITLE */}
         <div className="flex justify-center w-full mb-0 relative">
@@ -330,13 +330,13 @@ const Aboutus = () => {
           {/* BUTTONS */}
           <div className="flex gap-9 md:gap-20 justify-center md:mt-3 flex-wrap relative z-[50]">
             <button
-              className="font-['Montserrat'] font-bold text-lg px-12 py-4 rounded-full transition-all duration-500 ease-out hover:scale-105 active:scale-95 bg-gradient-to-br from-[#785a10] to-[#3a2a05] hover:from-[#E6C575] hover:to-[#B8860B] text-[#FFE5B4] hover:text-[#4A3728] border border-[#FFE5B4]/30 hover:border-[#F4C430] shadow-[0_0_25px_rgba(255,229,180,0.15)] hover:shadow-[0_0_60px_rgba(244,196,48,0.6)] flex items-center justify-center tracking-wide backdrop-blur-sm"
+              className="invictus-text font-bold text-lg px-12 py-4 rounded-full transition-all duration-500 ease-out hover:scale-105 active:scale-95 bg-gradient-to-br from-[#785a10] to-[#3a2a05] hover:from-[#E6C575] hover:to-[#B8860B] text-[#FFE5B4] hover:text-[#4A3728] border border-[#FFE5B4]/30 hover:border-[#F4C430] shadow-[0_0_25px_rgba(255,229,180,0.15)] hover:shadow-[0_0_60px_rgba(244,196,48,0.6)] flex items-center justify-center tracking-wide backdrop-blur-sm"
               onClick={() => router.push("/Gallery")}
             >
               View Gallery
             </button>
             <button
-              className="font-['Montserrat'] font-bold text-lg px-12 py-4 rounded-full transition-all duration-500 ease-out hover:scale-105 active:scale-95 bg-gradient-to-br from-[#785a10] to-[#3a2a05] hover:from-[#E6C575] hover:to-[#B8860B] text-[#FFE5B4] hover:text-[#4A3728] border border-[#FFE5B4]/30 hover:border-[#F4C430] shadow-[0_0_25px_rgba(255,229,180,0.15)] hover:shadow-[0_0_60px_rgba(244,196,48,0.6)] flex items-center justify-center tracking-wide backdrop-blur-sm"
+              className="invictus-text font-bold text-lg px-12 py-4 rounded-full transition-all duration-500 ease-out hover:scale-105 active:scale-95 bg-gradient-to-br from-[#785a10] to-[#3a2a05] hover:from-[#E6C575] hover:to-[#B8860B] text-[#FFE5B4] hover:text-[#4A3728] border border-[#FFE5B4]/30 hover:border-[#F4C430] shadow-[0_0_25px_rgba(255,229,180,0.15)] hover:shadow-[0_0_60px_rgba(244,196,48,0.6)] flex items-center justify-center tracking-wide backdrop-blur-sm"
               onClick={() => router.push("/Events")}
             >
               View Events
