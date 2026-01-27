@@ -27,8 +27,7 @@ export function useFigureBySection({
 
         setLotusClass(`
         fixed
-        max-[379px]:bottom-[20%]
-        bottom-[19%]
+        bottom-[22%]
         md:bottom-[26%]
         w-[80px] md:w-[100px] lg:w-[110px]
         opacity-90

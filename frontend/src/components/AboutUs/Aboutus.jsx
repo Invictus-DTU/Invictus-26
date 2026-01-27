@@ -252,13 +252,13 @@ const Aboutus = () => {
 
   return (
     <main ref={sectionRef} className="w-full min-h-screen relative overflow-x-hidden bg-transparent">
-      <div className="w-full flex flex-col items-center pb-10 px-4 pt-28">
+      <div className="w-full flex flex-col items-center  px-4 pt-28">
 
         {/* TITLE */}
         <div className="flex justify-center w-full mb-0 relative">
           <div className="relative inline-flex items-center">
 
-            <h1 className="invictus-heading text-[1.8rem] min-[350px]:text-[2.5rem] sm:text-[3.8rem] md:text-[5.2rem] tracking-[0.1em] relative -mt-7 z-10 text-center py-[20px] w-full px-2 break-words">
+            <h1 className="invictus-heading text-[1.8rem] min-[350px]:text-[2.5rem] sm:text-[3.8rem] md:text-[5.9rem] relative -mt-7 z-10 text-center py-[20px] w-full px-2">
               ABOUT US
             </h1>
           </div>
@@ -277,7 +277,7 @@ const Aboutus = () => {
             className="absolute inset-0 z-100 flex items-center justify-center pt-0 md:pt-[16%] md:items-start px-[22%] -ml-[1%] pointer-events-none transition-opacity duration-300 ease-out"
             style={{ opacity: textOpacity }}
           >
-            <p className="invictus-text text-center leading-relaxed font-black italic text-[#312215] text-[0.55rem] min-[350px]:text-[0.6rem] min-[400px]:text-[0.7rem] md:text-[1.159rem] max-w-[450px] w-full break-words drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
+            <p className="invictus-text text-center leading-relaxed font-black italic text-[#312215] text-[0.44rem] max-[500px]:text-[0.53rem] sm:text-[1rem] md:text-[1.159rem] max-w-[450px] w-full break-words drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
               {aboutText}
             </p>
           </div>
@@ -328,7 +328,7 @@ const Aboutus = () => {
           </div>
 
           {/* BUTTONS */}
-          <div className="flex gap-20 justify-center mt-3 flex-wrap relative z-[50]">
+          <div className="flex gap-9 md:gap-20 justify-center md:mt-3 flex-wrap relative z-[50]">
             <button
               className="font-['Montserrat'] font-bold text-lg px-12 py-4 rounded-full transition-all duration-500 ease-out hover:scale-105 active:scale-95 bg-gradient-to-br from-[#785a10] to-[#3a2a05] hover:from-[#E6C575] hover:to-[#B8860B] text-[#FFE5B4] hover:text-[#4A3728] border border-[#FFE5B4]/30 hover:border-[#F4C430] shadow-[0_0_25px_rgba(255,229,180,0.15)] hover:shadow-[0_0_60px_rgba(244,196,48,0.6)] flex items-center justify-center tracking-wide backdrop-blur-sm"
               onClick={() => router.push("/Gallery")}
