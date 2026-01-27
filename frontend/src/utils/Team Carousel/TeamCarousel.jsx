@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import CarouselCard from './CarouselCard'
-import TeamInfo from './TeamInfo.json'    //helper for team details. using dummy data atm
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import TeamInfo from './TeamInfo.json'    //helper for team details
 
 const TeamCarousel = () => {
   const [active, setActive] = useState(0)
@@ -37,33 +36,31 @@ const TeamCarousel = () => {
       </div>
 
       {/* controls */}
-      <div className="flex w-full justify-center mt-10">
+      <div className="flex w-full justify-center mt-12 gap-5">
         <button
           onClick={prev}
           className="
-            h-25 w-25 rounded-full cursor-pointer
-            transition-all duration-200 ease-out
-            hover:scale-105
-            hover:drop-shadow-[0_0_2.5rem_rgba(212,175,55,0.95)]
-            hover:shadow-[0_0_4.5rem_0.15rem_rgba(212,175,55,0.45)]
-            relative overflow-hidden">
-          <div className="absolute inset-0 rounded-full bg-[url('/Team/button.webp')] bg-cover bg-center"/>
-          <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.15),transparent_70%)]
-          opacity-0 transition-opacity duration-200 hover:opacity-90"/>
+            cursor-pointer
+            w-12 h-12 rounded-full 
+            border border-[#C5A059] text-[#C5A059] 
+            bg-white/80 hover:bg-[#C5A059] hover:text-white 
+            transition-all shadow-lg flex items-center justify-center
+          "
+        >
+          ←
         </button>
 
         <button
           onClick={next}
           className="
-            h-25 w-25 rounded-full cursor-pointer
-            transition-all duration-200 ease-out
-            hover:scale-105
-            hover:drop-shadow-[0_0_2.5rem_rgba(212,175,55,0.95)]
-            hover:shadow-[0_0_4.5rem_0.15rem_rgba(212,175,55,0.45)]
-            relative overflow-hidden">
-          <div className="absolute inset-0 rounded-full bg-[url('/Team/button.webp')] bg-cover bg-center scale-x-[-1]"/>
-          <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.15),transparent_70%)]
-          opacity-0 transition-opacity duration-200 hover:opacity-90"/>
+            cursor-pointer
+            w-12 h-12 rounded-full 
+            border border-[#C5A059] text-[#C5A059] 
+            bg-white/80 hover:bg-[#C5A059] hover:text-white 
+            transition-all shadow-lg flex items-center justify-center
+          "
+        >
+          →
         </button>
       </div>
     </div>

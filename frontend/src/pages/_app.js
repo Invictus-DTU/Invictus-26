@@ -98,6 +98,7 @@ export default function App({ Component, pageProps }) {
               className={`
           fixed top-1 left-2 z-60
           w-[100px] md:w-[150px] cursor-pointer
+          md:hidden
           transform transition-all duration-700 ease-in-out
 
           drop-shadow-[0_0_2rem_rgba(212,175,55,0.9)]

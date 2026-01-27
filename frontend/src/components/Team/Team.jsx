@@ -64,21 +64,6 @@ export default function TeamComponent({ setLotusClass, setLotusStyle, setFigureC
 
   return (
     <>
-
-      <img
-        src="/Team/feathers.webp"
-        alt="Decorative Feathers"
-        className="
-          fixed z-[10] pointer-events-none
-          w-[325px] md:w-[425px] xl:w-[525px]
-          bottom-0 right-0
-          translate-x-[35%] translate-y-[35%]
-          brightness-125 saturate-125
-          transition-all duration-500 opacity-100
-        "
-      />
-
-
       <div className="px-6 mt-22 lg:pt-8 md:pt-4 md:pl-10 text-center md:text-left">
 
         <div className="relative inline-block">

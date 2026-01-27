@@ -45,7 +45,7 @@ const CarouselCard = ({ personInfo, offset, isFlipped }) => {
         
         {/* front side of card */}
         <div 
-          className="absolute inset-0 w-full h-full rounded-t-[29px] rounded-b-3xl shadow-xl flex flex-col justify-center items-center"
+          className="absolute inset-0 w-full h-full shadow-xl flex flex-col justify-center items-center"
           style={{ 
             backfaceVisibility: "hidden",
             backgroundImage: "url('/Team/card.webp')",
