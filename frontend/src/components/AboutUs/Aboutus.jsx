@@ -258,7 +258,7 @@ const Aboutus = () => {
         <div className="flex justify-center w-full mb-0 relative">
           <div className="relative inline-flex items-center">
 
-            <h1 className="invictus-heading text-[3.8rem] md:text-[5.2rem] tracking-[0.1em] relative -mt-7 z-10 text-center py-[20px]">
+            <h1 className="invictus-heading text-[1.8rem] min-[350px]:text-[2.5rem] sm:text-[3.8rem] md:text-[5.2rem] tracking-[0.1em] relative -mt-7 z-10 text-center py-[20px] w-full px-2 break-words">
               ABOUT US
             </h1>
           </div>
@@ -274,10 +274,10 @@ const Aboutus = () => {
 
           {/* Text Content Overlay */}
           <div
-            className="absolute inset-0 z-100 flex items-center justify-center pt-0 md:pt-[16%] md:items-start px-[18%] md:px-[22%] -ml-[1%] pointer-events-none transition-opacity duration-300 ease-out"
+            className="absolute inset-0 z-100 flex items-center justify-center pt-0 md:pt-[16%] md:items-start px-[22%] -ml-[1%] pointer-events-none transition-opacity duration-300 ease-out"
             style={{ opacity: textOpacity }}
           >
-            <p className="invictus-text text-center leading-relaxed font-black italic text-[#312215] text-[0.6rem] min-[400px]:text-[0.7rem] md:text-[1.159rem] max-w-[450px] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
+            <p className="invictus-text text-center leading-relaxed font-black italic text-[#312215] text-[0.55rem] min-[350px]:text-[0.6rem] min-[400px]:text-[0.7rem] md:text-[1.159rem] max-w-[450px] w-full break-words drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
               {aboutText}
             </p>
           </div>
@@ -285,43 +285,43 @@ const Aboutus = () => {
 
         {/* STATS */}
         <div className={`flex flex-col items-center w-full z-10 relative mt-8 transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <div className="flex flex-col md:flex-row justify-center gap-10 md:gap-20 mb-8 md:flex-wrap w-[90%] max-w-[1000px] items-center">
+          <div className="flex flex-row justify-center md:justify-center gap-2 md:gap-20 mb-8 w-[98%] md:w-[90%] max-w-[1000px] items-start md:items-center">
 
             {/* Footfall */}
-            <div className="flex flex-col items-center min-w-[150px]">
-              <div className="font-serif text-[#4d411b] text-[3.2rem] leading-none mb-1 text-center">
+            <div className="flex flex-col items-center min-w-[30%] md:min-w-[150px]">
+              <div className="font-serif text-[#4d411b] text-[1.5rem] md:text-[3.2rem] leading-none mb-1 text-center">
                 {footfallValue.toLocaleString()}+
               </div>
-              <div className="flex gap-1 mb-2 text-4xl text-[#8B6914] drop-shadow-sm">
+              <div className="flex gap-1 mb-2 text-2xl md:text-4xl text-[#8B6914] drop-shadow-sm">
                 <i className="fa-solid fa-users"></i>
               </div>
-              <div className="invictus-subheading font-bold text-xl uppercase tracking-widest !text-[#675743ff] !bg-none !bg-clip-border mt-0">
+              <div className="invictus-subheading font-bold text-[0.65rem] md:text-xl uppercase tracking-widest !text-[#675743ff] !bg-none !bg-clip-border mt-0 text-center">
                 FOOTFALL
               </div>
             </div>
 
             {/* Colleges */}
-            <div className="flex flex-col items-center min-w-[150px]">
-              <div className="font-serif text-[#4d411b] text-[3.2rem] leading-none mb-1 text-center">
+            <div className="flex flex-col items-center min-w-[30%] md:min-w-[150px]">
+              <div className="font-serif text-[#4d411b] text-[1.5rem] md:text-[3.2rem] leading-none mb-1 text-center">
                 {collegesValue.toLocaleString()}+
               </div>
-              <div className="flex gap-1 mb-2 text-4xl text-[#8B6914] drop-shadow-sm">
+              <div className="flex gap-1 mb-2 text-2xl md:text-4xl text-[#8B6914] drop-shadow-sm">
                 <i className="fa-solid fa-building-columns"></i>
               </div>
-              <div className="invictus-subheading font-bold text-xl uppercase tracking-widest !text-[#675743ff] !bg-none !bg-clip-border mt-0">
+              <div className="invictus-subheading font-bold text-[0.65rem] md:text-xl uppercase tracking-widest !text-[#675743ff] !bg-none !bg-clip-border mt-0 text-center">
                 COLLEGES
               </div>
             </div>
 
             {/* Events */}
-            <div className="flex flex-col items-center min-w-[150px]">
-              <div className="font-serif text-[#4d411b] text-[3.2rem] leading-none mb-1 text-center">
+            <div className="flex flex-col items-center min-w-[30%] md:min-w-[150px]">
+              <div className="font-serif text-[#4d411b] text-[1.5rem] md:text-[3.2rem] leading-none mb-1 text-center">
                 {eventsValue.toLocaleString()}+
               </div>
-              <div className="flex gap-1 mb-2 text-4xl text-[#8B6914] drop-shadow-sm">
+              <div className="flex gap-1 mb-2 text-2xl md:text-4xl text-[#8B6914] drop-shadow-sm">
                 <i className="fa-solid fa-calendar-check"></i>
               </div>
-              <div className="invictus-subheading font-bold text-xl uppercase tracking-widest !text-[#675743ff] !bg-none !bg-clip-border mt-0">
+              <div className="invictus-subheading font-bold text-[0.65rem] md:text-xl uppercase tracking-widest !text-[#675743ff] !bg-none !bg-clip-border mt-0 text-center">
                 EVENTS
               </div>
             </div>
@@ -330,13 +330,13 @@ const Aboutus = () => {
           {/* BUTTONS */}
           <div className="flex gap-20 justify-center mt-3 flex-wrap relative z-[50]">
             <button
-              className="font-['Montserrat'] font-bold text-lg px-12 py-4 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all hover:scale-105 active:scale-95 border-2 !bg-white text-[#8B6914] border-[#B89C3B]"
+              className="font-['Montserrat'] font-bold text-lg px-12 py-4 rounded-full transition-all duration-500 ease-out hover:scale-105 active:scale-95 bg-gradient-to-br from-[#785a10] to-[#3a2a05] hover:from-[#E6C575] hover:to-[#B8860B] text-[#FFE5B4] hover:text-[#4A3728] border border-[#FFE5B4]/30 hover:border-[#F4C430] shadow-[0_0_25px_rgba(255,229,180,0.15)] hover:shadow-[0_0_60px_rgba(244,196,48,0.6)] flex items-center justify-center tracking-wide backdrop-blur-sm"
               onClick={() => router.push("/Gallery")}
             >
               View Gallery
             </button>
             <button
-              className="font-['Montserrat'] font-bold text-lg px-12 py-4 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all hover:scale-105 active:scale-95 border-2 !bg-white text-[#8B6914] border-[#B89C3B]"
+              className="font-['Montserrat'] font-bold text-lg px-12 py-4 rounded-full transition-all duration-500 ease-out hover:scale-105 active:scale-95 bg-gradient-to-br from-[#785a10] to-[#3a2a05] hover:from-[#E6C575] hover:to-[#B8860B] text-[#FFE5B4] hover:text-[#4A3728] border border-[#FFE5B4]/30 hover:border-[#F4C430] shadow-[0_0_25px_rgba(255,229,180,0.15)] hover:shadow-[0_0_60px_rgba(244,196,48,0.6)] flex items-center justify-center tracking-wide backdrop-blur-sm"
               onClick={() => router.push("/Events")}
             >
               View Events
