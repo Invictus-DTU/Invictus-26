@@ -10,7 +10,7 @@ export default function Loader() {
   const isReady = isModelRoute ? domReady && modelReady : domReady;
   
   return (
-    <div className={`fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#0a0a0a] ${isReady ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+    <div className={`fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#0a0a0a] ${isReady ? "opacity-0 duration-1200 pointer-events-none" : "opacity-100"}`}>
       
       {/* Noise overlay */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />

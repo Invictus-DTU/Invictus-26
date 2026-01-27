@@ -8,7 +8,9 @@ function ModelReadySignal({ onReady }) {
   const { progress } = useProgress();
 
   useEffect(() => {
-    if (progress === 100) onReady();
+    if (progress === 100) {
+      onReady();
+    }
   }, [progress]);
 
   return null;

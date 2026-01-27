@@ -2,13 +2,11 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, useState, useEffect } from "react";
 import GlitchIntro from "./GlitchIntro";
 import VideoTransition from "./VideoTransition";
-import IntroVideo from "./introVideo";
 import SceneRoot from "./SceneRoot";
 
 export default function ThreeScene({ onReady }) {
   const [playTransition, setPlayTransition] = useState(false);
   const [currSection, setcurrSection] = useState(0);
-  const [showIntro, setShowIntro] = useState(true);
   const [glitchTrigger, setGlitchTrigger] = useState(0);
   const [scrollOffset, setScrollOffset] = useState(0);
 
@@ -26,15 +24,6 @@ export default function ThreeScene({ onReady }) {
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
-      
-      {showIntro && (
-        <IntroVideo
-          play
-          onEnd={() => {
-            setShowIntro(false); 
-          }}
-        />
-      )}
 
       <GlitchIntro trigger={glitchTrigger} currSection={currSection} />
 
@@ -69,7 +58,7 @@ export default function ThreeScene({ onReady }) {
       <Canvas
         camera={{ position: [0, 12, 12], fov: 50 }}
         className="absolute inset-0"
-        frameloop={playTransition || showIntro ? "never" : "always"}
+        frameloop={playTransition ? "never" : "always"}
         style={{ all: "unset" }}
         gl={{ alpha: true, powerPreference: "high-performance" }}
       >

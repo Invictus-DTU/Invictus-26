@@ -17,11 +17,7 @@ function DomReady() {
   const { setDomReady } = useLoader();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
       setDomReady(true);
-    }, 1000); // 1 second delay
-
-    return () => clearTimeout(timer);
   }, []);
 
   return null;
