@@ -91,7 +91,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
         />
       </div>
 
-      {/* TAGLINE */}
+      {/* TAGLINE
       <h1
         className="
           mt-6 md:mt-4
@@ -107,86 +107,88 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
         "
       >
         Technology, Threaded in Tradition
-      </h1>
+      </h1> */}
 
       {/* GOLD SEPARATOR */}
-      <div className="mt-4 h-[2px] w-[60%] md:w-[40%] bg-gradient-to-r from-transparent via-[#C5A059] to-transparent opacity-80" />
+      {/* <div className="mt-4 h-[2px] w-[60%] md:w-[40%] bg-gradient-to-r from-transparent via-[#C5A059] to-transparent opacity-80" /> */}
 
       {/* DATE */}
-      <p
-        className="
-          mt-4
-          text-center
-          text-3xl md:text-6xl
-          font-bold
-          tracking-[0.15em]
-          text-[#FFF6E0]
-          font-['Orbitron']
-          relative z-10
-        "
-        style={{
-          textShadow: "0px 0px 15px rgba(197, 160, 89, 0.6)",
-        }}
-      >
-        9-11
-        <sup className="text-[0.5em] ml-1 text-[#D4AF37]">TH</sup>
-        <span className="ml-3">FEB'26</span>
-      </p>
+        <p
+          className="
+            mt-4
+            text-center
+            text-3xl md:text-6xl
+            font-bold
+            tracking-[0.15em]
+            text-[#FFF6E0]
+            font-['Orbitron']
+            relative z-10
+            [text-shadow:_-1px_-1px_0_#8B6914,1px_-1px_0_#8B6914,-1px_1px_0_#8B6914,1px_1px_0_#8B6914,-2px_0_0_#8B6914,2px_0_0_#8B6914,0_-2px_0_#8B6914,0_2px_0_#8B6914]
+          "
+        >
+          9-11
+          <sup className="text-[0.5em] ml-1 text-[#FFF6E0]">TH</sup>
+          <span className="ml-3">FEB'26</span>
+        </p>
 
-      {/* BUTTONS */}
+        {/* BUTTONS */}
       <div className="flex flex-col md:flex-row gap-4 md:gap-24 mt-10 md:mt-12 w-full px-8 md:px-0 justify-center items-center">
         
         {/* JOIN GROUP - Darker Gold/Bronze Style */}
         <button
-        onClick={() => window.open('https://t.me/joinchat/Invictus26','_blank')}
-          className="
-            group relative
-            w-full md:w-auto
-            px-6 py-3.5
-            rounded-full
-            font-bold tracking-widest uppercase text-sm md:text-base
-            text-[#FFEeb0]
-            
-            bg-gradient-to-b from-[#8E6E24] via-[#684F16] to-[#45330B]
-            border border-[#A88732]
-            
-            shadow-[0_4px_20px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.2)]
-            
-            transition-all duration-300 ease-out
-            hover:scale-105
-            hover:shadow-[0_0_25px_rgba(197,160,89,0.5)]
-            hover:border-[#FFD700]
-            active:scale-95
-          "
-        >
-          <span className="relative z-10">Join Group</span>
-        </button>
+  onClick={() => window.open('https://t.me/joinchat/Invictus26','_blank')}
+  className="
+    group relative
+    w-full md:w-auto
+    px-8 py-3.5
+    rounded-full
+    invictus-text
+    font-bold tracking-widest uppercase text-sm md:text-base
+    text-[#FFF1B8]
+    z-30
 
-        {/* REGISTER - Lighter Cream/Gold Style */}
-        <button
-        onClick={() => route.push('/login')}
-          className="
-            group relative
-            w-full md:w-auto
-            px-10 py-3.5
-            min-w-[180px]
-            rounded-full
-            font-bold tracking-widest uppercase text-sm md:text-base
-            text-[#5C450E]
-            bg-gradient-to-b from-[#FFFBEB] via-[#F3E3B6] to-[#D4AF37]
-            border border-[#FDE68A]
-            
-            shadow-[0_4px_20px_rgba(212,175,55,0.3),inset_0_1px_0_rgba(255,255,255,0.8)]
-            
-            transition-all duration-300 ease-out
-            hover:scale-105
-            hover:shadow-[0_0_30px_rgba(255,215,138,0.6)]
-            hover:brightness-110
-            active:scale-95
-          "
-        >
-          <span className="relative z-10">Register</span>
-        </button>
+    bg-gradient-to-b from-[#8E6E24] via-[#6F5418] to-[#4A360D]
+
+    /* ❌ removed border */
+    shadow-[0_6px_25px_rgba(0,0,0,0.45),inset_0_1.5px_0_rgba(255,255,255,0.25)]
+
+    transition-all duration-300 ease-out
+    hover:scale-[1.04]
+    hover:shadow-[0_0_35px_rgba(197,160,89,0.45)]
+    active:scale-95
+  "
+>
+  <span className="relative z-10">Join Group</span>
+</button>
+
+<button
+  onClick={() => route.push('/login')}
+  className="
+    group relative
+    w-full md:w-auto
+    px-10 py-3.5
+    min-w-[180px]
+    invictus-text
+    rounded-full
+    font-bold tracking-widest uppercase text-sm md:text-base
+    text-[#5C450E]
+    z-30
+
+    bg-gradient-to-b from-[#FFFEF5] via-[#F3E6BF] to-[#D6B44C]
+
+    /* ❌ removed border */
+    shadow-[0_6px_25px_rgba(212,175,55,0.35),inset_0_2px_0_rgba(255,255,255,0.9)]
+
+    transition-all duration-300 ease-out
+    hover:scale-[1.04]
+    hover:shadow-[0_0_40px_rgba(255,215,138,0.6)]
+    hover:brightness-105
+    active:scale-95
+  "
+>
+  <span className="relative z-10">Register</span>
+</button>
+
       </div>
 
       {/* SNACKBAR */}

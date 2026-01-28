@@ -1,17 +1,21 @@
 export async function getServerSideProps({ req }) {
   const hasSeenModel = req.cookies?.seenModel;
-  
+
   if (!hasSeenModel) {
     return {
-      
       redirect: {
-        destination: "/model",
+        destination: "/Intro",
         permanent: false,
       },
     };
   }
 
-  return { props: {} };
+  return {
+    redirect: {
+      destination: "/Home",
+      permanent: false,
+    },
+  };
 }
 
 import React, { useEffect } from 'react'

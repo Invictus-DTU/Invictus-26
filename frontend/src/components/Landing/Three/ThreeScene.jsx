@@ -1,5 +1,3 @@
-"use client";
-
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useState, useEffect } from "react";
 import GlitchIntro from "./GlitchIntro";
@@ -18,19 +16,15 @@ export default function ThreeScene({ onReady }) {
   }, []);
 
   useEffect(() => {
-    if (currSection === 0){
+    if (currSection === 0 || currSection === 2) {
       setGlitchTrigger((t) => t + 1);
     }
   }, [currSection]);
 
-  useEffect(() => {
-    if (currSection === 2) {
-      setGlitchTrigger((t) => t + 1);
-    }
-  }, [currSection]);
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
+
       <GlitchIntro trigger={glitchTrigger} currSection={currSection} />
 
       {/* Scroll Down Arrow - appears only when scroll is near top */}
@@ -65,8 +59,8 @@ export default function ThreeScene({ onReady }) {
         camera={{ position: [0, 12, 12], fov: 50 }}
         className="absolute inset-0"
         frameloop={playTransition ? "never" : "always"}
-        gl={{ alpha: true }}
         style={{ all: "unset" }}
+        gl={{ alpha: true, powerPreference: "high-performance" }}
       >
         <Suspense fallback={null}>
           <SceneRoot
@@ -79,12 +73,12 @@ export default function ThreeScene({ onReady }) {
         </Suspense>
       </Canvas>
 
-      {/* <VideoTransition
+      <VideoTransition
         play={playTransition}
         onEnd={() => {
           window.location.href = "/Home";
         }}
-      /> */}
+      />
     </div>
   );
 }

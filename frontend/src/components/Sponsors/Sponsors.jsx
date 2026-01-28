@@ -158,12 +158,12 @@ export default function Sponsors({ setLotusClass, setLotusStyle, setFigureClass,
   
     setFigureClass(`
       fixed
-      w-[120px]
-      md:w-[140px]
-      lg:w-[190px]
-      pointer-events-none
-      z-[30]
-      opacity-90
+      w-[100px]
+        md:w-[120px]
+        lg:w-[175px]
+        pointer-events-none
+        z-[30]
+        opacity-60
       drop-shadow-[0_0_30px_rgba(255,215,138,0.4)]
       transition-all duration-700 ease-out
     `);
@@ -262,25 +262,14 @@ export default function Sponsors({ setLotusClass, setLotusStyle, setFigureClass,
 
   return (
     <div className="w-screen h-screen flex flex-col items-center relative overflow-hidden bg-white/10">
-      
-      
-
-      {/* --- HEADER (FIXED TOP OVERLAY) --- */}
-      {/* We use absolute positioning with z-20 to make sure the sponsors 
-         scroll BEHIND the header visuals, but the header stays visible.
-         Gradient fade at bottom makes the transition smooth.
-      */}
-      <div className="absolute top-0 left-0 w-full z-20 flex flex-col items-center pt-[4vh] pb-8 bg-gradient-to-b from-white via-white/95 to-transparent pointer-events-none">
+      <div className="absolute top-0 left-0 w-full z-20 flex flex-col items-center pt-[4vh] pb-8 pointer-events-none">
         
-        {/* 1. Main Heading */}
         <h1 className="invictus-heading mt-18 text-[3.7rem] lg:text-[7rem] leading-none drop-shadow-sm">
           SPONSORS
         </h1>
 
-        {/* 2. Blue Line (Your exact style) */}
-        <div className="w-[50vw] max-w-[600px] h-[2px] bg-[#4A90E2] shadow-[0_0_8px_#4A90E2] my-[1.5vh]" />
+        {/* <div className="w-[50vw] max-w-[600px] h-[2px] bg-[#4A90E2] shadow-[0_0_8px_#4A90E2] my-[1.5vh]" />
 
-        {/* 3. Subtext (Your exact style) */}
         <p className="
             font-['Montserrat',sans-serif]
             text-[clamp(0.9rem,1.8vh,1.2rem)]
@@ -292,15 +281,14 @@ export default function Sponsors({ setLotusClass, setLotusStyle, setFigureClass,
           Our valued partners who power Invictus by supporting innovation and excellence.
         </p>
 
-        {/* 4. DYNAMIC SECTION LABEL (New Feature) */}
         <div className="mt-6 pointer-events-auto transition-all duration-300 transform">
            <span className="px-6 py-2 rounded-full border border-[#C5A059] bg-[#FFFBEB] text-[#8B6508] font-bold text-sm tracking-widest shadow-sm">
              {activeSection}
            </span>
-        </div>
+        </div> */}
       </div>
-
-      {/* --- SCROLL CONTAINER --- */}
+      
+      {/*
       <div
         ref={containerRef}
         className="
@@ -318,7 +306,6 @@ export default function Sponsors({ setLotusClass, setLotusStyle, setFigureClass,
 
           return (
             <div key={tier.id} id={`section-${tier.id}`} className="flex flex-col">
-              {/* Render rows for this tier */}
               {pairs.map((pair, index) => (
                 <ParabolicRow
                   key={`${tier.id}-${index}`}
@@ -328,15 +315,13 @@ export default function Sponsors({ setLotusClass, setLotusStyle, setFigureClass,
                   isMobile={isMobile}
                 />
               ))}
-              
-              {/* Small gap between tiers to prevent sudden jumps */}
+
               <div className="h-[10vh] w-full snap-center" /> 
             </div>
           );
         })}
       </div>
 
-      {/* --- FLOATING ARROW --- */}
       <div className="absolute bottom-8 z-30 pointer-events-none">
         <button
           onClick={scrollNext}
@@ -350,7 +335,20 @@ export default function Sponsors({ setLotusClass, setLotusStyle, setFigureClass,
         >
           ↓
         </button>
+      </div> */}
+
+      <div className="w-full py-120 flex flex-col items-center justify-center min-h-[400px]">
+        <div className="text-center space-y-4 p-8 border-4 border-[#C5A059] rounded-2xl bg-[#FFF8E7] shadow-xl">
+          <h2 className="text-[#C5A059] text-4xl md:text-7xl font-bold font-serif tracking-widest">
+            COMING SOON
+          </h2>
+          <div className="w-24 h-1 bg-[#C5A059] mx-auto rounded-full" />
+          <p className="text-[#7A6C45] font-bold uppercase tracking-widest mt-4">
+            Stay tuned for amazing sponsors and partners supporting Invictus
+          </p>
+        </div>
       </div>
+
     </div>
   );
 }

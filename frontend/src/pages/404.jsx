@@ -21,7 +21,7 @@ export default function Custom404() {
                           max-[1200px]:w-full max-[1200px]:h-full">
 
             <img
-              src="/NotFound/wheel.png"
+              src="NotFound/wheel.svg"
               alt=""
               className="w-full h-full object-contain animate-spin-slow"
             />
@@ -41,7 +41,7 @@ export default function Custom404() {
             </h2>
 
             <p className="text-[#F6F1D4] text-[13px] font-normal mb-[35px] max-w-[450px] leading-relaxed">
-              Perhaps you can try to refresh the page, sometimes it works
+              Lost? Go back to home {`->`}
             </p>
 
             <button
@@ -54,7 +54,7 @@ export default function Custom404() {
                          hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]
                          hover:-translate-y-[2px]"
             >
-              Retry
+              Home
             </button>
           </div>
         </div>
@@ -78,10 +78,10 @@ export default function Custom404() {
 
             {/* GOD IMAGE */}
             <img
-              src="/NotFound/Invictus_godpIc.png"
+              src="/figure.png"
               alt="God"
-              className="absolute z-[3] bottom-[20px] left-1/2 -translate-x-1/2 
-                         w-[220%] max-w-none h-auto block"
+              className="absolute z-[3] bottom-0 left-1/2 -translate-x-1/2 
+                         w-[70%] max-w-none h-auto block"
             />
           </div>
         </div>

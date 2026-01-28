@@ -138,12 +138,6 @@ export function SceneContent({
       <ambientLight intensity={0.9} />
       <directionalLight position={[5, 10, 5]} intensity={1.2} />
 
-      {/* Temple Model */}
-      {/* <Model
-        ref={modelRef}
-        scale={0.055}
-        position={[0, -1, 0]}
-      /> */}
       <Model2
         ref={modelRef}
         scale={2.5}
@@ -158,15 +152,6 @@ export function SceneContent({
 
       {/* Water surface with reflections */}
       <Ocean position={[0, -2, 0]} />
-
-      {/* Fog around model */}
-      {/* <Fog position={[0, -1, 0]} /> */}
-
-      {/* Ground */}
-      {/* <MarbleGround /> */}
-
-      {/* Walls */}
-      {/* <Walls /> */}
 
       {/* Clouds */}
       <Clouds />
@@ -203,7 +188,7 @@ export function SceneContent({
           />
           {/* 3D Button */}
           <group
-            position={[isMobile ? 28 : -1, 3.3, 4.3]}
+            position={isMobile ? [15.8, -0.9, 1.8] : [-1, 3.3, 4.3]}
             scale={1}
             rotation={[1, 1.8, -1]}
           >
@@ -233,7 +218,7 @@ export function SceneContent({
           <ThreeDText
             text="Events"
             size={0.3}
-            position={[isMobile ? 27.94 : -0.7, 3.2, 5]}
+            position={isMobile ? [16, -1, 2.5] : [-0.7, 3.2, 5]}
             rotation={[1, 1.8, -1]}
             section={1}
             activeSection={activeSection}
@@ -256,9 +241,7 @@ export function SceneContent({
           {/* 3D Button */}
           <group position={[0, -0.3, isMobile ? 13.4 : 8]} scale={0.1}>
             <mesh
-              onClick={() => {
-                router.push("/Home");
-              }}
+              onClick={() => {onStartExplore()}}
               onPointerOver={(e) => {
                 document.body.style.cursor = "pointer";
                 e.object.scale.set(1.1, 1.1, 1.1);

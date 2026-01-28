@@ -10,7 +10,7 @@ export default function GlobalBirdCanvas() {
       style={{ contain: "strict" }}
     >
       <Canvas
-        camera={{ position: [60, 22, -30], fov: 55 }}
+        camera={{ position: [70, 32, -30], fov: 48 }}
         gl={{ alpha: true }}
       >
         <ambientLight intensity={0.6} />

@@ -7,15 +7,7 @@ const Footer = ({}) => {
   return (
     <footer className="relative w-full border-t-[3px] border-[#D4AF37] shadow-[0_-4px_20px_rgba(212,175,55,0.15)] font-sans text-[#423212] overflow-hidden">
 
-      {/* ---------------- BACKGROUND LAYERS ---------------- */}
-      <div
-        className="absolute inset-0 z-0 opacity-30"
-        style={{
-          backgroundImage: "url('/backdrop.svg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+
 
       <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#68665f] via-[#FCEEB5] to-[#b4a97d] opacity-95" />
 
@@ -40,13 +32,13 @@ const Footer = ({}) => {
           </div>
 
           {/* ---------- CENTER : CREDITS (TRUE CENTER) ---------- */}
-          <div className="flex flex-col items-center text-center">
-            <p className="text-sm md:text-[15px] font-medium tracking-wide text-[#6D5627] leading-tight">
+          <div className="flex flex-col invictus-text items-center text-center">
+            <p className="text-sm md:text-[15px] font-medium  text-[#6D5627] leading-tight">
               Designed & Developed with
               <span className="text-[#C0392B] mx-1.5 text-lg inline-block">❤</span>
               by
             </p>
-            <p className="font-bold text-lg tracking-[0.12em] uppercase bg-gradient-to-r from-[#8B6E28] to-[#5C450E] bg-clip-text text-transparent mt-1">
+            <p className="font-bold text-lg tracking-[0.02em] uppercase bg-gradient-to-r from-[#8B6E28] to-[#5C450E] bg-clip-text text-transparent mt-1">
               Invictus Team
             </p>
           </div>

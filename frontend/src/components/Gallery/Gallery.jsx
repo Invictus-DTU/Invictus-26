@@ -110,12 +110,12 @@ export default function Gallery({ setLotusClass, setLotusStyle, setFigureClass, 
   
     setFigureClass(`
       fixed
-      w-[120px]
-      md:w-[140px]
-      lg:w-[190px]
-      pointer-events-none
-      z-[30]
-      opacity-90
+      w-[100px]
+        md:w-[120px]
+        lg:w-[175px]
+        pointer-events-none
+        z-[30]
+        opacity-60
       drop-shadow-[0_0_30px_rgba(255,215,138,0.4)]
       transition-all duration-700 ease-out
     `);

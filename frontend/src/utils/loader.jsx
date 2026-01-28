@@ -2,45 +2,84 @@ import { useRouter } from "next/router";
 import { useLoader } from "@/contexts/LoaderContext";
 
 export default function Loader() {
+  
   const router = useRouter();
   const { domReady, modelReady } = useLoader();
 
   const isModelRoute = router.pathname === "/model";
   const isReady = isModelRoute ? domReady && modelReady : domReady;
-
+  
   return (
-    <div
-      className={`fixed inset-0 z-[999] flex flex-col items-center justify-center bg-black transition-opacity duration-700 ${
-        isReady ? "opacity-0 pointer-events-none" : "opacity-100"
-      }`}
-    >
-      <div className="w-full max-w-md px-8 text-center">
-        {/* Elegant Typography */}
-        <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-400 to-gray-600 mb-8 animate-pulse">
-          Loading Experience
-        </h2>
+    <div className={`fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#0a0a0a] ${isReady ? "opacity-0 duration-1200 pointer-events-none" : "opacity-100"}`}>
+      
+      {/* Noise overlay */}
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
 
-        {/* Custom Progress Bar */}
-        <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden relative">
-          <div className="absolute top-0 left-0 h-full w-1/3 bg-white blur-[2px] animate-[slide_1.5s_ease-in-out_infinite]"></div>
+      <div className="relative w-40 h-40 flex items-center justify-center">
+
+        {/* LOGO */}
+        <div className="absolute z-10 w-16 h-16 flex items-center justify-center">
+          <img
+            src="/invictuslogo.svg"
+            alt="Logo"
+            className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,160,60,0.6)]"
+          />
         </div>
 
-        {/* Tip Section */}
-        <div className="mt-12 opacity-60">
-           <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Tip 💡</p>
-           <p className="text-sm text-gray-300">
-             Click anywhere to enable background music!
-           </p>
-        </div>
+        {/* SVG LOADER */}
+        <svg
+          className="w-full h-full animate-spin"
+          viewBox="0 0 100 100"
+        >
+          <defs>
+            <linearGradient id="loaderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#ff4d4d" />
+              <stop offset="50%" stopColor="#f59e0b" />
+              <stop offset="100%" stopColor="#ff4d4d" />
+            </linearGradient>
+          </defs>
+
+          {/* Background ring */}
+          <circle
+            cx="50"
+            cy="50"
+            r="42"
+            fill="none"
+            stroke="#333"
+            strokeWidth="2"
+            opacity="0.4"
+          />
+
+          {/* Foreground arc */}
+          <circle
+            cx="50"
+            cy="50"
+            r="42"
+            fill="none"
+            stroke="url(#loaderGradient)"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeDasharray="80 180"
+            className="drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]"
+          />
+        </svg>
       </div>
 
-      {/* Add this custom animation in your globals.css or tailwind config if not present */}
-      <style jsx>{`
-        @keyframes slide {
-          0% { left: -40%; }
-          100% { left: 140%; }
-        }
-      `}</style>
+      {/* TEXT */}
+      <div className="mt-8 text-center">
+        <h2 className="text-xl font-medium text-white tracking-[0.25em] uppercase opacity-80">
+          Loading
+        </h2>
+
+        <div className="mt-4 opacity-50">
+          <p className="text-[10px] uppercase tracking-widest text-gray-500">
+            Tip 💡
+          </p>
+          <p className="text-xs text-gray-400 mt-1">
+            Click anywhere to enable background music!
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

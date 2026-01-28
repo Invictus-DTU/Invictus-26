@@ -17,11 +17,7 @@ function DomReady() {
   const { setDomReady } = useLoader();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
       setDomReady(true);
-    }, 1000); // 1 second delay
-
-    return () => clearTimeout(timer);
   }, []);
 
   return null;
@@ -92,12 +88,13 @@ export default function App({ Component, pageProps }) {
           )}
           {router.pathname !== "/model" && (
             <img
-              src="/logo.png"
+              src="/invictuslogo.svg"
               alt="Invictus'26 Logo"
               onClick={() => router.push("/")}
               className={`
           fixed top-1 left-2 z-60
           w-[100px] md:w-[150px] cursor-pointer
+          md:hidden
           transform transition-all duration-700 ease-in-out
 
           drop-shadow-[0_0_2rem_rgba(212,175,55,0.9)]
