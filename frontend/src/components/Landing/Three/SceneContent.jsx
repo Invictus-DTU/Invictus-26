@@ -24,6 +24,7 @@ import { Shiva } from "./Shiva";
 import { ThreeDText, MultiLineText3D } from "./3dText";
 import { useRouter } from "next/router";
 import { Clouds } from "./Clouds";
+import { Lion } from "./Lion";
 
 export function SceneContent({
   setcurrSection,
@@ -36,6 +37,10 @@ export function SceneContent({
   const [sun, setSun] = useState();
   const [activeSection, setActiveSection] = useState(0);
   const router = useRouter();
+
+  // Mouse position for camera wobble
+  const mousePos = useRef({ x: 0, y: 0 });
+  const targetMousePos = useRef({ x: 0, y: 0 });
 
   // Camera keyframes state
   const [cameraShots, setCameraShots] = useState([
@@ -54,6 +59,16 @@ export function SceneContent({
   ]);
 
   const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      // Normalize mouse position to -1 to 1 range
+      targetMousePos.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+      targetMousePos.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   // Adjust camera positions for mobile devices
   useEffect(() => {
@@ -121,7 +136,28 @@ export function SceneContent({
     const current = cameraShots[sectionIndex];
     const next = cameraShots[Math.min(sectionIndex + 1, totalSections)];
 
-    state.camera.position.lerpVectors(current.pos, next.pos, sectionT);
+    // Calculate camera position with wobble
+    const basePos = new THREE.Vector3().lerpVectors(current.pos, next.pos, sectionT);
+    
+    // Disable wobble in section 2 and during transition to it
+    const isInSection2 = sectionIndex >= 2 || (sectionIndex === 1 && sectionT > 0.5);
+    const wobbleIntensity = isInSection2 ? 0 : 0.3;
+    
+    // Smoothly lerp mouse position for smoother wobble (only when not in section 2)
+    if (!isInSection2) {
+      mousePos.current.x += (targetMousePos.current.x - mousePos.current.x) * 0.05;
+      mousePos.current.y += (targetMousePos.current.y - mousePos.current.y) * 0.05;
+    } else {
+      // Gradually reset wobble to zero when entering section 2
+      mousePos.current.x *= 0.9;
+      mousePos.current.y *= 0.9;
+    }
+    
+    state.camera.position.set(
+      basePos.x + mousePos.current.x * wobbleIntensity,
+      basePos.y + mousePos.current.y * wobbleIntensity,
+      basePos.z
+    );
 
     const lookAt = current.lookAt.clone().lerp(next.lookAt, sectionT);
     state.camera.lookAt(lookAt);
@@ -241,7 +277,9 @@ export function SceneContent({
           {/* 3D Button */}
           <group position={[0, -0.3, isMobile ? 13.4 : 8]} scale={0.1}>
             <mesh
-              onClick={() => {onStartExplore()}}
+              onClick={() => {
+                onStartExplore();
+              }}
               onPointerOver={(e) => {
                 document.body.style.cursor = "pointer";
                 e.object.scale.set(1.1, 1.1, 1.1);
@@ -289,7 +327,8 @@ export function SceneContent({
       <Mountain position={[-60, -6, -100]} scale={15} />
 
       {/* shiva */}
-      <Shiva position={[-70, -2, 30]} scale={0.4} />
+      {/* <Shiva position={[-70, -2, 30]} scale={0.4} /> */}
+      <Lion position={[-50, 3.3, 40]} scale={1.2} />
 
       <Environment preset="sunset" />
 

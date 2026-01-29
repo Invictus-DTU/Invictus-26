@@ -70,7 +70,7 @@ const SearchInput = ({ value, onChange }) => {
 
 export default function Events({setLotusClass, setLotusStyle, setFigureClass, setFigureStyle}) {
     const [show, setShow] = useState(true);
-    const SNACKBAR_TIMEOUT = 3000;
+    const SNACKBAR_TIMEOUT = process.env.SNACKBAR_TIMEOUT_TWO;
     const router = useRouter();
     const [filters, setFilters] = useState({
       search: "",

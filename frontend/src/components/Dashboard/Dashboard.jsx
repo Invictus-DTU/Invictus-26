@@ -16,8 +16,8 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
   const { fetchUserEvents, loading, user , setLoading } = useContext(AuthContext);
   const [events, setEvents] = useState([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const SNACKBAR_TIMEOUT = 5000;
-
+  const SNACKBAR_TIMEOUT_1 = process.env.SNACKBAR_TIMEOUT_ONE;;
+  const SNACKBAR_TIMEOUT_2 = process.env.SNACKBAR_TIMEOUT_TWO;
   function openDrawer() {
     setDrawerOpen(!drawerOpen);
   }
@@ -39,7 +39,7 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
 
       const lastShown = Number(shown);
 
-      if (Date.now() - lastShown < SNACKBAR_TIMEOUT || localStorage.getItem("ModelSeen") ) {
+      if (Date.now() - lastShown < SNACKBAR_TIMEOUT_2 || localStorage.getItem("ModelSeen") ) {
         setShow(false);
       }
     }, []);
