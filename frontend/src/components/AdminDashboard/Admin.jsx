@@ -42,13 +42,13 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
 
   useEffect(() => {
     if (!setFigureClass || !setFigureStyle) return;
-  
+
     setFigureStyle({
       left: "0px",
       bottom: "0px",
       transform: "translate(10%, 10%)",
     });
-  
+
     setFigureClass(`
       fixed
       w-[120px]
@@ -104,9 +104,9 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -279,7 +279,6 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
       fetchEvents();
       setShowEventForm(false);
       resetForm();
-
     } catch (error) {
       console.log(error);
       alert("Operation failed. Check console for details.");
@@ -308,7 +307,7 @@ export default function Admin({ setLotusClass, setLotusStyle, setFigureClass, se
   };
 
   // --- 4. REGISTRATION MANAGEMENT ---
-  
+
   // Open Modal and Fetch Registrations
   const viewRegistrations = async (eventId, eventName) => {
     setShowRegistrations(eventId); // Store current Event ID
@@ -353,6 +352,16 @@ const normalizeMemberStatus = (raw) => {
 
 
   // Upload CSV to Backend
+
+  const getValue = (row, keys) => {
+    for (const key of keys) {
+      if (row[key] && String(row[key]).trim() !== "") {
+        return String(row[key]).trim();
+      }
+    }
+    return null;
+  };
+
   const handleCSVUpload = (e) => {
     const file = e.target.files[0];
     if (
@@ -370,6 +379,7 @@ const normalizeMemberStatus = (raw) => {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
+
       complete: async (results) => {
         try {
           console.log(results.data);
@@ -408,17 +418,16 @@ const normalizeMemberStatus = (raw) => {
             throw new Error(err || "Import failed");
           }
 
-          alert("CSV uploaded and linked successfully");
-          // Refresh the list immediately
+          alert("CSV imported successfully");
           viewRegistrations(eventId, currentEventName);
-
         } catch (err) {
           console.error(err);
-          alert("Failed to upload CSV to backend");
+          alert(err?.message || "CSV parsing failed. Check headers & values.");
         }
       },
+
       error: (err) => {
-        console.error("CSV Parse Error:", err);
+        console.error("PapaParse Error:", err);
         alert("Invalid CSV file");
       },
     });
@@ -428,20 +437,27 @@ const normalizeMemberStatus = (raw) => {
   const toggleAttendance = async (regId, currentStatus) => {
     try {
       // Optimistic UI Update
-      setSelectedEventRegs(prev => 
-        prev.map(reg => reg._id === regId ? { ...reg, attendance: !currentStatus } : reg)
+      setSelectedEventRegs((prev) =>
+        prev.map((reg) =>
+          reg._id === regId ? { ...reg, attendance: !currentStatus } : reg,
+        ),
       );
 
-      const response = await fetch(`${API_BASE_URL}/registrations/${regId}/attendance`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ attendance: !currentStatus })
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/registrations/${regId}/attendance`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ attendance: !currentStatus }),
+        },
+      );
 
       if (!response.ok) {
         // Revert if failed
-        setSelectedEventRegs(prev => 
-          prev.map(reg => reg._id === regId ? { ...reg, attendance: currentStatus } : reg)
+        setSelectedEventRegs((prev) =>
+          prev.map((reg) =>
+            reg._id === regId ? { ...reg, attendance: currentStatus } : reg,
+          ),
         );
         alert("Failed to update attendance on server");
       }
@@ -467,11 +483,16 @@ const normalizeMemberStatus = (raw) => {
         {/* Action Buttons */}
         <div className="flex gap-4 mb-12">
           <button
-            onClick={() => { resetForm(); setShowEventForm(true); }}
+            onClick={() => {
+              resetForm();
+              setShowEventForm(true);
+            }}
             className="bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] text-white px-8 py-4 rounded-lg flex items-center gap-3 hover:from-[#E5C158] hover:to-[#7F6C2E] transition-all shadow-xl border border-[#C5A059]"
           >
             <Plus size={24} />
-            <span className="font-['Montserrat',sans-serif] font-bold text-lg tracking-wide">Create New Event</span>
+            <span className="font-['Montserrat',sans-serif] font-bold text-lg tracking-wide">
+              Create New Event
+            </span>
           </button>
         </div>
 
@@ -481,25 +502,48 @@ const normalizeMemberStatus = (raw) => {
             <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full my-8 border-4 border-[#C5A059]">
               <div className="bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] text-white px-8 py-6 rounded-t-2xl flex justify-between items-center">
                 <h2 className="font-['Montserrat',sans-serif] text-3xl font-bold tracking-wide">
-                  {editingEvent ? 'Edit Event' : 'Create New Event'}
+                  {editingEvent ? "Edit Event" : "Create New Event"}
                 </h2>
-                <button onClick={() => { setShowEventForm(false); resetForm(); }} className="hover:bg-white/20 p-2 rounded-lg transition-all">
+                <button
+                  onClick={() => {
+                    setShowEventForm(false);
+                    resetForm();
+                  }}
+                  className="hover:bg-white/20 p-2 rounded-lg transition-all"
+                >
                   <X size={28} />
                 </button>
               </div>
-              
+
               <div className="p-8 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto">
                 {/* Event Photo */}
                 <div>
-                  <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3 text-lg">Event Photo</label>
+                  <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3 text-lg">
+                    Event Photo
+                  </label>
                   <div className="flex items-center gap-4">
-                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="eventPhotoUpload" />
-                    <label htmlFor="eventPhotoUpload" className="bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:from-[#E5C158] hover:to-[#7F6C2E] transition-all shadow-lg cursor-pointer border border-[#C5A059]">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      id="eventPhotoUpload"
+                    />
+                    <label
+                      htmlFor="eventPhotoUpload"
+                      className="bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:from-[#E5C158] hover:to-[#7F6C2E] transition-all shadow-lg cursor-pointer border border-[#C5A059]"
+                    >
                       <Upload size={20} />
-                      <span className="font-['Montserrat',sans-serif] font-semibold">Choose Image</span>
+                      <span className="font-['Montserrat',sans-serif] font-semibold">
+                        Choose Image
+                      </span>
                     </label>
                     {formData.eventPhoto && (
-                      <img src={formData.eventPhoto} alt="Preview" className="h-24 w-24 object-cover rounded-xl border-3 border-[#C5A059] shadow-lg" />
+                      <img
+                        src={formData.eventPhoto}
+                        alt="Preview"
+                        className="h-24 w-24 object-cover rounded-xl border-3 border-[#C5A059] shadow-lg"
+                      />
                     )}
                   </div>
                 </div>
@@ -507,8 +551,16 @@ const normalizeMemberStatus = (raw) => {
                 {/* Form Inputs Grid */}
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">Event Name *</label>
-                    <input type="text" name="eventName" value={formData.eventName} onChange={handleInputChange} className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]" />
+                    <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">
+                      Event Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="eventName"
+                      value={formData.eventName}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]"
+                    />
                   </div>
                   <div>
                     <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">Event Category *</label>
@@ -528,8 +580,16 @@ const normalizeMemberStatus = (raw) => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">Date *</label>
-                    <input type="datetime-local" name="date" value={formData.date} onChange={handleInputChange} className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]" />
+                    <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">
+                      Date *
+                    </label>
+                    <input
+                      type="datetime-local"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]"
+                    />
                   </div>
                   <div>
                     <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">Event Status *</label>
@@ -541,8 +601,16 @@ const normalizeMemberStatus = (raw) => {
                   </div>
                   <div className="flex items-center pt-8">
                     <label className="flex items-center gap-3 cursor-pointer bg-[#FDF8E2] px-5 py-3 rounded-lg border-2 border-[#C5A059] hover:border-[#D4AF37] transition-all">
-                      <input type="checkbox" name="isWorkshop" checked={formData.isWorkshop} onChange={handleInputChange} className="w-6 h-6 text-[#D4AF37] border-[#C5A059] rounded focus:ring-[#D4AF37]" />
-                      <span className="text-[#8B6508] font-['Montserrat',sans-serif] font-bold text-lg">Is this a workshop?</span>
+                      <input
+                        type="checkbox"
+                        name="isWorkshop"
+                        checked={formData.isWorkshop}
+                        onChange={handleInputChange}
+                        className="w-6 h-6 text-[#D4AF37] border-[#C5A059] rounded focus:ring-[#D4AF37]"
+                      />
+                      <span className="text-[#8B6508] font-['Montserrat',sans-serif] font-bold text-lg">
+                        Is this a workshop?
+                      </span>
                     </label>
                   </div>
                 </div>
@@ -618,8 +686,16 @@ const normalizeMemberStatus = (raw) => {
                 </div>
 
                 <div>
-                  <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">Unstop Registration Link</label>
-                  <input type="url" name="unstopRegLink" value={formData.unstopRegLink} onChange={handleInputChange} className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]" />
+                  <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">
+                    Unstop Registration Link
+                  </label>
+                  <input
+                    type="url"
+                    name="unstopRegLink"
+                    value={formData.unstopRegLink}
+                    onChange={handleInputChange}
+                    className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]"
+                  />
                 </div>
                     
                 <div>
@@ -630,20 +706,45 @@ const normalizeMemberStatus = (raw) => {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">Latitude</label>
-                    <input type="text" name="latitude" value={formData.latitude} onChange={handleInputChange} className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]" />
+                    <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">
+                      Latitude
+                    </label>
+                    <input
+                      type="text"
+                      name="latitude"
+                      value={formData.latitude}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]"
+                    />
                   </div>
                   <div>
-                    <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">Longitude</label>
-                    <input type="text" name="longitude" value={formData.longitude} onChange={handleInputChange} className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]" />
+                    <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">
+                      Longitude
+                    </label>
+                    <input
+                      type="text"
+                      name="longitude"
+                      value={formData.longitude}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]"
+                    />
                   </div>
                 </div>
 
                 <div className="flex gap-4 pt-6">
-                  <button onClick={handleSubmit} className="flex-1 bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] text-white py-4 rounded-lg font-['Montserrat',sans-serif] font-bold text-lg hover:from-[#E5C158] hover:to-[#7F6C2E] transition-all shadow-xl border border-[#C5A059]">
-                    {editingEvent ? 'Update Event' : 'Create Event'}
+                  <button
+                    onClick={handleSubmit}
+                    className="flex-1 bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] text-white py-4 rounded-lg font-['Montserrat',sans-serif] font-bold text-lg hover:from-[#E5C158] hover:to-[#7F6C2E] transition-all shadow-xl border border-[#C5A059]"
+                  >
+                    {editingEvent ? "Update Event" : "Create Event"}
                   </button>
-                  <button onClick={() => { setShowEventForm(false); resetForm(); }} className="px-8 bg-gradient-to-b from-gray-400 to-gray-600 text-white py-4 rounded-lg font-['Montserrat',sans-serif] font-bold text-lg hover:from-gray-500 hover:to-gray-700 transition-all border border-gray-500">
+                  <button
+                    onClick={() => {
+                      setShowEventForm(false);
+                      resetForm();
+                    }}
+                    className="px-8 bg-gradient-to-b from-gray-400 to-gray-600 text-white py-4 rounded-lg font-['Montserrat',sans-serif] font-bold text-lg hover:from-gray-500 hover:to-gray-700 transition-all border border-gray-500"
+                  >
                     Cancel
                   </button>
                 </div>
@@ -662,44 +763,63 @@ const normalizeMemberStatus = (raw) => {
                   <Users size={28} />
                   Registrations: {currentEventName}
                 </h2>
-                
+
                 <div className="flex items-center gap-4">
                   {/* CSV Upload Button */}
                   <label className="bg-gradient-to-b from-purple-500 to-purple-700 text-white px-4 py-2 rounded-lg cursor-pointer hover:from-purple-600 hover:to-purple-800 transition-all shadow-lg border border-purple-600 flex items-center gap-2">
                     <Upload size={18} />
                     <span className="text-sm font-bold">Import CSV</span>
-                    <input type="file" accept=".csv" className="hidden" onChange={handleCSVUpload} />
+                    <input
+                      type="file"
+                      accept=".csv"
+                      className="hidden"
+                      onChange={handleCSVUpload}
+                    />
                   </label>
 
                   {/* Close Button (FIX ADDED HERE) */}
-                  <button 
-                    onClick={() => { setShowRegistrations(false); setSelectedEventRegs([]); }} 
+                  <button
+                    onClick={() => {
+                      setShowRegistrations(false);
+                      setSelectedEventRegs([]);
+                    }}
                     className="bg-white/20 hover:bg-white/40 p-2 rounded-full transition-all"
                   >
                     <X size={24} color="white" />
                   </button>
                 </div>
               </div>
-              
+
               {/* Registration List */}
               <div className="p-8 overflow-y-auto max-h-[calc(90vh-120px)]">
                 <div className="space-y-4">
                   {selectedEventRegs.map((reg) => (
-                    <div key={reg._id || reg.id} className="bg-gradient-to-r from-[#FDF8E2] to-[#FFFBEB] p-5 rounded-xl border-2 border-[#C5A059] flex justify-between items-center hover:border-[#D4AF37] transition-all">
+                    <div
+                      key={reg._id || reg.id}
+                      className="bg-gradient-to-r from-[#FDF8E2] to-[#FFFBEB] p-5 rounded-xl border-2 border-[#C5A059] flex justify-between items-center hover:border-[#D4AF37] transition-all"
+                    >
                       <div>
-                        <p className="font-bold text-[#8B6508] text-lg font-['Montserrat',sans-serif]">{reg.name}</p>
-                        <p className="text-sm text-[#8B6508]/70 mt-1 font-['Montserrat',sans-serif]">{reg.email}</p>
-                        <p className="text-xs text-[#8B6508]/50 mt-1">{reg.college}</p>
+                        <p className="font-bold text-[#8B6508] text-lg font-['Montserrat',sans-serif]">
+                          {reg.name}
+                        </p>
+                        <p className="text-sm text-[#8B6508]/70 mt-1 font-['Montserrat',sans-serif]">
+                          {reg.email}
+                        </p>
+                        <p className="text-xs text-[#8B6508]/50 mt-1">
+                          {reg.college}
+                        </p>
                       </div>
                       <label className="flex items-center gap-3 cursor-pointer bg-white px-5 py-3 rounded-lg border-2 border-[#C5A059] hover:border-[#D4AF37] transition-all">
                         <input
                           type="checkbox"
                           checked={reg.attendance}
-                          onChange={() => toggleAttendance(reg._id || reg.id, reg.attendance)}
+                          onChange={() =>
+                            toggleAttendance(reg._id || reg.id, reg.attendance)
+                          }
                           className="w-6 h-6 text-[#D4AF37] border-[#C5A059] rounded focus:ring-[#D4AF37]"
                         />
                         <span className="text-[#8B6508] font-['Montserrat',sans-serif] font-bold">
-                          {reg.attendance ? 'Present' : 'Absent'}
+                          {reg.attendance ? "Present" : "Absent"}
                         </span>
                       </label>
                     </div>
@@ -738,7 +858,7 @@ const normalizeMemberStatus = (raw) => {
                       {event.status ? event.status.replace(/_/g, ' ').toUpperCase() : 'STATUS'}
                     </span>
                   </div>
-                  
+
                   <div className="space-y-2 text-sm text-[#8B6508]/80 mb-5 font-['Montserrat',sans-serif]">
                     <p><strong className="text-[#8B6508]">Category:</strong> {event.category}</p>
                     <p><strong className="text-[#8B6508]">Mode:</strong> {event.mode}</p>
@@ -775,8 +895,12 @@ const normalizeMemberStatus = (raw) => {
         {events.length === 0 && !eventsLoading && (
           <div className="text-center py-20 bg-white rounded-2xl shadow-xl border-3 border-[#C5A059]">
             <Calendar size={80} className="mx-auto text-[#D4AF37]/40 mb-6" />
-            <p className="text-[#8B6508] text-2xl font-bold mb-2 font-['Montserrat',sans-serif]">No events created yet</p>
-            <p className="text-[#8B6508]/60 text-lg font-['Montserrat',sans-serif]">Create your first event to get started</p>
+            <p className="text-[#8B6508] text-2xl font-bold mb-2 font-['Montserrat',sans-serif]">
+              No events created yet
+            </p>
+            <p className="text-[#8B6508]/60 text-lg font-['Montserrat',sans-serif]">
+              Create your first event to get started
+            </p>
           </div>
         )}
       </div>

@@ -19,8 +19,8 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
   const SNACKBAR_TIMEOUT_1 = process.env.SNACKBAR_TIMEOUT_ONE;;
   const SNACKBAR_TIMEOUT_2 = process.env.SNACKBAR_TIMEOUT_TWO;
   function openDrawer() {
-  setDrawerOpen(!drawerOpen);
-}
+    setDrawerOpen(!drawerOpen);
+  }
 
     useEffect(() => {
       if (typeof window === "undefined") return;
@@ -143,7 +143,15 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
                 invictus-heading
               "
             >
-              WELCOME BACK, {user ? user.split(" ")[0].toUpperCase() : "USER"}
+              WELCOME BACK,
+            </h1>
+            <h1
+              className="
+                text-4xl sm:text-4xl md:text-6xl
+                invictus-heading
+              "
+            >
+              {user ? user.split(" ")[0].toUpperCase() : "USER"}
             </h1>
 
             {/* 🌸 LOTUS ANCHOR */}
@@ -200,10 +208,10 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
           "
         >
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-            <span className="font-bold text-[#b19965] text-lg">HOME</span>
+            <span className="invictus-text font-bold text-lg">HOME</span>
             <button
               className="
-                text-[#7A6C45] font-bold uppercase tracking-widest rounded-lg
+                invictus-text font-bold uppercase tracking-widest rounded-lg
                 px-4 py-1
                 border-2 border-[#b19965]
                 transition hover:bg-[#ffffff] active:scale-95
@@ -225,7 +233,7 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
               style={{ border: "2px solid #e7d7b1" }}
             >
               <div>
-                <div className="font-bold mb-2 text-gray-400">No events registered</div>
+                <div className="invictus-text font-bold mb-2 opacity-50">No events registered</div>
                 <div className="flex gap-2 flex-wrap">
                   <button disabled className="bg-gray-300 text-gray-500 rounded-lg px-4 py-1 font-semibold border-2 border-gray-300 cursor-not-allowed">
                     VIEW VENUE ON MAP
@@ -235,8 +243,8 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
                   </button>
                 </div>
               </div>
-              <div className="font-semibold text-gray-400">—</div>
-              <div className="font-semibold text-gray-400">—</div>
+              <div className="invictus-text font-semibold opacity-50">—</div>
+              <div className="invictus-text font-semibold opacity-50">—</div>
             </div>
           )}
 
@@ -254,7 +262,7 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
               style={{ border: "2px solid #e7d7b1" }}
             >
               <div>
-                <div className="font-bold mb-2">{ev.event.name}</div>
+                <div className="invictus-text font-bold mb-2">{ev.event.name}</div>
                 <div className="flex gap-2 flex-wrap">
                   <button className="bg-[#b19965] text-white rounded-lg px-4 py-1 font-semibold border-2 border-[#b19965] transition hover:bg-[#d4af37] active:scale-95"   onClick={() => {
                     if (
@@ -279,8 +287,8 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
                   </button>
                 </div>
               </div>
-              <div className="font-semibold text-[#b19965]">{ev.teamName == "" ? "Solo Event" : ev.teamName}</div>
-             <div className="font-semibold text-[#b19965]">{ev.attendace === false ? "Attended" : "Yet to Attend"}</div>   {/*member or leader will fetch from backend three things to fetch here event/workshops name user has registered for there member status and unstop registration link*/}
+              <div className="invictus-text font-semibold">{ev.teamName == "" ? "Solo Event" : ev.teamName}</div>
+             <div className="invictus-text font-semibold">{ev.attendace === false ? "Attended" : "Yet to Attend"}</div>   {/*member or leader will fetch from backend three things to fetch here event/workshops name user has registered for there member status and unstop registration link*/}
               {drawerOpen && (
                 <Drawer event={ev} onClose={openDrawer} />
               )}

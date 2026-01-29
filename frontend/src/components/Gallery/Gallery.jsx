@@ -106,7 +106,6 @@ export default function Gallery({ setLotusClass, setLotusStyle, setFigureClass, 
   return (
     <div className="relative w-full bg-transparent">
       <div className="max-w-[1600px] mx-auto">
-
         {/* HEADER */}
         <div
           className="
@@ -197,7 +196,11 @@ export default function Gallery({ setLotusClass, setLotusStyle, setFigureClass, 
 
         {/* GRID */}
         <div className="px-5 md:px-8">
-          <SwapyLayout id="swapy" className="w-full" config={{ swapMode: "hover" }}>
+          <SwapyLayout
+            id="swapy"
+            className="w-full"
+            config={{ swapMode: "hover" }}
+          >
             <div className="grid w-full grid-cols-12 gap-6 py-6">
               {IMAGES[category].map((src, index) => (
                 <SwapySlot
