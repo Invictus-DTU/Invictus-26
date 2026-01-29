@@ -7,7 +7,8 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
 
   const [show, setShow] = useState(true);
   const wordArtRef = useRef(null);
-  const SNACKBAR_TIMEOUT = 10000;
+  const SNACKBAR_TIMEOUT_1 = process.env.SNACKBAR_TIMEOUT_ONE;//for cross
+  const SNACKBAR_TIMEOUT_2 = process.env.SNACKBAR_TIMEOUT_TWO;//for no
   const route = useRouter();
 
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
       return;
     }
     const lastShown = Number(shown);
-      if(Date.now() - lastShown > SNACKBAR_TIMEOUT) {
+      if(Date.now() - lastShown > SNACKBAR_TIMEOUT_2) {
         localStorage.removeItem("ModelSeen");
       }
     }
@@ -34,7 +35,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
     }
     const lastShown = Number(shown);
     // console.log(Date.now() - lastShown);
-    if (Date.now() - lastShown < SNACKBAR_TIMEOUT || localStorage.getItem("ModelSeen") ) {
+    if (Date.now() - lastShown < SNACKBAR_TIMEOUT_1 || localStorage.getItem("ModelSeen") ) {
       setShow(false);
     }
   }, []);
