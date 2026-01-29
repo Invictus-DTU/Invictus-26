@@ -127,9 +127,13 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
             [text-shadow:_-1px_-1px_0_#8B6914,1px_-1px_0_#8B6914,-1px_1px_0_#8B6914,1px_1px_0_#8B6914,-2px_0_0_#8B6914,2px_0_0_#8B6914,0_-2px_0_#8B6914,0_2px_0_#8B6914]
           "
         >
-          9-11
+          27
           <sup className="text-[0.5em] ml-1 text-[#FFF6E0]">TH</sup>
-          <span className="ml-3">FEB'26</span>
+          <span className="ml-3">FEB - 1
+          </span>
+              <sup className="text-[0.5em] ml-1 text-[#FFF6E0]">st</sup>
+              <span className="ml-3">MAR
+          </span>
         </p>
 
         {/* BUTTONS */}

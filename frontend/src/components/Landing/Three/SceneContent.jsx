@@ -20,7 +20,6 @@ import { Lotus } from "./Lotus";
 import { Birds } from "./Birds";
 import { Boat } from "./Boat";
 import { Mountain } from "./Mountain";
-import { Shiva } from "./Shiva";
 import { ThreeDText, MultiLineText3D } from "./3dText";
 import { useRouter } from "next/router";
 import { Clouds } from "./Clouds";
@@ -59,16 +58,20 @@ export function SceneContent({
   ]);
 
   const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     const handleMouseMove = (event) => {
-      // Normalize mouse position to -1 to 1 range
-      targetMousePos.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-      targetMousePos.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      // Only track mouse movement in section 0
+      if (activeSection === 0) {
+        // Normalize mouse position to -1 to 1 range
+        targetMousePos.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+        targetMousePos.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [activeSection]);
 
   // Adjust camera positions for mobile devices
   useEffect(() => {

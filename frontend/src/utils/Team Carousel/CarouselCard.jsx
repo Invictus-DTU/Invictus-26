@@ -45,7 +45,7 @@ const CarouselCard = ({ personInfo, offset, isFlipped }) => {
         
         {/* front side of card */}
         <div 
-          className="absolute inset-0 w-full h-full shadow-xl flex flex-col justify-center items-center"
+          className="absolute opacity-99 inset-0 w-full h-full shadow-xl flex flex-col justify-center items-center"
           style={{ 
             backfaceVisibility: "hidden",
             backgroundImage: "url('/Team/card.webp')",
@@ -56,7 +56,7 @@ const CarouselCard = ({ personInfo, offset, isFlipped }) => {
             <div className="w-20 h-20 sm:w-26 sm:h-26 rounded-full border-3 border-[#D4AF37]/60 brightness-105 saturate-125 
             flex items-center justify-center">
               
-              <div className={`w-18 h-18 sm:w-24 sm:h-24 rounded-full bg-cover`} style={{//no need to give it in tailwind specific only because tailwind will crash it
+              <div className={`w-18 h-18  sm:w-24 sm:h-24 rounded-full bg-cover`} style={{//no need to give it in tailwind specific only because tailwind will crash it
                 backgroundImage: `url(${personInfo.avatar})`,
               }}></div>
             </div>
@@ -69,8 +69,8 @@ const CarouselCard = ({ personInfo, offset, isFlipped }) => {
             backgroundPosition: 'center' }}></div>
           </div>
 
-          <div className="text-center [font-family:'Montserrat',sans-serif] font-[900]">
-            <p className="bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] bg-clip-text text-[1em] sm:text-[1.3em] text-transparent">
+          <div className="text-center [font-family:'Orbitron',sans-serif] font-[800]">
+            <p className="bg-gradient-to-b invictus-text from-[#998154] to-[#6E5B1D] bg-clip-text text-[1em] sm:text-[1.1em] text-transparent">
               {personInfo.name}
             </p>
             <p className="py-2 sm:py-3 text-black opacity-70 text-[0.9em] sm:text-[1.1em]">
@@ -78,22 +78,22 @@ const CarouselCard = ({ personInfo, offset, isFlipped }) => {
             </p>
           </div>
           <div className="mb-4 flex justify-center gap-4">
-          <div className="group p-1 rounded-lg border-2 border-[#D4AF37]/60 hover:bg-[#D4AF37] hover:scale-110 transition-all 
+          <div className="group p-1 rounded-lg border-2 border-[#998154]/60 hover:bg-[#998154] hover:scale-110 transition-all 
           duration-300 cursor-pointer">
             <a href={personInfo.ln_link} target="_blank" rel="noopener noreferrer">
             {/* default state */}
-            <Linkedin size={20} strokeWidth={2} color='#D4AF37' className="group-hover:hidden" />
+            <Linkedin size={20} strokeWidth={2} color='#998154' className="group-hover:hidden" />
             {/* hover state */}
-            <Linkedin size={20} strokeWidth={0} className="fill-current text-white hidden group-hover:block" />
+            <Linkedin size={20} color='#998154' strokeWidth={0} className="fill-current text-white hidden group-hover:block" />
             </a>
           </div>
-           { personInfo.ig_link && <div className="group p-1 rounded-lg border-2 border-[#D4AF37]/60 hover:bg-[#D4AF37] hover:scale-110 transition-all 
+           { personInfo.ig_link && <div className="group p-1 rounded-lg border-2 border-[#998154]/60 hover:bg-[#998154] hover:scale-110 transition-all 
           duration-300 cursor-pointer">
             <a href={personInfo.ig_link} target="_blank" rel="noopener noreferrer">
             {/* default state */}
-            <Instagram size={20} strokeWidth={2} color='#D4AF37' className="group-hover:hidden" />
+            <Instagram size={20} strokeWidth={2} color='#998154' className="group-hover:hidden" />
             {/* hover state */}
-            <Instagram size={20} color='white' strokeWidth={2} className="hidden group-hover:block" />
+            <Instagram size={20} color='#998154' strokeWidth={2} className="hidden fill-current text-white group-hover:block" />
             </a>
           </div> }
           </div>

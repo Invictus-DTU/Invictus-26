@@ -258,7 +258,7 @@ const Aboutus = () => {
         <div className="flex justify-center w-full mb-0 relative">
           <div className="relative inline-flex items-center">
 
-            <h1 className="invictus-heading text-[1.8rem] min-[350px]:text-[2.5rem] sm:text-[3.8rem] md:text-[5.9rem] relative -mt-7 z-10 text-center py-[20px] w-full px-2">
+            <h1 className="invictus-heading text-[1.8rem] min-[350px]:text-[2.5rem] sm:text-[3.8rem] md:text-[6.1rem] relative -mt-7 z-10 text-center py-[20px] w-full px-2">
               ABOUT US
             </h1>
           </div>

@@ -43,7 +43,7 @@ const TeamCarousel = () => {
             cursor-pointer
             w-12 h-12 rounded-full 
             border border-[#C5A059] text-[#C5A059] 
-            bg-white/80 hover:bg-[#C5A059] hover:text-white 
+            bg-white/80 hover:bg-[#998154] hover:text-white 
             transition-all shadow-lg flex items-center justify-center
           "
         >
@@ -56,7 +56,7 @@ const TeamCarousel = () => {
             cursor-pointer
             w-12 h-12 rounded-full 
             border border-[#C5A059] text-[#C5A059] 
-            bg-white/80 hover:bg-[#C5A059] hover:text-white 
+            bg-white/80 hover:bg-[#998154] hover:text-white 
             transition-all shadow-lg flex items-center justify-center
           "
         >
