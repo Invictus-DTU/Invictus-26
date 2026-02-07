@@ -75,7 +75,7 @@ if (status === 201) {
   return (
     <button
       onClick={handleClick}
-      disabled={loading || localStorage.getItem("notification-subscribed")}
+      disabled={loading || disabledByCooldown}
       className="px-4 py-2 rounded-md invictus-text uppercase tracking-widest font-[800] bg-[#ffffff] border-2 border-[#b19965]
                 transition hover:bg-[#745a309b] hover:text-black active:scale-95 "
     >

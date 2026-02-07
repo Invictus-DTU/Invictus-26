@@ -124,7 +124,6 @@ export default function Drawer({ event, onClose }) {
         {/* Footer */}
         <div className="border-t pt-4">
           <button
-            disabled={!event?.event?.unstopLink}
             className="relative mx-[23%] overflow-hidden
               px-6 py-2
               bg-[#7a2e3a]
@@ -133,13 +132,7 @@ export default function Drawer({ event, onClose }) {
               transition
               group"
             onClick={() => {
-              if (event?.event?.unstopLink) {
-                window.open(
-                  event.event.unstopLink,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }
+              window.location.href = "/Dashboard";
             }}
           >
             <span
@@ -151,7 +144,7 @@ export default function Drawer({ event, onClose }) {
                 duration-300
                 ease-out"
             ></span>
-            <span className="relative invictus-text z-10">VIEW_ON_UNSTOP</span>
+            <span className="relative invictus-text z-10">VIEW_IN_DASHBOARD</span>
           </button>
         </div>
       </div>

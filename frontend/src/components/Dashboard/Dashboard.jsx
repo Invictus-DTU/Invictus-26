@@ -18,6 +18,7 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
   const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3004';
   const { fetchUserEvents, loading, user , setLoading } = useContext(AuthContext);
   const [events, setEvents] = useState([]);
+  const [workshops, setWorkshops] = useState([]);
   const [singleEvent, setSingleEvent] = useState([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const SNACKBAR_TIMEOUT_1 = Number(process.env.NEXT_PUBLIC_SNACKBAR_TIMEOUT_ONE);
@@ -75,6 +76,14 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
         const data = await fetchUserEvents(token, userData.email);
         // console.log(data);
         setEvents(data);
+
+        // Fetch all workshops
+        const workshopsRes = await fetch(`${API_BASE_URL}/events`);
+        if (workshopsRes.ok) {
+          const allEvents = await workshopsRes.json();
+          const workshopsList = allEvents.filter(ev => ev.isWorkshop);
+          setWorkshops(workshopsList);
+        }
 
       } catch (error) {
         console.error("Error fetching user events:", error);
@@ -214,6 +223,7 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
             <span className="invictus-text font-bold text-lg">HOME</span>
             <Button></Button>
             <button
+              onClick={() => setActiveTab(activeTab === "EVENTS" ? "WORKSHOPS" : "EVENTS")}
               className="
                 invictus-text font-bold uppercase tracking-widest rounded-lg
                 px-4 py-1
@@ -225,7 +235,7 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
             </button>
           </div>
 
-          {events.length === 0 && (
+          {activeTab === "EVENTS" && events.length === 0 && (
             <div
               className="
                 flex flex-col sm:flex-row
@@ -252,8 +262,32 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
             </div>
           )}
 
+          {activeTab === "WORKSHOPS" && workshops.length === 0 && (
+            <div
+              className="
+                flex flex-col sm:flex-row
+                sm:items-center sm:justify-between
+                gap-4
+                border rounded-xl p-4 mb-4
+                bg-[#f9f6ef] opacity-50
+              "
+              style={{ border: "2px solid #e7d7b1" }}
+            >
+              <div>
+                <div className="invictus-text font-bold mb-2 opacity-50">No workshops available</div>
+                <div className="flex gap-2 flex-wrap">
+                  <button disabled className="bg-gray-300 invictus-text text-gray-500 rounded-lg px-4 py-1 font-semibold border-2 border-gray-300 cursor-not-allowed">
+                    VIEW VENUE ON MAP
+                  </button>
+                </div>
+              </div>
+              <div className="invictus-text font-semibold opacity-50">—</div>
+              <div className="invictus-text font-semibold opacity-50">—</div>
+            </div>
+          )}
+
           {/* EVENT LIST */}
-          {events.map((ev, idx) => (
+          {activeTab === "EVENTS" && events.map((ev, idx) => (
           <motion.div
   key={idx}
   variants={{
@@ -293,6 +327,49 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
               </div>
               <div className="invictus-text font-semibold">{ev.teamName == "" ? "Solo Event" : ev.teamName}</div>
              <div className="invictus-text font-semibold">{ev.attendace === false ? "Attended" : "Yet to Attend"}</div>   {/*member or leader will fetch from backend three things to fetch here event/workshops name user has registered for there member status and unstop registration link*/}
+
+            </motion.div>
+          
+          ))}
+
+          {/* WORKSHOPS LIST */}
+          {activeTab === "WORKSHOPS" && workshops.map((workshop, idx) => (
+          <motion.div
+  key={idx}
+  variants={{
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  }}
+  whileHover={{ scale: 1.01 }}
+  transition={{ duration: 0.3 }}
+  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border rounded-xl p-4 mb-4 bg-[#f9f6ef]"
+  style={{ border: "2px solid #e7d7b1" }}
+>
+              <div>
+                <div className="invictus-text font-bold uppercase mb-2">{workshop.name}</div>
+                <div className="flex gap-2 invictus-text flex-wrap">
+                  <button className="bg-[#b19965] text-white rounded-lg px-4 py-1 font-semibold border-2 border-[#6b6140] transition hover:bg-[#6b6140] active:scale-95"   onClick={() => {
+                    if (
+                      workshop.latitude == null ||
+                      workshop.longitude == null
+                    ) {
+                      alert("Venue location not available");
+                      return;
+                    }
+
+                    setMapDestination({
+                      name: workshop.name,
+                      lat: Number(workshop.latitude),
+                      lng: Number(workshop.longitude),
+                    });
+                    setMapOpen(true);
+                  }}>
+                    VIEW VENUE ON MAP
+                  </button>
+                </div>
+              </div>
+              <div className="invictus-text font-semibold">{workshop.date ? new Date(workshop.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : "TBA"}</div>
+             <div className="invictus-text font-semibold">{workshop.mode || "Mode TBA"}</div>
 
             </motion.div>
           

@@ -56,7 +56,7 @@ const EventCard = ({ title, image, isActive, onClick }) => {
       )}
 
       <button className="z-10 w-[90%] py-3 mb-2 border-[#4a3a1d] border-[2px] invictus-text bg-gradient-to-b from-[#e0c465d2] to-[#937c2f] brightness-115 text-white font-bold rounded-full shadow-md hover:shadow-lg transform transition hover:-translate-y-0.5 uppercase tracking-widest text-sm border border-[#C5A059]">
-        Register Now
+        View Details
       </button>
     </div>
   )

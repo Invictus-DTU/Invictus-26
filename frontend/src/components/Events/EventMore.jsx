@@ -121,41 +121,6 @@ export default function EventMore({ open, onClose, event }) {
             {/* CTA */}
             <div className="flex md:gap-6 gap-2 mt-6 invictus-text">
 <button
-  disabled={!event?.unstopLink}
-  className="
-    relative overflow-hidden
-    px-6 py-2
-    bg-[#7a2e3a]
-    text-[#f3efe6]
-    tracking-wide
-    transition
-    group
-  "
-  onClick={() => {
-    if (event?.unstopLink) {
-      window.open(event.unstopLink, "_blank", "noopener,noreferrer");
-    }
-  }}
->
-  <span
-    className="
-      absolute inset-0
-      bg-[#c9a44c]
-      translate-y-full
-      group-hover:translate-y-0
-      transition-transform
-      duration-300
-      ease-out
-    "
-  ></span>
-
-  <span className="relative z-10">
-    REGISTER
-  </span>
-</button>
-
-
-<button
   className="
     relative overflow-hidden
     px-3 py-2
