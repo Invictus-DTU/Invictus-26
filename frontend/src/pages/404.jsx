@@ -63,7 +63,7 @@ export default function Custom404() {
 
             {/* FIGURE IMAGE */}
             <img
-              src="/figure.png"
+              src="/figure1.png"
               alt="Ascended Figure"
               className="relative z-20 w-auto h-[80%] lg:h-[90%] object-contain drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"
             />

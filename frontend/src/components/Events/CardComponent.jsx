@@ -38,7 +38,7 @@ const EventCard = ({ title, image, isActive, isWorkshop, onClick }) => {
       <div className="z-10 w-full h-[30%] flex-1 my-3 border-2 border-[#C5A059]/30 bg-[#FFF8E7] rounded-lg flex items-center justify-center p-1">
         <div className="w-full h-full overflow-hidden rounded-lg flex items-center justify-center">
           <img
-            src={image || "/backdrop.png"}
+            src={image || "/backdropnew.png"}
             alt={title}
             className="w-full h-full"
           />

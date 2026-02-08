@@ -191,7 +191,7 @@ export default function EventMore({ open, onClose, event }) {
 
           <div className="relative pb-4 mt-10 rounded-xl w-fit h-fit max-h-3/5 bg-cover overflow-hidden border border-[#c9a44c]/20">
             <img
-              src={event?.imagePath || "/backdrop.png"}
+              src={event?.imagePath || "/backdropnew.png"}
               alt="Event Image"
               className="w-full h-[300px] object-contain"
             />
