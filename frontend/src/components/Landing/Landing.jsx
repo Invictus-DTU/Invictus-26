@@ -37,7 +37,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
     }
     const lastShown = Number(shown);
     // console.log(Date.now() - lastShown);
-    if (Date.now() - lastShown < SNACKBAR_TIMEOUT_1 || localStorage.getItem("ModelSeen") ) {
+    if (Date.now() - lastShown < SNACKBAR_TIMEOUT_2 || localStorage.getItem("ModelSeen") ) {
       setShow(false);
     }
   }, []);

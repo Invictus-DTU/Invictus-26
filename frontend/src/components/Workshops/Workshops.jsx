@@ -2,7 +2,37 @@
 import React, { useState, useEffect } from 'react';
 import CardComponent from '../Events/CardComponent';
 import { motion } from "framer-motion";
+import { Navigation } from 'lucide-react';
+import { useRouter } from 'next/router';
+import SnackBar from "@/utils/snackBar";
+
 export default function Workshops({setLotusClass, setLotusStyle, setFigureClass, setFigureStyle}) {
+
+  const router = useRouter();
+  const [show, setShow] = useState(true);
+  const SNACKBAR_TIMEOUT = Number(process.env.NEXT_PUBLIC_SNACKBAR_TIMEOUT_ONE);
+
+      useEffect(() => {
+        if (typeof window === "undefined") return;
+  
+        const shown = localStorage.getItem("SnackbarShownWorkshop");
+        if(!shown){
+          setShow(true);
+          return;
+        }
+        const lastShown = Number(shown);
+        // console.log(Date.now() - lastShown);
+        // console.log(SNACKBAR_TIMEOUT);
+        
+        if (Date.now() - lastShown < SNACKBAR_TIMEOUT ) {
+          setShow(false);
+        }
+      }, []);
+
+          const handleClose = () => {
+      setShow(false);
+      localStorage.setItem("SnackbarShownWorkshop",  Date.now().toString());
+    };
 
   useEffect(() => {
     if (!setFigureClass || !setFigureStyle) return;
@@ -68,6 +98,19 @@ export default function Workshops({setLotusClass, setLotusStyle, setFigureClass,
         </motion.div>
 
       </div>
+
+      {show && (
+          <SnackBar
+            text="See live locations of Workshops/Events in your Profile"
+            actionText={
+              <span className="flex h-6 items-center">
+              <Navigation />
+              </span>
+            }
+            onAction={() => router.replace("/Dashboard")}
+            onClose={handleClose}
+          />
+        )}
     </div>
   );
 }

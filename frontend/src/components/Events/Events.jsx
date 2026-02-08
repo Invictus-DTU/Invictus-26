@@ -94,7 +94,7 @@ export default function Events({setLotusClass, setLotusStyle, setFigureClass, se
       // console.log(Date.now() - lastShown);
       // console.log(SNACKBAR_TIMEOUT);
       
-      if (Date.now() - lastShown < SNACKBAR_TIMEOUT || localStorage.getItem("ModelSeen") ) {
+      if (Date.now() - lastShown < SNACKBAR_TIMEOUT ) {
         setShow(false);
       }
     }, []);
