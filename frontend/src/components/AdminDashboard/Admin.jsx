@@ -486,7 +486,7 @@ const normalizeMemberStatus = (raw) => {
 
       complete: async (results) => {
         try {
-          console.log(results.data);
+          console.log(results.data);//this main sending normalized data to backend, so check console for how your csv should be structured or how data is being fetched
           // Normalize data structure for backend
           const registrationsPayload = results.data.map(row => ({
             candidateName: row["Candidate's Name"] || row.Name || "",
@@ -500,7 +500,7 @@ const normalizeMemberStatus = (raw) => {
 
           // console.log(registrationsPayload);
 
-          const isFirstUpload = selectedEventRegs.length === 0;
+          const isFirstUpload = selectedEventRegs.length === 0;//if no regs present then call create endpoint else update
 
           const endpoint = isFirstUpload
             ? `${API_BASE_URL}/events/${eventId}/register`      // PUT or POST (see note below)
@@ -542,10 +542,10 @@ const normalizeMemberStatus = (raw) => {
     setNotifLoading(true);
     try {
       
-      // Optimistic UI Update
+      // Optimistic UI Update: this updates the ui with present toggled status and if backend call fails it reverts to original status afterwards 
       setSelectedEventRegs((prev) =>
         prev.map((reg) =>
-          reg._id === regId ? { ...reg, attendance: !currentStatus } : reg,
+          reg.id === regId ? { ...reg, attendance: !currentStatus } : reg,
         ),
       );
 
@@ -937,7 +937,7 @@ const normalizeMemberStatus = (raw) => {
                           className="w-6 h-6 text-[#D4AF37] border-[#C5A059] rounded focus:ring-[#D4AF37]"
                         />
                         <span className="text-[#8B6508] font-['Montserrat',sans-serif] font-bold">
-                          { notifLoading ? "Loading" : reg.attendance ? "Present" : "Absent"}
+                          { reg.attendance ? "Present" : "Absent"}
                         </span>
                       </label>
                     </div>
