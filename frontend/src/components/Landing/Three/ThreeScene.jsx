@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useState, useEffect } from "react";
 import GlitchIntro from "./GlitchIntro";
-import VideoTransition from "./VideoTransition";
+// import VideoTransition from "./VideoTransition";
 import SceneRoot from "./SceneRoot";
 import { useRouter } from "next/router";
 
@@ -68,19 +68,19 @@ export default function ThreeScene({ onReady }) {
           <SceneRoot
             setcurrSection={setcurrSection}
             playTransition={playTransition}
-            onStartExplore={() => setPlayTransition(true)}
+            onStartExplore={() => route.push("/Home")}
             onReady={onReady}
             setScrollOffset={setScrollOffset}
           />
         </Suspense>
       </Canvas>
-
+{/* 
       <VideoTransition
         play={playTransition}
         onEnd={() => {
           window.location.href = "/Home";
         }}
-      />
+      /> */}
     </div>
   );
 }
