@@ -34,8 +34,7 @@ export default function VideoTransition({ play, onEnd }) {
         playsInline
         preload="auto"
         className={`
-          w-full h-full object-cover
-          mix-blend-screen
+          w-full h-full object-cover mix-blend-multiply
           transition-opacity duration-700
           ${ending ? "opacity-0" : "opacity-100"}
         `}

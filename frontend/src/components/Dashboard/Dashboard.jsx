@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, use } from "react";
 import MapPreview from "./MapPreview";
 import { DTU_LOCATIONS } from "./locations";
 import MapModal from "./MapModal";
+import Mapforevents from "./Mapforevents";
 import SnackBar from "@/utils/snackBar";
 import { AuthContext } from "@/contexts/AuthContext";
 import Drawer from "./Drawer"
@@ -12,6 +13,7 @@ import Button from "@/utils/Button"
 export default function Dashboard({ setLotusClass, setLotusStyle }) {
   const [activeTab, setActiveTab] = useState("EVENTS");
   const [mapOpen, setMapOpen] = useState(false);
+  const [eventsMap , setEventsMap] = useState(false);
   const [mapDestination, setMapDestination] = useState(DTU_LOCATIONS.DTU);
   const [show, setShow] = useState(true);
   const [error, setError] = useState(false);
@@ -194,23 +196,22 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
           <button
             type="button"
             onClick={() => {
-              setMapDestination(DTU_LOCATIONS.DTU);
-              setMapOpen(true);
+              setEventsMap(true);
             }}
             className="
               mt-6
-              bg-[#b19965] text-white font-semibold
+              bg-[#a08c5f] text-white font-semibold
               rounded-lg px-5 py-2
               invictus-text
               flex items-center gap-2
-              border-2 border-[#b19965]
+              border-2 border-[#fffbf3]
               transition hover:bg-[#6b6140] active:scale-95
             "
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 2a6 6 0 016 6c0 4.418-6 10-6 10S4 12.418 4 8a6 6 0 016-6zm0 8a2 2 0 100-4 2 2 0 000 4z" />
             </svg>
-            Open Map
+            See all Venues
           </button>
         </motion.div>
 
@@ -393,11 +394,13 @@ export default function Dashboard({ setLotusClass, setLotusStyle }) {
           <Drawer event={singleEvent} onClose={openDrawer} />
         )}
 
-              <MapModal
+    <MapModal
       open={mapOpen}
       onClose={() => setMapOpen(false)}
       destination={mapDestination}
     />
+
+    <Mapforevents open={eventsMap} onClose={() => setEventsMap(false)} mapId={'38aad727a6a36b82fc654ea8'} />
 
           {show && (
             <SnackBar

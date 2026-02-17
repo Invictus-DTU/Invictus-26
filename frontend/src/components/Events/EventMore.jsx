@@ -8,7 +8,7 @@ export default function EventMore({ open, onClose, event }) {
   const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3004';
 
   useEffect(() => {
-    console.log(event);
+    // console.log(event);
     if (open) document.body.style.overflow = "hidden";
     return () => (document.body.style.overflow = "auto");
   }, [open]);
@@ -152,7 +152,7 @@ export default function EventMore({ open, onClose, event }) {
     "
   ></span>
 
-  <span className="relative z-10">
+  <span className="relative md:left-0 -left-4 z-10">
     REGISTER
   </span>
 </button>}

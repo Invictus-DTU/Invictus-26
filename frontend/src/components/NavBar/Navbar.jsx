@@ -224,7 +224,7 @@ export default function Navbar({ className = "" }) {
 
       {/* mobile menu overlay */}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-[400px] bg-transparent backdrop-blur-xl z-[45]
+        className={`fixed top-0 right-0 h-full w-full sm:w-[400px] bg-transparent backdrop-blur-xl z-[75]
         transform transition-transform duration-500 ease-in-out border-l-2 border-[#D4AF37]
         flex flex-col pt-32 px-10 space-y-8 ${open ? 'translate-x-0' : 'translate-x-full'}`}>
         {navItems.map(({ name, href }, i) => (

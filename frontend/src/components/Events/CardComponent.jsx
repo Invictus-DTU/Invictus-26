@@ -229,22 +229,23 @@ const filteredEvents = events.filter((ev) => {
   if (filters.date) {
     const eventDate = new Date(ev.date);
     // console.log(eventDate);
-    const today = new Date();
+    const firstdate = new Date(2026, 1, 27); // February is 1 in JavaScript (0-indexed) 
     // console.log(today);
 
-    if (filters.date === "TODAY" && !isSameDay(eventDate, today)) {
+    if (filters.date === "27th_FEB" && !isSameDay(eventDate, firstdate)) {
       return false;
     }
 
-    if (filters.date === "TOMORROW") {
-      const tomorrow = new Date(today);
-      tomorrow.setDate(today.getDate() + 1);
+    if (filters.date === "28th_FEB") {
+      const tomorrow = new Date(firstdate);
+      tomorrow.setDate(firstdate.getDate() + 1);
       if (!isSameDay(eventDate, tomorrow)) return false;
     }
 
-    if (filters.date === "THIS_WEEKEND") {
-      const day = eventDate.getDay(); // 0 Sun, 6 Sat
-      if (day !== 0 && day !== 6) return false;
+    if (filters.date === "1st_MARCH") {
+      const dayAfterTomorrow = new Date(firstdate);
+      dayAfterTomorrow.setDate(firstdate.getDate() + 2);
+      if (!isSameDay(eventDate, dayAfterTomorrow)) return false;
     }
   }
 
