@@ -26,13 +26,12 @@ export default function MuteButton() {
         unlockAndPlay();
         toggleMute();
       }}
-      className="
-        fixed top-6 left-1/2 md:left-6 z-[10000]
+      className={`fixed top-6 left-1/2 md:left-6 ${unlocked ? 'z-[10000]' : 'z-0'}
         w-9 h-9 rounded-full
         bg-black/50 backdrop-blur
         flex items-center justify-center
         text-white
-      "
+      `}
     >
       {muted || !unlocked ? <VolumeX size={18} /> : <Volume2 size={18} />}
     </button>

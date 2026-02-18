@@ -79,7 +79,7 @@ export default function Navbar({ className = "" }) {
   useEffect(() => {
     if (!mounted) return;
     updatePill();
-  }, [activeIndex, mounted]);
+  }, [activeIndex, user, isAdmin, mounted]);
 
   useEffect(() => {
     const handleResize = () => {
