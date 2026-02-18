@@ -208,10 +208,10 @@ export default function Events({setLotusClass, setLotusStyle, setFigureClass, se
 
             <button 
               title="RESET FILTERS"
-                            style={{ transition: 'transform 0.5s ease-in-out' }}
+              style={{ transition: 'transform 0.5s ease-in-out' }}
               onMouseEnter={(e) => e.currentTarget.style.transform = 'rotate(45deg)'}
               onMouseLeave={(e) => e.currentTarget.style.transform = 'rotate(0deg)'}
-              className='mt-2 border-[#a69153] text-[#39362d] transition-transform duration-500 hover:rotate-[60deg] cursor-pointer'
+              className='mt-2 border-[#a69153] text-[#39362d] transition-transform duration-500 cursor-pointer'
               onClick={() => {
                 setFilters((prev) => ({
                   ...prev,

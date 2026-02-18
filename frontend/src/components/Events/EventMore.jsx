@@ -116,7 +116,7 @@ export default function EventMore({ open, onClose, event }) {
               </p> }
 
              {!event?.isWorkshop && <p className="text-4xl font-bold text-[#c9a44c] mt-2">
-                ₹ {event?.prizes || "50,000"}*
+                ₹ {event?.prizes > 100 ? event?.prizes : "--"}*
               </p> 
               }
             </div>
