@@ -2,33 +2,71 @@ import React, { useEffect, useRef, useState } from "react";
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
 const DTU_CENTER = { lat: 28.7501, lng: 77.1177 };
+const DEFAULT_TILT = 67.5;
+const DEFAULT_HEADING = 0;
+const DEFAULT_ZOOM = 18;
 
-export default function Events3DMapModal({
-  open,
-  onClose,
-  mapId,
-}) {
+// --- ICONS ---
+const ICONS = {
+  EVENT: {
+    path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+    fillColor: "#FFD700", 
+    fillOpacity: 1,
+    strokeWeight: 1.5,
+    strokeColor: "#000",
+    scale: 2,
+    anchor: { x: 12, y: 22 },
+  },
+  WORKSHOP: {
+    path: "M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z",
+    fillColor: "#00BFFF",
+    fillOpacity: 1,
+    strokeWeight: 1.5,
+    strokeColor: "#000",
+    scale: 1.5,
+    anchor: { x: 12, y: 12 },
+  },
+  USER: {
+    path: "M12,2C6.47,2,2,6.47,2,12s4.47,10,10,10s10-4.47,10-10S17.53,2,12,2z",
+    scale: 0.7, 
+    fillColor: "#4285F4",
+    fillOpacity: 1,
+    strokeColor: "white",
+    strokeWeight: 2,
+    anchor: { x: 12, y: 12 },
+  },
+};
+
+export default function Events3DMapModal({ open, onClose, mapId }) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markersRef = useRef([]);
   const clusterRef = useRef(null);
-  const rotateInterval = useRef(null);
+
+  // Navigation & Logic Refs
   const directionsRendererRef = useRef(null);
-const directionsServiceRef = useRef(null);
+  const directionsServiceRef = useRef(null);
+  const watchIdRef = useRef(null);
+  const userMarkerRef = useRef(null);
+  
+  // Interaction Logic
+  const activeInfoWindowRef = useRef(null);
+  const activeMarkerIdRef = useRef(null); // Tracks which marker is currently "locked" by click
+  const hoverTimeoutRef = useRef(null); 
 
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("ALL");
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [navData, setNavData] = useState({ distance: "", duration: "" });
+  const [navigationStatus, setNavigationStatus] = useState("");
 
-  const backend_url =
-    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3004";
+  const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3004";
 
   /* ---------------- FETCH EVENTS ---------------- */
-
   useEffect(() => {
     if (!open) return;
-
     const getEvents = async () => {
       try {
         setLoading(true);
@@ -37,68 +75,77 @@ const directionsServiceRef = useRef(null);
         const data = await res.json();
         setEvents(data || []);
       } catch {
-        setError("Unable to fetch events");
+        setError("Unable to load map data");
         setEvents([]);
       } finally {
         setLoading(false);
       }
     };
-
     getEvents();
-  }, [open]);
+  }, [open, backend_url]);
 
-  /* ---------------- INITIALIZE MAP ---------------- */
-
+  /* ---------------- MAP INITIALIZATION & CLEANUP ---------------- */
   useEffect(() => {
-    if (!open || !window.google || !mapRef.current) return;
+    // CLEANUP WHEN CLOSED
+    if (!open) {
+      if (mapInstance.current) {
+         // Clear listeners to prevent leaks
+         window.google?.maps?.event?.clearInstanceListeners(mapInstance.current);
+         mapInstance.current = null;
+      }
+      return;
+    }
 
+    if (!window.google || !mapRef.current) return;
+
+    // INIT MAP
     if (!mapInstance.current) {
       mapInstance.current = new window.google.maps.Map(mapRef.current, {
         center: DTU_CENTER,
-        zoom: 18,
+        zoom: DEFAULT_ZOOM,
         mapTypeId: "satellite",
-        mapId,
-        tilt: 67.5,
-        heading: 45,
+        mapId: mapId,
+        tilt: DEFAULT_TILT,
+        heading: DEFAULT_HEADING,
+        disableDefaultUI: true,
+        zoomControl: true,
         gestureHandling: "greedy",
       });
 
-      // Auto rotating preview
-rotateInterval.current = setInterval(() => {
-  if (!mapInstance.current) return;
+      // Click on map background closes any locked info window
+      mapInstance.current.addListener("click", () => {
+        if (activeInfoWindowRef.current) {
+          activeInfoWindowRef.current.close();
+          activeInfoWindowRef.current = null;
+          activeMarkerIdRef.current = null;
+        }
+      });
 
-  const heading = mapInstance.current.getHeading() || 0;
-  mapInstance.current.setHeading(heading + 0.5); // slower
-}, 60); // slower interval
-
+      directionsServiceRef.current = new window.google.maps.DirectionsService();
+      directionsRendererRef.current = new window.google.maps.DirectionsRenderer({
+        map: mapInstance.current,
+        suppressMarkers: true,
+        polylineOptions: {
+          strokeColor: "#00BFFF",
+          strokeWeight: 6,
+          strokeOpacity: 0.8,
+        },
+      });
     }
 
-    return () => {
-      clearInterval(rotateInterval.current);
-    };
-
+    return () => stopNavigation();
   }, [open, mapId]);
 
-  const enforce3DView = () => {
-  if (!mapInstance.current) return;
-
-  mapInstance.current.setTilt(67.5);
-  mapInstance.current.setHeading(45);
-};
-
-
-  /* ---------------- ADD MARKERS + CLUSTER ---------------- */
-
+  /* ---------------- MARKERS & WINDOW LOGIC ---------------- */
   useEffect(() => {
     if (!mapInstance.current || !events.length) return;
 
+    // Clear old markers
     markersRef.current.forEach((m) => m.setMap(null));
     markersRef.current = [];
-
     if (clusterRef.current) clusterRef.current.clearMarkers();
 
-    const filteredEvents =
-      selectedCategory === "ALL"
+    const filteredEvents = selectedCategory === "ALL"
         ? events
         : events.filter((e) => e.category === selectedCategory);
 
@@ -110,305 +157,304 @@ rotateInterval.current = setInterval(() => {
       if (isNaN(lat) || isNaN(lng)) return;
 
       const position = { lat, lng };
+      const icon = event.isWorkshop ? ICONS.WORKSHOP : ICONS.EVENT;
 
       const marker = new window.google.maps.Marker({
         position,
         title: event.name,
-        icon: {
-          path: window.google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-          scale: 8,
-          fillColor: "#d4af37",
-          fillOpacity: 1,
-          strokeWeight: 2,
-          strokeColor: "#000",
-          rotation: 0,
-        },
+        icon: icon,
+        map: mapInstance.current,
+        animation: window.google.maps.Animation.DROP,
       });
+
+      // --- HTML CONTENT ---
+      // Note the ID for the button to attach listener later
+      const contentString = `
+        <div class="map-info-card" style="
+            width: 240px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid ${event.isWorkshop ? '#00BFFF' : '#FFD700'};
+            border-radius: 12px;
+            overflow: hidden;
+            font-family: system-ui, -apple-system, sans-serif;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+        ">
+          ${event.imagePath ? `
+            <div style="width: 100%; height: 100px; overflow: hidden; border-bottom: 1px solid #333;">
+               <img src="${event.imagePath}" style="width: 100%; height: 100%; object-fit: contain;" />
+            </div>
+          ` : ''}
+          
+          <div style="padding: 12px;">
+            <div style="
+               display: inline-block;
+               padding: 2px 6px;
+               background: ${event.isWorkshop ? 'rgba(0, 191, 255, 0.2)' : 'rgba(255, 215, 0, 0.2)'};
+               color: ${event.isWorkshop ? '#00BFFF' : '#FFD700'};
+               font-size: 10px; font-weight: 800; letter-spacing: 1px; border-radius: 4px; margin-bottom: 6px;
+            ">
+              ${event.isWorkshop ? "WORKSHOP" : event.category.toUpperCase()}
+            </div>
+            
+            <h3 style="margin: 0 0 4px; color: #fff; font-size: 15px; font-weight: 700; line-height: 1.2;">
+               ${event.name}
+            </h3>
+            
+            <button id="go-btn-${event.id}" style="
+              width: 100%; margin-top: 10px;
+              background: ${event.isWorkshop ? 'linear-gradient(90deg, #007bff, #00bfff)' : 'linear-gradient(90deg, #b8860b, #ffd700)'}; 
+              color: #000; border: none; padding: 10px; border-radius: 6px; 
+              font-weight: 800; font-size: 12px; cursor: pointer; text-transform: uppercase;
+              box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            ">
+              Go Here 📍
+            </button>
+          </div>
+        </div>
+      `;
 
       const infoWindow = new window.google.maps.InfoWindow({
-        content: `
-          <div style="
-        background: linear-gradient(135deg, #1a1a1a 0%, #2d2416 100%);
-        color: #d4af37;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #d4af37;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        max-width: 240px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-          ">
-        ${
-          event.imagePath
-            ? `<img src="${event.imagePath}" 
-           style="width: 100%; height: 80px; object-fit: contain; border-radius: 6px; margin-bottom: 8px; border: 1px solid #564d37;" />`
-            : ""
+        content: contentString,
+        disableAutoPan: true, 
+        pixelOffset: new window.google.maps.Size(0, -5),
+      });
+
+      // --- HELPER: OPEN WINDOW & ATTACH LISTENERS ---
+      const openWindow = () => {
+        if (activeInfoWindowRef.current && activeInfoWindowRef.current !== infoWindow) {
+           // Close other window if it's not the same one
+           activeInfoWindowRef.current.close();
+           activeMarkerIdRef.current = null;
         }
-        <div style="font-weight: 600; font-size: 14px; line-height: 1.4;">
-          ${event.name}
-        </div>
-        <div style="margin-top: 6px; font-size: 12px; color: #a89041;">
-          ${event.category}
-        </div>
-        <div style="
-          margin-top: 6px;
-          font-weight: 600;
-          font-size: 12px;
-          padding: 4px 8px;
-          border-radius: 4px;
-          background: ${
-            event.status === "ACTIVE"
-          ? "rgba(22, 163, 74, 0.2)"
-          : event.status === "UPCOMING"
-          ? "rgba(37, 99, 235, 0.2)"
-          : "rgba(220, 38, 38, 0.2)"
-          };
-          color: ${
-            event.status === "ACTIVE"
-          ? "#4ade80"
-          : event.status === "UPCOMING"
-          ? "#60a5fa"
-          : "#f87171"
-          };
-          text-align: center;
-        ">
-          ${event.status}
-        </div>
-          </div>
-        `,
-      });
 
+        infoWindow.open({ anchor: marker, map: mapInstance.current });
+        activeInfoWindowRef.current = infoWindow;
+        
+        // Use a timeout to ensure DOM is ready for button click
+        setTimeout(() => {
+            const btn = document.getElementById(`go-btn-${event.id}`);
+            if (btn) {
+                // Remove old listeners to be safe (clone node trick or just reassign)
+                btn.onclick = (e) => {
+                    e.stopPropagation(); // Prevent map click
+                    startNavigation(position);
+                    infoWindow.close();
+                    activeMarkerIdRef.current = null;
+                };
+            }
+        }, 50); // Small delay to wait for Google Maps to render DOM
+      };
 
+      // 1. HOVER: Open, but don't lock
       marker.addListener("mouseover", () => {
-        infoWindow.open({
-          anchor: marker,
-          map: mapInstance.current,
-        });
-        clearInterval(rotateInterval.current);
-
+        // If we have a locked marker that isn't this one, don't interfere
+        if (activeMarkerIdRef.current && activeMarkerIdRef.current !== event.id) return;
+        
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        openWindow();
       });
 
+      // 2. MOUSEOUT: Close after delay (unless locked)
       marker.addListener("mouseout", () => {
-        infoWindow.close();
-            rotateInterval.current = setInterval(() => {
-            const heading = mapInstance.current.getHeading() || 0;
-            mapInstance.current.setHeading(heading + 0.5);
-          }, 5500);
-
-  setTimeout(() => {
-
-    enforce3DView();
-  }, 5500);
-
+        hoverTimeoutRef.current = setTimeout(() => {
+           // Only close if NOT locked
+           if (activeMarkerIdRef.current !== event.id) {
+               infoWindow.close();
+               if (activeInfoWindowRef.current === infoWindow) {
+                   activeInfoWindowRef.current = null;
+               }
+           }
+        }, 400); // 400ms grace period to move mouse to window
       });
 
-
+      // 3. CLICK: Open & LOCK
       marker.addListener("click", () => {
-       
-        drawRoute(position);
-          setTimeout(() => {
-    enforce3DView();
-  }, 500);
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        activeMarkerIdRef.current = event.id; // LOCK THIS ID
+        openWindow();
+      });
+
+      // 4. DomReady Listener (Backup for button)
+      infoWindow.addListener("domready", () => {
+         const btn = document.getElementById(`go-btn-${event.id}`);
+         if (btn) {
+             btn.onclick = () => {
+                 startNavigation(position);
+                 infoWindow.close();
+                 activeMarkerIdRef.current = null;
+             };
+         }
       });
 
       markers.push(marker);
     });
 
-    clusterRef.current = new MarkerClusterer({
-      map: mapInstance.current,
-      markers,
-    });
-
     markersRef.current = markers;
-
   }, [events, selectedCategory]);
 
-  /* ---------------- ROUTE DRAWING ---------------- */
+  /* ---------------- NAVIGATION LOGIC ---------------- */
+  const startNavigation = (destination) => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported.");
+      return;
+    }
 
-const drawRoute = (destination) => {
-  if (!window.google || !mapInstance.current) return;
+    setIsNavigating(true);
+    setNavigationStatus("LOCATING...");
 
-  // Stop rotation when navigating
-  if (rotateInterval.current) {
-    clearInterval(rotateInterval.current);
-  }
+    if (watchIdRef.current) navigator.geolocation.clearWatch(watchIdRef.current);
 
-  if (!navigator.geolocation) {
-    alert("Geolocation not supported.");
-    return;
-  }
+    watchIdRef.current = navigator.geolocation.watchPosition(
+      (pos) => {
+        const origin = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setNavigationStatus("LIVE TRACKING");
 
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const origin = {
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-      };
-
-      // Initialize once
-      if (!directionsServiceRef.current) {
-        directionsServiceRef.current =
-          new window.google.maps.DirectionsService();
-      }
-
-      if (!directionsRendererRef.current) {
-        directionsRendererRef.current =
-          new window.google.maps.DirectionsRenderer({
-            suppressMarkers: false,
-            polylineOptions: {
-              strokeColor: "#d4af37",
-              strokeWeight: 6,
-            },
+        if (!userMarkerRef.current) {
+          userMarkerRef.current = new window.google.maps.Marker({
+            position: origin,
+            map: mapInstance.current,
+            icon: ICONS.USER,
+            title: "You",
+            zIndex: 999,
           });
-
-        directionsRendererRef.current.setMap(mapInstance.current);
-      } else {
-        directionsRendererRef.current.setDirections({ routes: [] });
-      }
-
-      directionsServiceRef.current.route(
-        {
-          origin,
-          destination,
-          travelMode: window.google.maps.TravelMode.WALKING,
-        },
-        (result, status) => {
-          if (status === "OK") {
-            directionsRendererRef.current.setDirections(result);
-
-            // Smooth zoom to fit route
-            const bounds = new window.google.maps.LatLngBounds();
-            result.routes[0].overview_path.forEach((p) =>
-              bounds.extend(p)
-            );
-            mapInstance.current.fitBounds(bounds);
-
-              setTimeout(() => {
-    enforce3DView();
-  }, 500);
-          } else {
-            console.error("Directions failed:", status);
-            alert("Unable to calculate route.");
-          }
+        } else {
+          userMarkerRef.current.setPosition(origin);
         }
-      );
 
-       new window.google.maps.Marker({
-          position: origin,
-          map: mapInstance.current,
-          icon: {
-            path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-            scale: 6,
-            fillColor: "#1d4ed8",
-            fillOpacity: 1,
-            strokeWeight: 2,
-            strokeColor: "white",
+        directionsServiceRef.current.route(
+          {
+            origin,
+            destination,
+            travelMode: window.google.maps.TravelMode.WALKING,
           },
-          title: "You",
-        });
+          (result, status) => {
+            if (status === "OK") {
+              directionsRendererRef.current.setDirections(result);
+              const leg = result.routes[0].legs[0];
+              setNavData({
+                distance: leg.distance.text,
+                duration: leg.duration.text,
+              });
+            }
+          }
+        );
+      },
+      (err) => {
+          console.error(err);
+          setNavigationStatus("GPS LOST");
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  };
 
-        new window.google.maps.Marker({
-          position: destination,
-          map: mapInstance.current,
-          title: "Destination",
-        });
-    },
-    (error) => {
-      console.error("Geolocation error:", error);
-      alert("Please allow location access to navigate.");
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
+  const stopNavigation = () => {
+    setIsNavigating(false);
+    setNavigationStatus("");
+    setNavData({ distance: "", duration: "" });
+
+    if (watchIdRef.current) navigator.geolocation.clearWatch(watchIdRef.current);
+    if (directionsRendererRef.current) directionsRendererRef.current.setDirections({ routes: [] });
+    if (userMarkerRef.current) {
+      userMarkerRef.current.setMap(null);
+      userMarkerRef.current = null;
     }
-  );
-};
-
-useEffect(() => {
-  if (!open) {
-    // Stop rotation
-    if (rotateInterval.current) {
-      clearInterval(rotateInterval.current);
-      rotateInterval.current = null;
+    
+    // Reset View
+    if (mapInstance.current) {
+       mapInstance.current.setZoom(DEFAULT_ZOOM);
+       mapInstance.current.setCenter(DTU_CENTER);
+       mapInstance.current.setTilt(DEFAULT_TILT);
+       mapInstance.current.setHeading(DEFAULT_HEADING);
     }
-
-    // Clear directions
-    if (directionsRendererRef.current) {
-      directionsRendererRef.current.setMap(null);
-      directionsRendererRef.current = null;
-    }
-
-    // Clear cluster
-    if (clusterRef.current) {
-      clusterRef.current.clearMarkers();
-      clusterRef.current = null;
-    }
-
-    // Clear markers
-    markersRef.current.forEach((m) => {
-      if (m.setMap) m.setMap(null);
-    });
-    markersRef.current = [];
-
-    // Destroy map instance
-    mapInstance.current = null;
-  }
-}, [open]);
-
+  };
 
   if (!open) return null;
 
-  const categories = [
-    "ALL",
-    ...new Set(events.map((e) => e.category)),
-  ];
+  const categories = ["ALL", ...new Set(events.map((e) => e.category))];
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md">
-      <div className="absolute inset-6 bg-gradient-to-br from-black to-[#3a2f0b] rounded-2xl overflow-hidden shadow-2xl border border-[#d4af37]">
+    <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-center justify-center">
+      
+      {/* MAP CONTAINER - Restored to 'inset-6' size but with Cyber UI */}
+      <div className="absolute inset-4 md:inset-6 bg-[#121212] rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-[#d4af37]/30 flex flex-col">
+        
+        {/* --- HEADER UI --- */}
+        <div className="absolute top-0 left-0 right-0 z-10 p-4 bg-gradient-to-b from-black/90 to-transparent pointer-events-none flex justify-between items-start">
+          
+          {/* CATEGORIES */}
+          <div className="pointer-events-auto flex flex-wrap gap-2 max-w-[80%]">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`
+                  px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all duration-300
+                  ${selectedCategory === cat 
+                    ? "bg-[#d4af37] text-black shadow-[0_0_10px_#d4af37] scale-105" 
+                    : "bg-black/60 text-gray-400 border border-[#d4af37]/30 hover:bg-[#d4af37]/20 hover:text-[#d4af37] backdrop-blur-md"}
+                `}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
 
-        {/* Close */}
-        <button
-          onClick={onClose}
-          className="absolute top-14 right-4 z-22
-          bg-[#7c7047] text-black px-4 py-1 rounded-full font-bold"
-        >
-          ✕
-        </button>
-
-        {/* Category Filter */}
-        <div className="absolute top-24 left-4 z-50 flex gap-2 flex-wrap">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1 rounded-full text-sm font-bold border ${
-                selectedCategory === cat
-                  ? "bg-[#a89041] text-black"
-                  : "bg-black text-[#d4af37] border-[#94803d]"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+          {/* CLOSE BTN */}
+          <button
+            onClick={onClose}
+            className="pointer-events-auto w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-black/50 border border-[#d4af37]/50 text-[#d4af37] hover:bg-red-500 hover:border-red-500 hover:text-white transition-all backdrop-blur-md"
+          >
+            ✕
+          </button>
         </div>
 
+        {/* --- NAVIGATION HUD --- */}
+        {isNavigating && (
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 w-[90%] max-w-sm animate-in slide-in-from-bottom-5">
+            <div className="bg-black/80 backdrop-blur-xl border border-[#00BFFF]/30 rounded-2xl p-4 shadow-2xl flex items-center justify-between gap-4">
+              
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00BFFF] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00BFFF]"></span>
+                  </span>
+                  <span className="text-[10px] font-bold text-[#00BFFF] uppercase tracking-widest">{navigationStatus}</span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                   <span className="text-xl font-bold text-white font-mono">{navData.duration || "--"}</span>
+                   <span className="text-xs text-gray-400 font-mono">({navData.distance || "--"})</span>
+                </div>
+              </div>
+
+              <button
+                onClick={stopNavigation}
+                className="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all"
+              >
+                Exit
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* LOADING */}
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black z-20 text-[#d4af37] font-bold">
-            Loading Invictus Map...
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#050505]">
+            <div className="w-10 h-10 border-4 border-[#333] border-t-[#d4af37] rounded-full animate-spin mb-4"></div>
+            <p className="text-[#d4af37] font-mono text-xs tracking-[0.2em] animate-pulse">LOADING DATA...</p>
           </div>
         )}
 
+        {/* ERROR */}
         {error && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black z-20 text-red-500">
-            {error}
-          </div>
+           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/90">
+             <div className="text-red-500 text-3xl mb-2">⚠️</div>
+             <p className="text-red-400 font-mono text-sm">{error}</p>
+           </div>
         )}
 
-        <div
-          ref={mapRef}
-          className="w-full h-full"
-          style={{ minHeight: "500px" }}
-        />
+        <div ref={mapRef} className="w-full h-full bg-[#1a1a1a]" />
       </div>
     </div>
   );

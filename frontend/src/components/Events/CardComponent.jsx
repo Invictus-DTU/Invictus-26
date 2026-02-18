@@ -155,8 +155,34 @@ useEffect(() => {
     api.on('select', update)
   }, [api, events])
 
-  if (eventsLoading) {
-    return <div className="min-h-[600px]" />
+    if(eventsError){
+    return (
+      <div className="w-full py-20 flex flex-col items-center justify-center min-h-100">
+        <div className="text-center space-y-6 p-8 border-4 border-[#a69153] rounded-2xl bg-[#FFF8E7] shadow-xl max-w-md">
+          <div className="flex justify-center mb-4">
+            <svg className="w-16 h-16 text-[#C5A059]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2 className="text-[#624f2c] text-3xl md:text-5xl font-bold font-serif tracking-widest invictus-heading">
+            Oops!
+          </h2>
+          <div className="w-24 h-1 bg-[#a69153] mx-auto rounded-full" />
+          <p className="text-[#7A6C45] font-bold uppercase tracking-widest text-sm">
+            Unable to load events
+          </p>
+          <p className="text-[#937c2f] text-sm leading-relaxed">
+            Try reloading the page or check your internet connection
+          </p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="mt-6 px-6 py-2 bg-gradient-to-b from-[#e0c465d2] to-[#937c2f] text-white font-bold rounded-full hover:shadow-lg transform transition hover:-translate-y-0.5 uppercase tracking-widest text-sm border border-[#C5A059]"
+          >
+            Reload Page
+          </button>
+        </div>
+      </div>
+    )
   }
 
   if (!events || events.length === 0) {
@@ -175,18 +201,21 @@ useEffect(() => {
     )
   }
 
-  if(eventsError){
-    return (
-      <div className="w-full py-20 flex flex-col items-center justify-center min-h-[400px]">
-        <div className="text-center space-y-4 p-8 border-4 border-[#C5A059] rounded-2xl bg-[#FFF8E7] shadow-xl">
-          <h2 className="text-[#C5A059] text-4xl md:text-7xl font-bold font-serif tracking-widest">
-            Unable to fetch Events
-          </h2>
-          <div className="w-24 h-1 bg-[#C5A059] mx-auto rounded-full" />
-          <p className="text-[#7A6C45] font-bold uppercase tracking-widest mt-4">
-            Try reloading the page!
-          </p>
+  if(eventsLoading){
+    return(
+      <div className="w-full py-20 flex flex-col items-center justify-center min-h-100">
+      <div className="text-center space-y-4 p-8 border-4 border-[#C5A059] rounded-2xl bg-[#FFF8E7] shadow-xl">
+        
+        <div className="w-24 h-1 bg-[#C5A059] mx-auto rounded-full" />
+        <p className="text-[#7A6C45] font-bold uppercase tracking-widest mt-4">
+        Hang on while we fetch the latest events for you!
+        </p>
+        <div className="mt-6 flex justify-center gap-2">
+        <div className="w-3 h-3 bg-[#C5A059] rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+        <div className="w-3 h-3 bg-[#C5A059] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+        <div className="w-3 h-3 bg-[#C5A059] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
         </div>
+      </div>
       </div>
     )
   }
