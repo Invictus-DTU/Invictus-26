@@ -185,23 +185,7 @@ useEffect(() => {
     )
   }
 
-  if (!events || events.length === 0) {
-    return (
-      <div className="w-full py-20 flex flex-col items-center justify-center min-h-[400px]">
-        <div className="text-center space-y-4 p-8 border-4 border-[#a69153] rounded-2xl bg-[#FFF8E7] shadow-xl">
-          <h2 className="text-[#C5A059] text-4xl md:text-7xl font-bold font-serif tracking-widest invictus-heading">
-            COMING SOON
-          </h2>
-          <div className="w-24 h-1 border-[#a69153] mx-auto rounded-full" />
-          <p className="text-[#7A6C45] font-bold uppercase tracking-widest mt-4">
-            Stay tuned for amazing Events/Workshops
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  if(eventsLoading){
+    if(eventsLoading){
     return(
       <div className="w-full py-20 flex flex-col items-center justify-center min-h-100">
       <div className="text-center space-y-4 p-8 border-4 border-[#C5A059] rounded-2xl bg-[#FFF8E7] shadow-xl">
@@ -216,6 +200,22 @@ useEffect(() => {
         <div className="w-3 h-3 bg-[#C5A059] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
         </div>
       </div>
+      </div>
+    )
+  }
+
+  if (!events || events.length === 0) {
+    return (
+      <div className="w-full py-20 flex flex-col items-center justify-center min-h-[400px]">
+        <div className="text-center space-y-4 p-8 border-4 border-[#a69153] rounded-2xl bg-[#FFF8E7] shadow-xl">
+          <h2 className="text-[#C5A059] text-4xl md:text-7xl font-bold font-serif tracking-widest invictus-heading">
+            COMING SOON
+          </h2>
+          <div className="w-24 h-1 border-[#a69153] mx-auto rounded-full" />
+          <p className="text-[#7A6C45] font-bold uppercase tracking-widest mt-4">
+            Stay tuned for amazing Events/Workshops
+          </p>
+        </div>
       </div>
     )
   }
