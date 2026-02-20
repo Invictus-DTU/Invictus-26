@@ -281,8 +281,8 @@ useEffect(() => {
     unstopRegLink: event.unstopLink,
     prizes: event.prizes || '',
     teamSize: event.maxTeamMembers,
-    latitude: '',
-    longitude: '',
+    latitude: event.latitude,
+    longitude: event.longitude,
     contacts: [
     { name: "", phone: "" } 
   ],
@@ -980,7 +980,16 @@ const normalizeMemberStatus = (raw) => {
                   <div className="space-y-2 text-sm text-[#8B6508]/80 mb-5 font-['Montserrat',sans-serif]">
                     <p><strong className="text-[#8B6508]">Category:</strong> {event.category}</p>
                     <p><strong className="text-[#8B6508]">Mode:</strong> {event.mode}</p>
-                    <p><strong className="text-[#8B6508]">Date:</strong> {event.date ? new Date(event.date).toLocaleString() : 'TBD'}</p>
+                    <p><strong className="text-[#8B6508]">Date:</strong>  {event.date 
+                      ? new Date(event.date).toLocaleString('en-IN', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true,
+                          timeZone: 'Asia/Kolkata' // Forces IST regardless of user's local browser settings
+                        })  : 'TBD'}</p>
                   </div>
 
                   <div className="flex gap-3">

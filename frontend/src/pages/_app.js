@@ -106,7 +106,7 @@ export default function App({ Component, pageProps }) {
       />
       <Head>
         <title>Invictus'26</title>
-        <meta name="description" content="Invictus 2026 Technical Fest" />
+        <meta name="description" content="Invictus is a flagship techfest that brings together innovation, creativity, and technology. Rooted in India's rich heritage and driven by a vision for the future, it provides a platform for students to ideate, build, and compete through hackathons, workshops, and technical events." />
       </Head>
       <AuthProvider>
         <LoaderProvider>

@@ -90,7 +90,20 @@ export default function EventMore({ open, onClose, event }) {
                     <p>{event?.description || "Event description goes here."}</p> 
                     )}
                     {tab === "stages & timeline" && (
-                    <p>{event?.date ? new Date(event.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : "Stages information goes here."}</p>
+                    <p>
+                    {event?.date 
+                      ? new Date(event.date).toLocaleString('en-IN', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true,
+                          timeZone: 'Asia/Kolkata' // Forces IST regardless of user's local browser settings
+                        }) 
+                      : "Stages information goes here."
+                    }
+                  </p>
                     )}
                     {tab === "contacts" && (
                     <div>
@@ -116,9 +129,13 @@ export default function EventMore({ open, onClose, event }) {
               </p> }
 
              {!event?.isWorkshop && <p className="text-4xl font-bold text-[#c9a44c] mt-2">
-                ₹ {event?.prizes > 100 ? event?.prizes : "--"}*
+                ₹ {event?.prizes > 100 ? event?.prizes : "NA"}*
               </p> 
               }
+
+              {event?.isWorkshop && <p className="text-4xl font-bold text-[#c9a44c] mt-2">
+                FREE CERTIFICATIONS
+              </p> }
             </div>
 
             {/* CTA */}

@@ -14,8 +14,8 @@ export default function Document() {
         />
         <link rel="preload" href="/intro/startVideo.mp4" as="video" />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" href="/pwa-512x512.png" />
-        <link rel="apple-touch-icon" href="/pwa-512x512.png" />
+        <link rel="icon" type="image/png" href="/onSearchIcon.png" />
+        <link rel="apple-touch-icon" href="/onSearchIcon.png" />
         <link rel="manifest" href="/manifest.json" />
         <link
           rel="stylesheet"

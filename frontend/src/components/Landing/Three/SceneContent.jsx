@@ -266,7 +266,7 @@ export function SceneContent({
         </>
       )}
 
-      {activeSection === 2 && (
+      {activeSection >= 2 && (
         <>
           <ThreeDText
             text="Start Exploring"

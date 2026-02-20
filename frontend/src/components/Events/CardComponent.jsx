@@ -88,7 +88,6 @@ export default function CardComponent({ filters, setLotusClass, setLotusStyle })
 
 const handleClose = () => {
   setDrawerOpen(false);
-  setTimeout(() => setSelectedEvent(null), 300); // match animation
 };
   // 🌸 Lotus center → fade animation (unchanged)
   useEffect(() => {
