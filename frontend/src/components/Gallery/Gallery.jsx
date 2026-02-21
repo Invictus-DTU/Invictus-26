@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   SwapyItem,
@@ -18,6 +18,7 @@ function ImageCard({ src }) {
         src={src}
         alt=""
         className="w-full h-full object-cover"
+        style={{ objectFit: 'cover' }}
         draggable={false}
       />
     </div>
@@ -27,9 +28,9 @@ function ImageCard({ src }) {
 /* ---------------- CATEGORY IMAGES ---------------- */
 
 const IMAGES = {
-  FUN: Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat1/cat1_${i + 1}.jpeg`),
-  CULTURAL: Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat2/cat2_${i + 1}.jpeg`),
-  WORKSHOP: Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat3/cat3_${i + 1}.jpeg`),
+  "PAST PERFORMERS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat1/cat1_${i + 1}.jpeg`),
+  "CULTURAL & WORKSHOPS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat2/cat2_${i + 1}.jpeg`),
+  "FUN MOMENTS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat3/cat3_${i + 1}.jpeg`),
 };
 
 /* ---------------- GRID CONFIG ---------------- */
@@ -53,7 +54,8 @@ const GRID_CLASSES = [
 /* ---------------- COMPONENT ---------------- */
 
 export default function Gallery({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle }) {
-  const [category, setCategory] = useState("FUN");
+  const [category, setCategory] = useState("PAST PERFORMERS");
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   /* 🌸 LOTUS POSITION — RELATIVE TO GALLERY HEADING */
   useEffect(() => {
@@ -163,7 +165,7 @@ export default function Gallery({ setLotusClass, setLotusStyle, setFigureClass, 
             </motion.p>
           </div>
 
-          {/* CATEGORY BOX */}
+          {/* COLLAPSIBLE CATEGORY BOX */}
          <motion.div
   initial={{ opacity: 0, x: 30 }}
   whileInView={{ opacity: 1, x: 0 }}
@@ -178,34 +180,55 @@ export default function Gallery({ setLotusClass, setLotusStyle, setFigureClass, 
     shadow-[6px_6px_0_rgba(120,100,40,0.45)]
   "
 >
-            <div className="flex justify-between items-center">
+            <button 
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="w-full flex justify-between items-center cursor-pointer"
+            >
               <span className="font-[Montserrat] text-[18px] tracking-[2px] font-semibold text-[#8f8457]">
                 VIEW GLANCES
               </span>
-              <span className="text-[16px] font-bold text-[#8f8457]">⌄</span>
-            </div>
+              <motion.span 
+                animate={{ rotate: isCollapsed ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-[16px] font-bold text-[#8f8457]"
+              >
+                ⌄
+              </motion.span>
+            </button>
 
-            <div className="h-[2px] bg-[#d9b85c] my-[10px]" />
-
-            <div className="flex flex-col gap-2.5">
-              {["FUN", "CULTURAL", "WORKSHOP"].map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setCategory(cat)}
-                  className={`
-                    text-left text-[16px] tracking-[1px]
-                    px-3 py-1.5 rounded-md transition-all
-                    ${
-                      category === cat
-                        ? "bg-[linear-gradient(180deg,rgba(225,200,125,0.95),rgba(190,160,80,0.95))] text-[#6d5b1f] font-semibold"
-                        : "text-[#9b8a3d]"
-                    }
-                  `}
+            <AnimatePresence>
+              {!isCollapsed && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
                 >
-                  {cat}
-                </button>
-              ))}
-            </div>
+                  <div className="h-[2px] bg-[#d9b85c] my-[10px]" />
+
+                  <div className="flex flex-col gap-2.5">
+                    {["PAST PERFORMERS", "CULTURAL & WORKSHOPS", "FUN MOMENTS"].map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setCategory(cat)}
+                        className={`
+                          text-left text-[16px] tracking-[1px]
+                          px-3 py-1.5 rounded-md transition-all
+                          ${
+                            category === cat
+                              ? "bg-[linear-gradient(180deg,rgba(225,200,125,0.95),rgba(190,160,80,0.95))] text-[#6d5b1f] font-semibold"
+                              : "text-[#9b8a3d]"
+                          }
+                        `}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </motion.div>
 
