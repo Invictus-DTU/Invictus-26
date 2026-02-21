@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 
 
 // Reusable Dropdown Component
-const CustomDropdown = ({ label, options, icon: Icon, onSelect }) => {
+const CustomDropdown = ({ label, options, icon: Icon, onSelect, reset }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 
@@ -18,6 +18,12 @@ const CustomDropdown = ({ label, options, icon: Icon, onSelect }) => {
     setIsOpen(false);
     onSelect?.(opt);
   };
+
+  useEffect(() => {
+    if (reset) {
+      setSelected(null);
+    }
+  }, [reset]);
 
   return (
     <div className="relative group min-w-[160px] md:min-w-[200px]">
@@ -74,6 +80,7 @@ export default function Events({setLotusClass, setLotusStyle, setFigureClass, se
     const [show, setShow] = useState(true);
     const SNACKBAR_TIMEOUT = Number(process.env.NEXT_PUBLIC_SNACKBAR_TIMEOUT_ONE);
     const router = useRouter();
+    const [reset, setReset] = useState(false);
     const [filters, setFilters] = useState({
       search: "",
       mode: null,
@@ -94,7 +101,7 @@ export default function Events({setLotusClass, setLotusStyle, setFigureClass, se
       // console.log(Date.now() - lastShown);
       // console.log(SNACKBAR_TIMEOUT);
       
-      if (Date.now() - lastShown < SNACKBAR_TIMEOUT || localStorage.getItem("ModelSeen") ) {
+      if (Date.now() - lastShown < SNACKBAR_TIMEOUT ) {
         setShow(false);
       }
     }, []);
@@ -172,29 +179,39 @@ export default function Events({setLotusClass, setLotusStyle, setFigureClass, se
             <CustomDropdown 
               label="MODE" 
               options={['ONLINE', 'OFFLINE']} 
-              onSelect={(mode) =>
+              onSelect={(mode) => {
                 setFilters((prev) => ({ ...prev, mode }))
-              }
+                setReset(false);
+              }}
+              reset={reset}
             />
 
             <CustomDropdown
               label="CATEGORY"
               options={["TECH", "NON_TECH", "CORE", "FIELD", "OTHER"]}
-              onSelect={(category) =>
+              onSelect={(category) =>{
                 setFilters((prev) => ({ ...prev, category }))
-              }
+                setReset(false);
+              }}
+              reset={reset}
             />
 
             <CustomDropdown
               label="DATE"
-              options={["TODAY", "TOMORROW", "THIS_WEEKEND"]}
-              onSelect={(date) =>
+              options={["27th_FEB", "28th_FEB", "1st_MARCH"]}
+              onSelect={(date) => {
                 setFilters((prev) => ({ ...prev, date }))
-              }
+                setReset(false);
+              }}
+              reset={reset}
             />
 
-            <div 
-              className='mt-2 border-[#a69153] text-[#39362d] transition-transform duration-500 hover:rotate-[360deg] cursor-pointer'
+            <button 
+              title="RESET FILTERS"
+              style={{ transition: 'transform 0.5s ease-in-out' }}
+              onMouseEnter={(e) => e.currentTarget.style.transform = 'rotate(45deg)'}
+              onMouseLeave={(e) => e.currentTarget.style.transform = 'rotate(0deg)'}
+              className='mt-2 border-[#a69153] text-[#39362d] transition-transform duration-500 cursor-pointer'
               onClick={() => {
                 setFilters((prev) => ({
                   ...prev,
@@ -203,10 +220,11 @@ export default function Events({setLotusClass, setLotusStyle, setFigureClass, se
                   category: null,
                   date: null,
                 }))
+                setReset(true);
               }}
             >
               <RefreshCw />
-            </div>
+            </button>
           </div>
         </motion.div>
 

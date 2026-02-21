@@ -49,7 +49,7 @@ export default function Drawer({ event, onClose }) {
   }, [event]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
+    <div className="fixed inset-0 z-90 bg-black/60 backdrop-blur-sm flex justify-end">
       {/* Drawer */}
       <div className="w-full sm:w-[420px] h-full bg-white shadow-2xl p-6 flex flex-col">
         {/* Header */}

@@ -79,7 +79,7 @@ export default function Navbar({ className = "" }) {
   useEffect(() => {
     if (!mounted) return;
     updatePill();
-  }, [activeIndex, mounted]);
+  }, [activeIndex, user, isAdmin, mounted]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -112,7 +112,7 @@ export default function Navbar({ className = "" }) {
 
   return (
     <div className="flex justify-center">
-      <nav className={`${className} fixed top-4 right-0 md:right-auto w-auto md:w-fit z-[50] flex bg-transparent backdrop-blur-md text-black rounded-l-2xl rounded-r-2xl border-3 border-[#897b4b] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.15)]`}>
+      <nav className={`${className} fixed top-4 right-0 md:right-auto w-auto md:w-fit z-[80] flex bg-transparent backdrop-blur-md text-black rounded-l-2xl rounded-r-2xl border-3 border-[#897b4b] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.15)]`}>
         <div className="px-4 py-3 flex items-center">
 
           {/* desktop menu */}
@@ -224,7 +224,7 @@ export default function Navbar({ className = "" }) {
 
       {/* mobile menu overlay */}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-[400px] bg-transparent backdrop-blur-xl z-[45]
+        className={`fixed top-0 right-0 h-full w-full sm:w-[400px] bg-transparent backdrop-blur-xl z-[75]
         transform transition-transform duration-500 ease-in-out border-l-2 border-[#D4AF37]
         flex flex-col pt-32 px-10 space-y-8 ${open ? 'translate-x-0' : 'translate-x-full'}`}>
         {navItems.map(({ name, href }, i) => (

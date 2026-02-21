@@ -233,9 +233,9 @@ useEffect(() => {
   if (!formData.eventMode) return "Event mode is required";
   if (!formData.status) return "Event status is required";
   if (!formData.description.trim()) return "Event description is required";
-  if (!formData.latitude.trim() || isNaN(Number(formData.latitude)))
-    return "Latitude must be a valid number";
-  if(!formData.longitude.trim() || isNaN(Number(formData.longitude)))
+  if (formData.latitude === "" || isNaN(Number(formData.latitude)))
+  return "Latitude must be a valid number";
+  if(formData.longitude === "" || isNaN(Number(formData.longitude)))
     return "Longitude must be a valid number";
 
   const urlRegex = /^https?:\/\/.+/;
@@ -275,14 +275,19 @@ useEffect(() => {
     eventCategory: event.category,
     eventMode: event.mode,
     description: event.description,
-    date: event.date,
+  date: event.date
+  ? new Date(event.date)
+      .toLocaleString("sv-SE", { timeZone: "Asia/Kolkata" })
+      .replace(" ", "T")
+      .slice(0, 16)
+  : "",
     status: event.status,
     isWorkshop: Boolean(event.isWorkshop),
     unstopRegLink: event.unstopLink,
     prizes: event.prizes || '',
     teamSize: event.maxTeamMembers,
-    latitude: '',
-    longitude: '',
+    latitude: event.latitude,
+    longitude: event.longitude,
     contacts: [
     { name: "", phone: "" } 
   ],
@@ -304,7 +309,7 @@ useEffect(() => {
     const basicEventFields = {
       name: formData.eventName.trim(),
       description: formData.description.trim(),
-      date: formData.date,
+      date: new Date(formData.date).toISOString(),
       category: formData.eventCategory,
       mode: formData.eventMode,
       status: formData.status,
@@ -327,6 +332,9 @@ useEffect(() => {
     if (formData.eventPhotoFile) imageFormData.append('image', formData.eventPhotoFile);
 
     try {
+    
+      setNotifLoading(true);
+    
       const adminToken = localStorage.getItem('adminToken');
 
       if (editingEvent) {
@@ -385,6 +393,8 @@ useEffect(() => {
     } catch (error) {
       console.log(error);
       alert("Operation failed. Check console for details.");
+    }finally{
+      setNotifLoading(false);
     }
   };
 
@@ -486,7 +496,7 @@ const normalizeMemberStatus = (raw) => {
 
       complete: async (results) => {
         try {
-          console.log(results.data);
+          console.log(results.data);//this main sending normalized data to backend, so check console for how your csv should be structured or how data is being fetched
           // Normalize data structure for backend
           const registrationsPayload = results.data.map(row => ({
             candidateName: row["Candidate's Name"] || row.Name || "",
@@ -500,7 +510,7 @@ const normalizeMemberStatus = (raw) => {
 
           // console.log(registrationsPayload);
 
-          const isFirstUpload = selectedEventRegs.length === 0;
+          const isFirstUpload = selectedEventRegs.length === 0;//if no regs present then call create endpoint else update
 
           const endpoint = isFirstUpload
             ? `${API_BASE_URL}/events/${eventId}/register`      // PUT or POST (see note below)
@@ -542,10 +552,10 @@ const normalizeMemberStatus = (raw) => {
     setNotifLoading(true);
     try {
       
-      // Optimistic UI Update
+      // Optimistic UI Update: this updates the ui with present toggled status and if backend call fails it reverts to original status afterwards 
       setSelectedEventRegs((prev) =>
         prev.map((reg) =>
-          reg._id === regId ? { ...reg, attendance: !currentStatus } : reg,
+          reg.id === regId ? { ...reg, attendance: !currentStatus } : reg,
         ),
       );
 
@@ -850,10 +860,18 @@ const normalizeMemberStatus = (raw) => {
 
                 <div className="flex gap-4 pt-6">
                   <button
+                    disabled={notifLoading}
                     onClick={handleSubmit}
                     className="flex-1 bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] text-white py-4 rounded-lg font-['Montserrat',sans-serif] font-bold text-lg hover:from-[#E5C158] hover:to-[#7F6C2E] transition-all shadow-xl border border-[#C5A059]"
                   >
-                    {editingEvent ? "Update Event" : "Create Event"}
+                    {notifLoading ? (
+                      <span className="flex items-center justify-center">
+                        <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                        Processing...
+                      </span>
+                    ) : (
+                      `${editingEvent ? "Update Event" : "Create Event"}`
+                    )}
                   </button>
                   <button
                     onClick={() => {
@@ -937,7 +955,7 @@ const normalizeMemberStatus = (raw) => {
                           className="w-6 h-6 text-[#D4AF37] border-[#C5A059] rounded focus:ring-[#D4AF37]"
                         />
                         <span className="text-[#8B6508] font-['Montserrat',sans-serif] font-bold">
-                          { notifLoading ? "Loading" : reg.attendance ? "Present" : "Absent"}
+                          { reg.attendance ? "Present" : "Absent"}
                         </span>
                       </label>
                     </div>
@@ -980,7 +998,16 @@ const normalizeMemberStatus = (raw) => {
                   <div className="space-y-2 text-sm text-[#8B6508]/80 mb-5 font-['Montserrat',sans-serif]">
                     <p><strong className="text-[#8B6508]">Category:</strong> {event.category}</p>
                     <p><strong className="text-[#8B6508]">Mode:</strong> {event.mode}</p>
-                    <p><strong className="text-[#8B6508]">Date:</strong> {event.date ? new Date(event.date).toLocaleString() : 'TBD'}</p>
+                    <p><strong className="text-[#8B6508]">Date:</strong>  {event.date 
+                      ? new Date(event.date).toLocaleString('en-IN', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true,
+                          timeZone: 'Asia/Kolkata' // Forces IST regardless of user's local browser settings
+                        })  : 'TBD'}</p>
                   </div>
 
                   <div className="flex gap-3">

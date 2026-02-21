@@ -85,10 +85,10 @@ export default function BottomSlider({
 
   const SliderContent = () => (
     <>
-      <img src="/slider.svg" className="h-14 opacity-70 mix-blend-multiply flex-shrink-0" onLoad={measure} />
-      <img src="/slider.svg" className="h-14 opacity-70 mix-blend-multiply flex-shrink-0" />
-      <img src="/slider.svg" className="h-14 opacity-70 mix-blend-multiply flex-shrink-0" />
-      <img src="/slider.svg" className="h-14 opacity-70 mix-blend-multiply flex-shrink-0" />
+      <img src="/slider.png" className="h-14 opacity-70 mix-blend-multiply flex-shrink-0" onLoad={measure} />
+      <img src="/slider.png" className="h-14 opacity-70 mix-blend-multiply flex-shrink-0" />
+      <img src="/slider.png" className="h-14 opacity-70 mix-blend-multiply flex-shrink-0" />
+      <img src="/slider.png" className="h-14 opacity-70 mix-blend-multiply flex-shrink-0" />
     </>
   );
 

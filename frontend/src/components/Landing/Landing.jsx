@@ -37,7 +37,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
     }
     const lastShown = Number(shown);
     // console.log(Date.now() - lastShown);
-    if (Date.now() - lastShown < SNACKBAR_TIMEOUT_1 || localStorage.getItem("ModelSeen") ) {
+    if (Date.now() - lastShown < SNACKBAR_TIMEOUT_2 || localStorage.getItem("ModelSeen") ) {
       setShow(false);
     }
   }, []);
@@ -159,7 +159,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
     invictus-text
     font-bold tracking-widest uppercase text-sm md:text-base
     text-[#FFF1B8]
-    z-30
+    z-70
 
     bg-gradient-to-b from-[#8E6E24] via-[#6F5418] to-[#4A360D]
 
@@ -172,7 +172,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
     active:scale-95
   "
 >
-  <span className="relative z-10">Join Group</span>
+  <span className="relative z-70">Join Group</span>
 </button>
 
 <button
@@ -186,7 +186,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
     rounded-full
     font-bold tracking-widest uppercase text-sm md:text-base
     text-[#5C450E]
-    z-30
+    z-50
 
     bg-gradient-to-b from-[#FFFEF5] via-[#F3E6BF] to-[#D6B44C]
 

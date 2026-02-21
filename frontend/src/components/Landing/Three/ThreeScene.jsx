@@ -74,8 +74,8 @@ export default function ThreeScene({ onReady }) {
           />
         </Suspense>
       </Canvas>
-
-      {/* <VideoTransition
+{/* 
+      <VideoTransition
         play={playTransition}
         onEnd={() => {
           window.location.href = "/Home";

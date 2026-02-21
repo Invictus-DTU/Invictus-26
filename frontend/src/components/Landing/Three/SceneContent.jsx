@@ -124,13 +124,14 @@ export function SceneContent({
   useFrame((state) => {
     const totalSections = cameraShots.length - 1;
     const progress = scroll.offset * totalSections;
-
+    
     const sectionIndex = Math.floor(progress);
     const sectionT = progress % 1;
 
     setActiveSection((prev) => (prev !== sectionIndex ? sectionIndex : prev));
-
+    scroll.offset > 0.955 && setActiveSection(2);
     setcurrSection((prev) => (prev !== sectionIndex ? sectionIndex : prev));
+    scroll.offset > 0.995 && setcurrSection(2);
 
     if (setScrollOffset) {
       setScrollOffset(scroll.offset);
@@ -266,7 +267,7 @@ export function SceneContent({
         </>
       )}
 
-      {activeSection === 2 && (
+      {activeSection >= 2 && (
         <>
           <ThreeDText
             text="Start Exploring"

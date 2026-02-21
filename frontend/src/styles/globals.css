@@ -99,7 +99,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("/backdrop.png");
+  background-image: url("/backdropnew.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -118,6 +118,19 @@ body {
   width: auto;
   height:min-content;
   background: transparent;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 

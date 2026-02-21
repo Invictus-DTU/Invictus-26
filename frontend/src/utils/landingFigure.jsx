@@ -10,7 +10,7 @@ export default function landingFigure({ className, style }) {
       `}
     >
       <img
-        src="/figure.png"
+        src="/figure1.png"
         alt="Lotus"
         className="w-full h-full object-contain"
       />

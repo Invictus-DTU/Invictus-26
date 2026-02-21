@@ -5,6 +5,7 @@ import FAQ from "@/components/FAQ/faq";
 import Footer from "@/components/Footer/footer";
 import { useFigureBySection } from "@/lib/useFigureBySection";
 import { useLoader } from "@/contexts/LoaderContext";
+import SmoothScroll from "@/utils/smoothScroll";
 
 export default function Home({
   setFigureClass,
@@ -34,6 +35,7 @@ export default function Home({
   return (
     <>
       {/* LANDING */}
+      <SmoothScroll>
       <section ref={landingRef}>
         <Landing setDisplayNavbar={setDisplayNavbar} displayLogo={displayLogo} setDisplayLogo={setDisplayLogo}/>
       </section>
@@ -43,6 +45,7 @@ export default function Home({
         <FAQ />
         <Footer />
       </section>
+      </SmoothScroll>
     </>
   );
 }
