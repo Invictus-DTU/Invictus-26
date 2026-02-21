@@ -275,7 +275,12 @@ useEffect(() => {
     eventCategory: event.category,
     eventMode: event.mode,
     description: event.description,
-    date: event.date,
+  date: event.date
+  ? new Date(event.date)
+      .toLocaleString("sv-SE", { timeZone: "Asia/Kolkata" })
+      .replace(" ", "T")
+      .slice(0, 16)
+  : "",
     status: event.status,
     isWorkshop: Boolean(event.isWorkshop),
     unstopRegLink: event.unstopLink,
@@ -304,7 +309,7 @@ useEffect(() => {
     const basicEventFields = {
       name: formData.eventName.trim(),
       description: formData.description.trim(),
-      date: formData.date,
+      date: new Date(formData.date).toISOString(),
       category: formData.eventCategory,
       mode: formData.eventMode,
       status: formData.status,
