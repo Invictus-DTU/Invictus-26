@@ -28,9 +28,9 @@ function ImageCard({ src }) {
 /* ---------------- CATEGORY IMAGES ---------------- */
 
 const IMAGES = {
-  "PAST PERFORMERS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat1/cat1_${i + 1}.jpeg`),
-  "CULTURAL & WORKSHOPS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat2/cat2_${i + 1}.jpeg`),
-  "FUN MOMENTS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat3/cat3_${i + 1}.jpeg`),
+  "PAST PERFORMERS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat2/cat2_${i + 1}.jpeg`),
+  "CULTURAL & WORKSHOPS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat3/cat3_${i + 1}.jpeg`),
+  "FUN MOMENTS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat1/cat1_${i + 1}.jpeg`),
 };
 
 /* ---------------- GRID CONFIG ---------------- */
