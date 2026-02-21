@@ -233,9 +233,9 @@ useEffect(() => {
   if (!formData.eventMode) return "Event mode is required";
   if (!formData.status) return "Event status is required";
   if (!formData.description.trim()) return "Event description is required";
-  if (!formData.latitude.trim() || isNaN(Number(formData.latitude)))
-    return "Latitude must be a valid number";
-  if(!formData.longitude.trim() || isNaN(Number(formData.longitude)))
+  if (formData.latitude === "" || isNaN(Number(formData.latitude)))
+  return "Latitude must be a valid number";
+  if(formData.longitude === "" || isNaN(Number(formData.longitude)))
     return "Longitude must be a valid number";
 
   const urlRegex = /^https?:\/\/.+/;
@@ -327,6 +327,9 @@ useEffect(() => {
     if (formData.eventPhotoFile) imageFormData.append('image', formData.eventPhotoFile);
 
     try {
+    
+      setNotifLoading(true);
+    
       const adminToken = localStorage.getItem('adminToken');
 
       if (editingEvent) {
@@ -385,6 +388,8 @@ useEffect(() => {
     } catch (error) {
       console.log(error);
       alert("Operation failed. Check console for details.");
+    }finally{
+      setNotifLoading(false);
     }
   };
 
@@ -850,10 +855,18 @@ const normalizeMemberStatus = (raw) => {
 
                 <div className="flex gap-4 pt-6">
                   <button
+                    disabled={notifLoading}
                     onClick={handleSubmit}
                     className="flex-1 bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D] text-white py-4 rounded-lg font-['Montserrat',sans-serif] font-bold text-lg hover:from-[#E5C158] hover:to-[#7F6C2E] transition-all shadow-xl border border-[#C5A059]"
                   >
-                    {editingEvent ? "Update Event" : "Create Event"}
+                    {notifLoading ? (
+                      <span className="flex items-center justify-center">
+                        <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                        Processing...
+                      </span>
+                    ) : (
+                      `${editingEvent ? "Update Event" : "Create Event"}`
+                    )}
                   </button>
                   <button
                     onClick={() => {

@@ -13,6 +13,9 @@ export default function SmoothScroll({ children }) {
     const lenis = new Lenis({
       duration: isHome ? 3.0 : 0.9,
       easing: (t) => 1 - Math.pow(1 - t, 4),
+       smoothWheel: true,
+        smoothTouch: true,
+        touchMultiplier: 1.5,
     });
 
     function raf(time) {
