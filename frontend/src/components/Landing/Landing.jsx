@@ -150,7 +150,7 @@ export default function Landing({ setDisplayNavbar, displayLogo, setDisplayLogo 
         
         {/* JOIN GROUP - Darker Gold/Bronze Style */}
         <button
-  onClick={() => window.open('https://chat.whatsapp.com/HEIcKiF77zK5NxranQ9ML6?mode=gi_t','_blank')}
+  onClick={() => window.open('https://chat.whatsapp.com/HKjNMoFq81YI847v1WkIhL','_blank')}
   className="
     group relative
     w-full md:w-auto
