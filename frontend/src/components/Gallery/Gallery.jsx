@@ -13,14 +13,17 @@ import {
 
 function ImageCard({ src }) {
   return (
-    <div className="relative w-full h-full rounded-xl overflow-hidden border-[3px] border-[#d9b85c] shadow-[6px_6px_0_rgba(120,100,40,0.45)]">
+    <div className="relative w-full h-full rounded-xl overflow-hidden border-[3px] border-[#d9b85c] shadow-[6px_6px_0_rgba(120,100,40,0.45)] group cursor-pointer">
       <img
         src={src}
         alt=""
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         style={{ objectFit: 'cover' }}
         draggable={false}
       />
+      {/* Overlay effect on hover */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1410]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     </div>
   );
 }
@@ -28,9 +31,9 @@ function ImageCard({ src }) {
 /* ---------------- CATEGORY IMAGES ---------------- */
 
 const IMAGES = {
-  "PAST PERFORMERS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat1/cat1_${i + 1}.jpeg`),
-  "CULTURAL & WORKSHOPS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat2/cat2_${i + 1}.jpeg`),
-  "FUN MOMENTS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat3/cat3_${i + 1}.jpeg`),
+  "PAST PERFORMERS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat2/cat2_${i + 1}.jpeg`),
+  "CULTURAL & WORKSHOPS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat3/cat3_${i + 1}.jpeg`),
+  "FUN MOMENTS": Array.from({ length: 9 }, (_, i) => `/Gallery-pics/cat1/cat1_${i + 1}.jpeg`),
 };
 
 /* ---------------- GRID CONFIG ---------------- */
@@ -182,18 +185,33 @@ export default function Gallery({ setLotusClass, setLotusStyle, setFigureClass, 
 >
             <button 
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="w-full flex justify-between items-center cursor-pointer"
+              className="w-full flex justify-between items-center cursor-pointer group"
             >
-              <span className="font-[Montserrat] text-[18px] tracking-[2px] font-semibold text-[#8f8457]">
+              <span className="font-[Montserrat] text-[18px] tracking-[2px] font-semibold text-[#8f8457] group-hover:text-[#6d5b1f] transition-colors">
                 VIEW GLANCES
               </span>
-              <motion.span 
+              <motion.div
                 animate={{ rotate: isCollapsed ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-                className="text-[16px] font-bold text-[#8f8457]"
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="w-6 h-6 flex items-center justify-center rounded-full bg-[#d9b85c]/30 group-hover:bg-[#d9b85c]/50 transition-colors"
               >
-                ⌄
-              </motion.span>
+                <svg 
+                  width="12" 
+                  height="8" 
+                  viewBox="0 0 12 8" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-[#8f8457]"
+                >
+                  <path 
+                    d="M1 1.5L6 6.5L11 1.5" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </motion.div>
             </button>
 
             <AnimatePresence>
@@ -218,7 +236,7 @@ export default function Gallery({ setLotusClass, setLotusStyle, setFigureClass, 
                           ${
                             category === cat
                               ? "bg-[linear-gradient(180deg,rgba(225,200,125,0.95),rgba(190,160,80,0.95))] text-[#6d5b1f] font-semibold"
-                              : "text-[#9b8a3d]"
+                              : "text-[#9b8a3d] hover:bg-[#d9b85c]/20"
                           }
                         `}
                       >
@@ -255,7 +273,7 @@ export default function Gallery({ setLotusClass, setLotusStyle, setFigureClass, 
     show: { opacity: 1, y: 0 }
   }}
   transition={{ duration: 0.35 }}
-  whileHover={{ scale: 1.02 }}
+  whileHover={{ scale: 1.02, y: -4 }}
   className={GRID_CLASSES[index]}
 >
   <SwapySlot id={`slot-${index}`} className="w-full h-full">
