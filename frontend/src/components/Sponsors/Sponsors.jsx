@@ -1,360 +1,154 @@
-import React, { useRef, useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 
-/* ---------------- 1. SPONSOR FRAME (YOUR STYLING) ---------------- */
-
-
-const SponsorFrame = ({ sizeType = "small", sponsorImg, name }) => {
-
-  const isLarge = sizeType === "large";
-
-  return (
-    <div className="flex flex-col items-center justify-end shrink-0 transition-all duration-500 ease-out">
-      {/* Circle */}
-      <div
-        className={`
-          relative z-10 flex items-center justify-center overflow-hidden rounded-full
-          border-[3px] border-[#C5A059]
-          bg-gradient-to-b from-white to-[#FFFBEB]
-          shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)]
-          transition-all duration-500
-          ${isLarge
-            ? "w-[26vh] h-[26vh] max-w-[220px] max-h-[220px] min-w-[140px] min-h-[140px]"
-            : "w-[18vh] h-[18vh] max-w-[150px] max-h-[150px] min-w-[100px] min-h-[100px]"}
-        `}
-      >
-        {sponsorImg ? (
-          <img
-            src={sponsorImg}
-            alt={name}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.style.display = "none";
-              e.currentTarget.parentElement.innerText = "NO IMAGE";
-            }}
-          />
-        ) : (
-          <span className="text-[#C5A059]/50 font-bold text-xs">PHOTO</span>
-        )}
-      </div>
-
-      {/* Rectangle */}
-      <div
-        className={`
-          relative z-20 -mt-6 flex items-center justify-center
-          border-[3px] border-[#C5A059] bg-[#FDF8E2]
-          shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]
-          min-h-[35px] transition-all duration-500
-          ${isLarge
-            ? "w-[28vh] max-w-[240px] min-w-[150px] h-[6vh]"
-            : "w-[20vh] max-w-[170px] min-w-[110px] h-[5vh]"}
-        `}
-      >
-        <span
-          className={`
-            px-2 text-center font-bold uppercase tracking-[0.05em]
-            text-[#8B6508] whitespace-nowrap overflow-hidden text-ellipsis
-            ${isLarge
-              ? "text-[clamp(10px,1.8vh,18px)]"
-              : "text-[clamp(10px,1.4vh,18px)]"}
-          `}
-        >
-          {name || "SPONSOR"}
+/* ---------------- 1. SPONSOR CARD ---------------- */
+const SponsorCard = ({ name, img }) => (
+    <div className="flex flex-col items-center justify-center p-1.5 bg-white/10 backdrop-blur-md border border-[#C5A059]/40 rounded-lg hover:bg-white/20 transition-all duration-300 group shadow-lg w-full">
+        <div className="bg-[#FDF8E2]/90 border-[1px] border-[#C5A059] flex items-center justify-center overflow-hidden rounded-md mb-1.5 w-full aspect-[4/3] md:aspect-square relative">
+            {img ? (
+                <img
+                    src={img}
+                    alt={name}
+                    className="w-[70%] h-[70%] object-contain group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {
+                        e.currentTarget.src = "";
+                        e.currentTarget.style.display = "none";
+                    }}
+                />
+            ) : (
+                <span className="text-[#8B6508] text-[9px] font-bold uppercase tracking-widest opacity-60">
+                    {name}
+                </span>
+            )}
+        </div>
+        <span className="font-bold text-[#FDF8E2] drop-shadow-md text-[9px] md:text-[11px] uppercase tracking-widest truncate w-full text-center">
+            {name}
         </span>
-      </div>
     </div>
-  );
-};
+);
 
-/* ---------------- 2. PARABOLIC ROW LOGIC ---------------- */
-const ParabolicRow = ({ leftSponsor, rightSponsor, containerRef, isMobile }) => {
-  const rowRef = useRef(null);
-  const [offset, setOffset] = useState(0);
-  const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    if (isMobile) return;
-
-    const handleScroll = () => {
-      if (!rowRef.current || !containerRef.current) return;
-
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const rowRect = rowRef.current.getBoundingClientRect();
-
-      // Calculate distance from center of viewport
-      const dist = Math.abs(
-        containerRect.top + containerRect.height / 2 - 
-        (rowRect.top + rowRect.height / 2)
-      );
-
-      const maxDist = containerRect.height / 2;
-      const normalized = Math.min(dist / maxDist, 1);
-
-      // Math for the curve: Push out (120px) and scale down (0.85)
-      setOffset(normalized * 120);
-      setScale(1 - normalized * 0.15);
-    };
-
-    const container = containerRef.current;
-    container.addEventListener("scroll", handleScroll);
-    handleScroll(); // Init
-
-    return () => container.removeEventListener("scroll", handleScroll);
-  }, [containerRef, isMobile]);
-
-  return (
-    <div
-      ref={rowRef}
-      className="w-full flex justify-center items-center h-[45vh] md:h-[50vh] shrink-0 snap-center"
-    >
-      <div
-        className="flex w-full max-w-6xl items-center justify-between px-[2vw] transition-transform duration-100 ease-out will-change-transform"
-        style={!isMobile ? { transform: `scale(${scale})` } : {}}
-      >
-        {/* Left Side - Pushes Left */}
-        <div style={!isMobile ? { transform: `translateX(-${offset}px)` } : {}}>
-          {leftSponsor && (
-            <SponsorFrame
-              name={leftSponsor.name}
-              sponsorImg={leftSponsor.img}
-              sizeType={!isMobile && offset < 50 ? "large" : "small"}
-            />
-          )}
+/* ---------------- 2. SMALLER PARTNER BOX ---------------- */
+const MediumPartnerBox = ({ title, partner }) => (
+    <div className="relative w-full max-w-[200px] md:max-w-[240px]">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 bg-gradient-to-r from-[#8B6508] via-[#C5A059] to-[#8B6508] px-3 py-0.5 rounded-sm shadow-[0_0_8px_rgba(197,160,89,0.3)] border border-[#FDF8E2]/30 whitespace-nowrap">
+            <h3 className="text-[#FDF8E2] text-[9px] md:text-[10px] font-black tracking-[0.15em] uppercase">
+                {title}
+            </h3>
         </div>
 
-        {/* Right Side - Pushes Right */}
-        <div style={!isMobile ? { transform: `translateX(${offset}px)` } : {}}>
-          {rightSponsor && (
-            <SponsorFrame
-              name={rightSponsor.name}
-              sponsorImg={rightSponsor.img}
-              sizeType={!isMobile && offset < 50 ? "large" : "small"}
-            />
-          )}
+        <div className="p-3 pt-7 border-[2px] border-[#C5A059] bg-black/40 backdrop-blur-xl rounded-xl shadow-[0_0_30px_rgba(197,160,89,0.1)] flex justify-center">
+            <SponsorCard name={partner.name} img={partner.img} />
         </div>
-      </div>
     </div>
-  );
-};
+);
 
 /* ---------------- 3. MAIN PAGE ---------------- */
+export default function Sponsors({ setLotusClass, setFigureClass, setFigureStyle }) {
 
+    const platformPartner = { name: "Unstop", img: "/Sponsers/unstop.png" };
 
+    const pastSponsors = [
+        { name: "Adobe", img: "/Past_Sponsers/Adobe_icon.png" },
+        { name: "Qualcomm", img: "/Past_Sponsers/Qualcomm.png" },
+        { name: "Suzuki", img: "/Past_Sponsers/Suzuki.png" },
+        { name: "GeeksforGeeks", img: "/Past_Sponsers/gfg.png" },
+        { name: "HDFC Bank", img: "/Past_Sponsers/hdfc.png" },
+        { name: "TVS", img: "/Past_Sponsers/TVS.png" },
+        { name: "Chess.com", img: "/Past_Sponsers/chess.png" },
+        { name: "Bank Of Baroda", img: "/Past_Sponsers/BankOfBarodo.png" },
+    ];
 
-export default function Sponsors({ setLotusClass, setLotusStyle, setFigureClass, setFigureStyle }) {
-  const containerRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [activeSection, setActiveSection] = useState("GOLD SPONSORS");
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!setFigureClass || !setFigureStyle) return;
-  
-    setFigureStyle({
-      left: "0px",
-      bottom: "0px",
-      transform: "translate(10%, 10%)",
-    });
-  
-    setFigureClass(`
-      fixed
-      w-[100px]
-        md:w-[120px]
-        lg:w-[175px]
-        pointer-events-none
-        z-[30]
-        opacity-60
-      drop-shadow-[0_0_30px_rgba(255,215,138,0.4)]
-      transition-all duration-700 ease-out
-    `);
-  }, [setFigureClass, setFigureStyle]);
-
-
-  useEffect(() => {
-  if (!setLotusClass) return;
-  setLotusStyle({});
-  // Sponsors page lotus position
-  setLotusClass(`
-    fixed
-    top-1/2 left-1/2
-    -translate-x-1/2 -translate-y-1/2
-    w-[100px] md:w-[240px]
-    opacity-80
-    transition-all duration-700 ease-in-out
-  `);
-
-}, [router.pathname, setLotusClass]);
-
-
-  // --- DATA SETUP ---
-  const tiers = useMemo(() => [
-    {
-      id: "gold",
-      title: "GOLD SPONSORS",
-      items: [
-        { name: "Gold 1", img: "" }, { name: "Gold 2", img: "" },
-        { name: "Gold 3", img: "" }, { name: "Gold 4", img: "" },
-      ]
-    },
-    {
-      id: "silver",
-      title: "SILVER SPONSORS",
-      items: [
-        { name: "Silver 1", img: "" }, { name: "Silver 2", img: "" },
-        { name: "Silver 3", img: "" }, { name: "Silver 4", img: "" },
-        { name: "Silver 5", img: "" }, { name: "Silver 6", img: "" },
-      ]
-    },
-    {
-      id: "bronze",
-      title: "BRONZE SPONSORS",
-      items: [
-        { name: "Bronze 1", img: "" }, { name: "Bronze 2", img: "" },
-        { name: "Bronze 3", img: "" }, { name: "Bronze 4", img: "" },
-      ]
-    }
-  ], []);
-
-  // --- RESIZE HANDLER ---
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  // --- SECTION DETECTION (SCROLL SPY) ---
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      
-      const containerTop = containerRef.current.scrollTop;
-      const containerHeight = containerRef.current.clientHeight;
-      const scrollCenter = containerTop + (containerHeight / 2);
-
-      // Find which section div is currently in the middle of the screen
-      tiers.forEach((tier) => {
-        const el = document.getElementById(`section-${tier.id}`);
-        if (el) {
-          const { offsetTop, offsetHeight } = el;
-          if (scrollCenter >= offsetTop && scrollCenter <= offsetTop + offsetHeight) {
-            setActiveSection(tier.title);
-          }
+    useEffect(() => {
+        if (setFigureStyle) {
+            setFigureStyle({ left: "0px", bottom: "0px", transform: "translate(10%, 10%)" });
         }
-      });
-    };
+        setFigureClass?.(`fixed w-[100px] md:w-[150px] lg:w-[180px] pointer-events-none z-[5] opacity-40 drop-shadow-[0_0_30px_rgba(255,215,138,0.3)] transition-all duration-700 ease-out`);
+        setLotusClass?.("fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] opacity-10 z-0 pointer-events-none");
+    }, [setLotusClass, setFigureClass, setFigureStyle]);
 
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-      // Run once on mount
-      handleScroll();
-    }
-    return () => container?.removeEventListener("scroll", handleScroll);
-  }, [tiers]);
+    return (
+        <div className="w-full h-screen relative flex flex-col items-center overflow-hidden px-4">
 
-  const scrollNext = () => {
-    containerRef.current?.scrollBy({
-      top: window.innerHeight * 0.5,
-      behavior: "smooth",
-    });
-  };
+            {/* Header Section */}
+            <div className="z-10 text-center pt-12 md:pt-16 mb-4">
+                <motion.h1
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="invictus-heading text-[3.5rem] md:text-[6rem] lg:text-[7.5rem] leading-none text-[#C5A059] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)]"
+                >
+                    SPONSORS
+                </motion.h1>
 
-  return (
-    <div className="w-screen h-screen flex flex-col items-center relative overflow-hidden bg-white/10">
-      <div className="absolute top-0 left-0 w-full z-20 flex flex-col items-center pt-[4vh] pb-8 pointer-events-none">
-        
-       <motion.h1
-  initial={{ opacity: 0, y: 40, scale: 0.95 }}
-  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-  
-  transition={{ duration: 0.7, ease: "easeOut" }}
-  className="invictus-heading mt-18 text-[3.7rem] lg:text-[7rem] leading-none drop-shadow-sm"
->
-  SPONSORS
-</motion.h1>
-
-        <p className="
-            invictus-subheading
-            text-[clamp(0.9rem,1.8vh,1.2rem)]
-            font-semibold text-center
-            max-w-[90vw] px-[10px]
-            bg-gradient-to-b from-[#D4AF37] to-[#6E5B1D]
-            bg-clip-text text-transparent
-        ">
-          Our valued partners who power Invictus by supporting innovation and excellence.
-        </p>
-
-        {/* <div className="mt-6 pointer-events-auto transition-all duration-300 transform">
-           <span className="px-6 py-2 rounded-full border border-[#C5A059] bg-[#FFFBEB] text-[#8B6508] font-bold text-sm tracking-widest shadow-sm">
-             {activeSection}
-           </span>
-        </div> */}
-      </div>
-      
-      {/*
-      <div
-        ref={containerRef}
-        className="
-          relative z-10 w-full h-full
-          overflow-y-auto snap-y snap-mandatory scroll-smooth
-          pt-[45vh] pb-[20vh]
-        "
-      >
-        {tiers.map((tier) => {
-          // Break items into pairs for the Parabolic Rows
-          const pairs = [];
-          for (let i = 0; i < tier.items.length; i += 2) {
-            pairs.push([tier.items[i], tier.items[i + 1]]);
-          }
-
-          return (
-            <div key={tier.id} id={`section-${tier.id}`} className="flex flex-col">
-              {pairs.map((pair, index) => (
-                <ParabolicRow
-                  key={`${tier.id}-${index}`}
-                  leftSponsor={pair[0]}
-                  rightSponsor={pair[1]}
-                  containerRef={containerRef}
-                  isMobile={isMobile}
-                />
-              ))}
-
-              <div className="h-[10vh] w-full snap-center" /> 
+                {/* Subheading - Made DARKER and BOLDER */}
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="mt-2 text-[#8B6508] font-black tracking-[0.05em] text-[9px] md:text-[13px] lg:text-sm whitespace-nowrap text-center w-full drop-shadow-sm"
+                >
+                    Our valued partners who power Invictus by supporting innovation and excellence.
+                </motion.p>
             </div>
-          );
-        })}
-      </div>
 
-      <div className="absolute bottom-8 z-30 pointer-events-none">
-        <button
-          onClick={scrollNext}
-          className="
-            pointer-events-auto
-            w-12 h-12 rounded-full 
-            border border-[#C5A059] text-[#C5A059] 
-            bg-white/80 hover:bg-[#C5A059] hover:text-white 
-            transition-all animate-bounce shadow-lg flex items-center justify-center
-          "
-        >
-          ↓
-        </button>
-      </div> */}
+            {/* Main Section */}
+            <div className="w-full flex flex-col items-center px-6 z-10 mt-1 md:mt-2">
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="flex flex-col items-center"
+                >
+                    <MediumPartnerBox title="Platform Partner" partner={platformPartner} />
 
+                    {/* More Coming Soon - BIGGER and MORE VISIBLE */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.8 }}
+                        className="mt-5 px-8 py-2 bg-black/80 border-[1.5px] border-[#C5A059] rounded-full backdrop-blur-md shadow-[0_0_20px_rgba(197,160,89,0.2)]"
+                    >
+                        <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#FDF8E2] to-[#D4AF37] font-black tracking-[0.4em] text-[10px] md:text-sm uppercase italic">
+                            More coming soon...
+                        </p>
+                    </motion.div>
+                </motion.div>
+            </div>
 
-           <div className="w-full py-120 flex flex-col items-center justify-center min-h-[400px]">
-        <div className="text-center space-y-4 p-8 border-4 border-[#a69153] rounded-2xl bg-[#FFF8E7] shadow-xl">
-          <h2 className="text-[#C5A059] text-4xl md:text-7xl font-bold font-serif tracking-widest invictus-heading">
-            COMING SOON
-          </h2>
-          <div className="w-24 h-1 border-[#a69153] mx-auto rounded-full" />
-          <p className="text-[#7A6C45] font-bold uppercase tracking-widest mt-4">
-            Stay tuned
-          </p>
+            {/* FOOTER MARQUEE SECTION */}
+            <div className="mt-auto mb-6 w-full z-10 relative">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 bg-gradient-to-r from-[#8B6508] via-[#C5A059] to-[#8B6508] px-6 py-1 rounded-sm shadow-[0_0_15px_rgba(197,160,89,0.4)] border border-[#FDF8E2]/30 whitespace-nowrap">
+                    <h3 className="text-[#FDF8E2] text-[10px] md:text-xs font-black tracking-[0.3em] uppercase">
+                        PAST SPONSORS
+                    </h3>
+                </div>
+
+                <div className="w-full bg-black/40 backdrop-blur-md border-y-[2px] border-[#C5A059] py-4 md:py-6 relative">
+                    <div className="w-full overflow-hidden group">
+                        <div className="flex space-x-8 animate-marquee whitespace-nowrap">
+                            {[...pastSponsors, ...pastSponsors, ...pastSponsors].map((s, i) => (
+                                <div key={i} className="shrink-0">
+                                    <div className="flex flex-col items-center justify-center p-2 bg-white/10 backdrop-blur-sm border border-[#C5A059]/30 rounded-lg w-[110px] md:w-[140px]">
+                                        <div className="bg-[#FDF8E2]/90 border-[1.5px] border-[#C5A059] flex items-center justify-center overflow-hidden rounded-md mb-1.5 w-full h-[65px] md:h-[75px]">
+                                            <img src={s.img} alt={s.name} className="w-[80%] h-[80%] object-contain" />
+                                        </div>
+                                        <span className="font-bold text-[#FDF8E2] text-[8px] md:text-[9px] uppercase tracking-wider">{s.name}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style jsx global>{`
+                @keyframes marquee {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-33.333%); }
+                }
+                .animate-marquee {
+                    animation: marquee 40s linear infinite;
+                }
+            `}</style>
         </div>
-      </div>
-
-    </div>
-  );
+    );
 }
