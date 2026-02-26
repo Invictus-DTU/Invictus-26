@@ -260,8 +260,8 @@ useEffect(() => {
   if (formData.prizes && Number(formData.prizes) < 0)
     return "Prize money cannot be negative";
 
-  if (formData.teamSize < 1 || formData.teamSize > 9)
-    return "Team size must be between 1 and 9";
+  if (formData.teamSize < 1 || formData.teamSize > 50)
+    return "Team size must be between 1 and 50";
 
   return null;
 };
@@ -827,7 +827,7 @@ const normalizeMemberStatus = (raw) => {
                     
                 <div>
                   <label className="block text-[#8B6508] font-['Montserrat',sans-serif] font-bold mb-3">No. of team members</label>
-                  <input type="number" max={9} name="teamSize" value={formData.teamSize} onChange={handleInputChange} className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]" />
+                  <input type="number" max={50} name="teamSize" value={formData.teamSize} onChange={handleInputChange} className="w-full bg-[#FFFBEB] border-2 border-[#C5A059] text-[#8B6508] rounded-lg px-4 py-3 focus:border-[#D4AF37] focus:outline-none transition-all font-['Montserrat',sans-serif]" />
                 </div>
 
 
