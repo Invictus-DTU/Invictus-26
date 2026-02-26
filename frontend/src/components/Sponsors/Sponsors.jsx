@@ -70,7 +70,7 @@ export default function Sponsors({ setLotusClass, setFigureClass, setFigureStyle
         <div className="w-full h-screen relative flex flex-col items-center overflow-hidden px-4">
 
             {/* Header Section */}
-            <div className="z-10 text-center pt-12 md:pt-16 mb-4">
+            <div className="z-10 text-center pt-15 md:pt-20 mb-4">
                 <motion.h1
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -84,7 +84,7 @@ export default function Sponsors({ setLotusClass, setFigureClass, setFigureStyle
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="mt-2 text-[#8B6508] font-black tracking-[0.05em] text-[9px] md:text-[13px] lg:text-sm whitespace-nowrap text-center w-full drop-shadow-sm"
+                    className="mt-2 text-[#8B6508] font-black tracking-[0.05em] text-[7px] md:text-[13px] lg:text-sm whitespace-nowrap text-center w-full drop-shadow-sm"
                 >
                     Our valued partners who power Invictus by supporting innovation and excellence.
                 </motion.p>
