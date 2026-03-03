@@ -70,7 +70,7 @@ export default function Sponsors({ setLotusClass, setFigureClass, setFigureStyle
         <div className="w-full h-screen relative flex flex-col items-center overflow-hidden px-4">
 
             {/* Header Section */}
-            <div className="z-10 text-center pt-16 md:pt-20 mb-4">
+            <div className="z-10 text-center pt-15 md:pt-20 mb-4">
                 <motion.h1
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
