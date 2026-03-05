@@ -13,9 +13,10 @@ export default function Document() {
           rel="stylesheet"
         />
         <link rel="preload" href="/intro/startVideo.mp4" as="video" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" href="/onSearchIcon.png" />
-        <link rel="apple-touch-icon" href="/onSearchIcon.png" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/onSearchIcon.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/onSearchIcon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/onSearchIcon.png" />
         <link rel="manifest" href="/manifest.json" />
         <link
           rel="stylesheet"
