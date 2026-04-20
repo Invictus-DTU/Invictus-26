@@ -11,6 +11,7 @@ const scrollerImg = "/scroller.png";
 const aboutText = `Invictus is a flagship techfest that brings together innovation, creativity, and technology. Rooted in India's rich heritage and driven by a vision for the future, it provides a platform for students to ideate, build, and compete through hackathons, workshops, and technical events.`;
 
 // Vertex Shader
+
 const vertexShader = `
 uniform float time;
 uniform float angle;
